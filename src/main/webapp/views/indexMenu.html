@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>财务报销系统</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="${request.contextPath}/static/ywUi/font/iconfont.css" media="all">
+  <link rel="stylesheet" href="${request.contextPath}/static/ywUi/css/index.css" media="all">
+  <link rel="stylesheet" href="${request.contextPath}/static/ywUi/css/cssJs.css" media="all">
+  <script>
+  /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+  </script>
+</head>
+<body class="layui-layout-body">
+  <div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+      <!-- header -->
+      <div class="layui-header yw-header">
+          <div class="yw-logo layui-inline">
+            <i class="iconfont icon-rmyy-logo layui-inline"></i>
+			  财务报销系统
+          </div>
+          <div class="layui-layout-right">
+            <ul class="layui-nav layui-inline yw-float" lay-filter="yw-nav">
+              <#list firstPer as obj>
+              <li class="layui-nav-item JS-nav-item <#if id=obj.id>layui-this</#if>" <#if obj.permissionType.value==1>data-id="0" iframeSrc="${obj.permissionUrl}"<#elseif obj.permissionType.value==0>data-id="1"</#if>>
+                <a <#if obj.permissionType.value==1>href="index?id=${obj.id}"<#elseif obj.permissionType.value==0>href="indexMenu?id=${obj.id}"</#if> lay-text="${obj.permissionName}">
+                  <i class="iconfont icon-configuration layui-show"></i>
+                  	${obj.permissionName}
+                </a>
+              </li>
+              </#list>
+            </ul>
+            <!--<!-- 改 -->
+            <ul class="layui-nav yw-float">
+	            	<li class="layui-nav-item">
+	                <a href="javascript:;" class="yw-a-noword">
+	                  <i class="layui-icon layui-icon-username yw-iconfont-noword"></i>
+	                  <span class="layui-nav-more"  style="display: none;"></span>
+	                </a>
+	                <dl class="layui-nav-child layui-anim layui-anim-upbit">
+	                    <dd><a lay-href="/sys/users/password">修改密码</a></dd>
+	                    <dd><a href="login/logOut">退出登录</a></dd>
+	                </dl>
+	              </li>
+	              <li class="layui-nav-item">
+	              	 <a href="javascript:;" class="yw-a-noword">
+	              	 		<i class="iconfont icon-help01 yw-iconfont-noword"></i>
+	              	 		<span class="layui-nav-more" style="display: none;"></span>
+	              	 </a>
+	              </li>
+            </ul>
+          </div>
+        </div>
+      <!-- 侧边菜单 -->
+		<div class="layui-side layui-side-menu yw-side-menu Js-side-menu">
+				<div class="layui-side-scroll">
+						<div class="yw-logo yw-menu-home" href="javascript:;">
+							<i class="layui-icon layui-icon-home yw-icon-home"></i>
+							<#list firstPer as obj>
+							<#if obj.id=id>
+							<span>${obj.permissionName}</span>
+							<#break>
+							</#if>
+			            	</#list>
+							<div class="layui-nav-item layadmin-flexible yw-icon-menu" lay-unselect style="z-index: 9999;">
+								<a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+									<i class="layui-icon layui-icon-shrink-right yw-icon-wrap" id="LAY_app_flexible"></i>
+								</a>
+							</div>
+						</div>
+					<ul class="layui-nav layui-nav-tree JS-nav yw-no yw-active" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+			            <#assign idx=0>
+			            <#assign idy=0>
+			            <#list secondPer as obj>
+			            <#if obj.parentId==id>
+			            <li data-name="user" class="layui-nav-item <#if idy==0>layui-nav-itemed</#if>">
+			              <#if obj.permissionType.value==1>
+			              <a lay-href="${request.contextPath}${obj.permissionUrl}" lay-tips="${obj.permissionName}" lay-direction="2" <#if idx==0>class="js-menu-first"</#if>>
+			                <i class="layui-icon layui-icon-user"></i>
+			                <cite>${obj.permissionName}</cite>
+			              </a>
+			              <#assign idx++>
+			              <#else>
+			              <a href="javascript:;" lay-tips="${obj.permissionName}" lay-direction="2">
+			                <i class="layui-icon iconfont ${obj.permissionIcon!}"></i>
+			                <cite>${obj.permissionName}</cite>
+			              </a>
+			              <dl class="layui-nav-child">
+			                <#list secondPer as sonobj>
+			                <#if sonobj.parentId?c == obj.id?c>
+			                <#assign gradsonnum=0>
+			                  <#list secondPer as gradsonobj>
+			                  	<#if gradsonobj.parentId?c == sonobj.id?c&&gradsonobj.permissionType.value!=2>
+			                  		<#assign gradsonnum++>
+			                  	</#if>
+			                  </#list>
+			                <dd>
+			                  <#if gradsonnum == 0>
+			                  <a <#if idx==0>class="js-menu-first"</#if>lay-href="${request.contextPath}${sonobj.permissionUrl}">${sonobj.permissionName}</a>
+			                  <#elseif gradsonnum gt 0>
+			                  <a <#if idx==0>class="js-menu-first"</#if>href="javascript:;">${sonobj.permissionName}<span class="layui-nav-more"></span></a>
+			                  <dl class="layui-nav-child">
+				                  <#list secondPer as gradsonobj>
+				                  	<#if gradsonobj.parentId?c == sonobj.id?c>
+				                  		<dd <#if idx==0>class="layui-this"</#if> >
+						                  <a <#if idx==0>class="js-menu-first"</#if>lay-href="${request.contextPath}${gradsonobj.permissionUrl}">${gradsonobj.permissionName}</a>
+						               	  <#assign idx++>
+						                </dd>
+				                  	</#if>
+				                  </#list>
+			                  </dl>
+			                  </#if>
+			                </dd>
+			                <#assign idx++>
+			                </#if>
+			                </#list>
+			              </dl>
+			              </#if>
+			            </li>
+			            <#assign idy++>
+			            </#if>
+			            </#list>
+	          		</ul>
+				 </div>
+	  </div>
+				<!-- 页面标签 -->
+      <div class="layadmin-pagetabs yw-pagetabs" id="LAY_app_tabs">
+        <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-down">
+          <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+            <li class="layui-nav-item" lay-unselect>
+              <a href="javascript:;"></a>
+              <dl class="layui-nav-child layui-anim-fadein">
+                <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+        <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+          <ul class="layui-tab-title" id="LAY_app_tabsheader">
+          	<li lay-id="index/blank" lay-attr="test.html"  class="layui-this yw-first-child"></li>  
+          </ul>
+        </div>
+      </div>
+      <!-- 主体内容 -->
+      <div class="layui-body yw-body" id="LAY_app_body">
+        <div class="layadmin-tabsbody-item layui-show">
+          <iframe src="index/blank" frameborder="0" class="layadmin-iframe"></iframe>
+        </div>
+      </div>
+      <!-- 辅助元素，一般用于移动设备下遮罩 -->
+      <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+  </div>
+  <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
+  <script>
+  layui.config({
+  	version: true,
+    base: '${request.contextPath}/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index', //主入口模块
+    menu: '../../ywUi/js/index/menu'
+  }).use(['index','menu','jquery'],function(){
+  	var $ = layui.$;
+	$('.js-menu-first').click();
+	var menu = layui.menu;
+	menu.init();
+  });
+  </script>
+</body>
+</html>

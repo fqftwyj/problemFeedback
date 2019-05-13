@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>角色权限关系表编辑</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+
+  <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item layui-hide">
+        <input type="button" name="id" class="layui-input" value="${result.id?c}">
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">角色id</label>
+      <div class="layui-input-inline">
+        <input type="number" name="roleId" lay-verify="required" placeholder="请输入角色id" autocomplete="off" class="layui-input" value="${(result.roleId?c)!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">权限id</label>
+      <div class="layui-input-inline">
+        <input type="number" name="permissionId" lay-verify="required" placeholder="请输入权限id" autocomplete="off" class="layui-input" value="${(result.permissionId?c)!}">
+      </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-rolePermission-submit" id="LAY-rolePermission-submit" value="确认">
+    </div>
+  </div>
+
+  <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>  
+  <script>
+  layui.config({
+    base: '${request.contextPath}/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index', //主入口模块
+    verfy:'../../ywUi/js/commons/verfy'
+  }).use(['index','form','verfy', function(){
+    var $ = layui.$
+    ,form = layui.form 
+    ,laydate = layui.laydate;
+    
+  })
+  </script>
+</body>
+</html>

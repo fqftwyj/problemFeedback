@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+ * UserMapper
+ * 用户表
+ * @author  crj
+ * @version v1.0.0
+ * 描述：自动生成的代码
+ * 时间：2018-08-07 15:00:08
+-->
+<mapper namespace="com.yuanwang.sys.dao.UserMapper" >
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <resultMap id="resultUserMap" type="User" > 
+			<id column="id" property="id" jdbcType="INTEGER" /><!---->
+			<result column="created_time" property="createdTime" jdbcType="TIMESTAMP" /><!--创建时间-->
+			<result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" /><!--更新时间-->
+			<result column="user_name" property="userName" jdbcType="VARCHAR" /><!--用户名-->
+			<result column="password" property="password" jdbcType="VARCHAR" /><!--密码-->
+			<result column="status" property="status" jdbcType="INTEGER" /><!--账户状态【enum】(0:禁用:enabled,1:启用:disabled)-->
+			<result column="error_num" property="errorNum" jdbcType="INTEGER" /><!--错误次数-->
+			<result column="built_in" property="builtIn" jdbcType="INTEGER" /><!--是否内置【enum】(0:FALSE:,1:是:TRUE)-->
+			<collection property="roles" column="id" javaType="ArrayList" ofType="Role" select="com.yuanwang.sys.dao.RoleMapper.getRolesByUid"/>
+	</resultMap>
+	<resultMap id="resultUserRolesPermissionMap" type="User" > 
+			<id column="id" property="id" jdbcType="INTEGER" /><!---->
+			<result column="created_time" property="createdTime" jdbcType="TIMESTAMP" /><!---->
+			<result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" /><!---->
+			<result column="user_name" property="userName" jdbcType="VARCHAR" /><!--用户名-->
+			<result column="password" property="password" jdbcType="VARCHAR" /><!--密码-->
+			<result column="status" property="status" jdbcType="INTEGER" /><!--账户状态【enum】(0:禁用:enabled,1:启用:disabled)-->
+			<result column="error_num" property="errorNum" jdbcType="INTEGER" /><!--错误次数-->
+			<result column="built_in" property="builtIn" jdbcType="INTEGER" /><!--是否内置【enum】(0:FALSE:,1:是:TRUE)-->
+			<collection property="roles" column="id" javaType="ArrayList" ofType="Role" select="com.yuanwang.sys.dao.RoleMapper.getRolesByUid"/>
+			<collection property="permissions" column="id" javaType="ArrayList" ofType="Permission" select="com.yuanwang.sys.dao.PermissionMapper.getPermissionsByUid"/>
+	</resultMap>
+
+	<!-- 表名 -->
+	<sql id="table_name">
+		sys_user
+	</sql>
+	
+	<!-- 主键条件 -->
+    <sql id="primaryCondition">
+    <where>
+    id = #{id}
+    </where>
+    </sql>
+    
+    <!-- 查询全部 -->
+    <sql id="findAll">
+        select * from <include refid="table_name" />
+    </sql>
+    <!-- 通用条件判断 -->
+    <sql id="condition">
+    	<where>
+    	  <if test="operator=='or'">
+    	  (
+    	  </if>
+    		<trim prefixOverrides="and|or">
+	    	<if test="createdTime!=null and createdTime!=''">
+    		 created_time = #{createdTime}
+    		</if>
+	    	<if test="updatedTime!=null and updatedTime!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> updated_time = #{updatedTime}
+    		</if>
+	    	<if test="userName!=null and userName!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> user_name = #{userName}
+    		</if>
+	    	<if test="password!=null and password!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> password = #{password}
+    		</if>
+	    	<if test="status!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> status = #{status}
+    		</if>
+	    	<if test="errorNum!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> error_num = #{errorNum}
+    		</if>
+	    	<if test="builtIn!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> built_in = #{builtIn}
+    		</if>
+	    	</trim>
+	    	<if test="operator=='or'">
+    		)
+	    	</if>
+	    	<if test="excludeId!=null">
+    		 <![CDATA[
+    		 and id <> #{excludeId}
+    		 ]]>
+    		</if>
+    	</where>
+    </sql>
+    <sql id="orderBy">
+        <if test="sql_keyword_orderBy!=null and sql_keyword_orderBy!=''">
+    		order by ${sql_keyword_orderBy} ${sql_keyword_sort}
+    	</if>
+    </sql>
+    
+	
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="User"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true"> 
+        insert into <include refid="table_name" />(
+	        created_time,
+	        updated_time,
+	        user_name,
+	        password,
+	        status,
+	        error_num,
+	        built_in) values(
+	         #{createdTime},
+	         #{updatedTime},
+	         #{userName},
+	         #{password},
+	         #{status},
+	         #{errorNum},
+	         #{builtIn}
+	        )
+	        <selectKey resultType="int" keyProperty="id">  
+	          SELECT  
+	          LAST_INSERT_ID()  
+	        </selectKey>
+   </insert>
+     <!-- 更新数据 -->
+    <update id="update" parameterType="User" flushCache="true" >
+    	update <include refid="table_name" /> 
+    	<set>
+        	<if test="createdTime!=null">
+        	created_time = #{createdTime},
+        	 </if>
+        	<if test="updatedTime!=null">
+        	updated_time = #{updatedTime},
+        	 </if>
+        	<if test="userName!=null">
+        	user_name = #{userName},
+        	 </if>
+        	<if test="password!=null">
+        	password = #{password},
+        	 </if>
+        	<if test="status!=null">
+        	status = #{status},
+        	 </if>
+        	<if test="errorNum!=null">
+        	error_num = #{errorNum},
+        	 </if>
+        	<if test="builtIn!=null">
+        	built_in = #{builtIn},
+        	 </if>
+        </set>
+        <include refid="primaryCondition"/> 
+   </update>
+   <!-- 删除数据 -->
+   <delete id="deleteByIds" flushCache="true" >
+		delete from <include refid="table_name" /> where id in
+		<foreach collection="list" index="index" item="ids" open="(" separator="," close=")">  
+            #{ids}
+        </foreach>                                          
+   </delete>
+   <!-- 删除数据 -->
+   <delete id="deleteById" parameterType="User" flushCache="true" >
+		delete from <include refid="table_name" />  where id=#{id} 
+   </delete>
+   <!-- map删除数据 -->
+   <delete id="deleteByMap" parameterType="Map" flushCache="true" >
+		delete from <include refid="table_name" />   <include refid="condition"/>
+   </delete> 
+    
+    
+	
+	<!--根据主键查询-->
+	<select id="findById" parameterType="Integer" resultMap="resultUserMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="primaryCondition"/> 
+	</select>
+	
+	<!--根据实体属性查询-->
+	<select id="findByMap" parameterType="Map" resultMap="resultUserMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="condition"/>
+	</select>
+	
+	<!--查询全部记录-->
+    <select id="findAll" resultMap="resultUserMap" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+    </select>   
+    
+    <!--excel导出记录-->
+    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+        <include refid="condition"/>
+    </select> 
+    
+    <select id="pro" parameterType="Map" resultMap="resultUserMap" useCache="false"
+        statementType="CALLABLE">  
+        <![CDATA[ 
+        call xxx(
+        #{v_total,mode=OUT,jdbcType=INTEGER},
+        #{startRow,mode=IN,jdbcType=INTEGER},
+        #{endRow,mode=IN,jdbcType=INTEGER});
+        ]]>
+    </select>
+    
+    <!--根据实体属性查询-->
+	<select id="findUserRolesPermissionByMap" parameterType="Map" resultMap="resultUserRolesPermissionMap" useCache="false" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="condition"/>
+	</select>
+</mapper>

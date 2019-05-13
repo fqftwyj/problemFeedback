@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link href="${request.contextPath}/static/ywUi/css/login/login.css" rel="stylesheet"/>
+		<link href="${request.contextPath}/static/ywUi/css/login/animate.css" rel="stylesheet"/>
+		<script src="${request.contextPath}/static/ywUi/js/lib/jquery-2.1.0.js"></script>
+		<script src="${request.contextPath}/static/ywUi/js/login/login.js"></script>
+		<script src="${request.contextPath}/static/ywUi/js/commons/md5.js"></script>
+	</head>
+	<body>
+		<div class="ui-login ui-grid-12 ">
+			<div class="logLayout">
+				<div class="logo-wrap bounceInDown">
+					<div class="img-wrap"></div>
+				  	<div class="words-wrap">财务报销系统</div>
+				</div>
+			</div>
+			<div class="login-content ui-grid-12">
+				<div class="conLayout">
+					<label class="animated">用户登录</label>
+					<div class="contentLayout">
+						<div class="inputLayout">
+							<input type="text" maxlength="50" name="userName" id="username" placeholder="请输入用户名"/>
+							<i class="userLog"></i>
+						</div>
+						<div class="inputLayout">
+							<input type="password" name="password" id="password" placeholder="请输入密码"/>
+							<i class="passLog"></i>
+						</div>
+						<div class="alertMes">
+							<div class="alertMes-tip" style="display: none;">
+								<i class="alertLog"></i>
+								<label></label>
+							</div>
+						</div>
+						<button class="yw-radius-large" onclick="checkUser()">登录</button>
+					<a class="sysLink"></a>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-12 login-footer">富阳第一人民医院</div>
+		</div>
+	</body>
+	<script>
+		$('.ui-login').css('height',$(window).height());
+	</script>
+</html>

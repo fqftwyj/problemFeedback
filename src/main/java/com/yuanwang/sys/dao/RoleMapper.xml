@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+ * RoleMapper
+ * 角色表
+ * @author  crj
+ * @version v1.0.0
+ * 描述：自动生成的代码
+ * 时间：2018-08-07 15:00:08
+-->
+<mapper namespace="com.yuanwang.sys.dao.RoleMapper" >
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <resultMap id="resultRoleMap" type="Role" > 
+			<id column="id" property="id" jdbcType="INTEGER" /><!---->
+			<result column="created_time" property="createdTime" jdbcType="TIMESTAMP" /><!--创建时间-->
+			<result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" /><!--更新时间-->
+			<result column="name" property="name" jdbcType="VARCHAR" /><!--角色名-->
+			<result column="description" property="description" jdbcType="VARCHAR" /><!--描述-->
+	</resultMap>
+
+
+	<!-- 表名 -->
+	<sql id="table_name">
+		sys_role
+	</sql>
+	
+	<!-- 主键条件 -->
+    <sql id="primaryCondition">
+    <where>
+    id = #{id}
+    </where>
+    </sql>
+    
+    <!-- 查询全部 -->
+    <sql id="findAll">
+        select * from <include refid="table_name" />
+    </sql>
+    <!-- 通用条件判断 -->
+    <sql id="condition">
+    	<where>
+    	  <if test="operator=='or'">
+    	  (
+    	  </if>
+    		<trim prefixOverrides="and|or">
+	    	<if test="createdTime!=null and createdTime!=''">
+    		 created_time = #{createdTime}
+    		</if>
+	    	<if test="updatedTime!=null and updatedTime!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> updated_time = #{updatedTime}
+    		</if>
+	    	<if test="name!=null and name!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> name = #{name}
+    		</if>
+	    	<if test="description!=null and description!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> description = #{description}
+    		</if>
+	    	</trim>
+	    	<if test="operator=='or'">
+    		)
+	    	</if>
+	    	<if test="excludeId!=null">
+    		 <![CDATA[
+    		 and id <> #{excludeId}
+    		 ]]>
+    		</if>
+    	</where>
+    </sql>
+    <sql id="orderBy">
+        <if test="sql_keyword_orderBy!=null and sql_keyword_orderBy!=''">
+    		order by ${sql_keyword_orderBy} ${sql_keyword_sort}
+    	</if>
+    </sql>
+    
+	
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Role"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true"> 
+        insert into <include refid="table_name" />(
+	        created_time,
+	        updated_time,
+	        name,
+	        description) values(
+	         #{createdTime},
+	         #{updatedTime},
+	         #{name},
+	         #{description}
+	        )
+	        
+	        <selectKey resultType="int" keyProperty="id">  
+	          SELECT  
+	          LAST_INSERT_ID()  
+	        </selectKey>
+   </insert>
+     <!-- 更新数据 -->
+    <update id="update" parameterType="Role" flushCache="true" >
+    	update <include refid="table_name" /> 
+    	<set>
+        	<if test="createdTime!=null">
+        	created_time = #{createdTime},
+        	 </if>
+        	<if test="updatedTime!=null">
+        	updated_time = #{updatedTime},
+        	 </if>
+        	<if test="name!=null">
+        	name = #{name},
+        	 </if>
+        	<if test="description!=null">
+        	description = #{description},
+        	 </if>
+        </set>
+        <include refid="primaryCondition"/> 
+   </update>
+   <!-- 删除数据 -->
+   <delete id="deleteByIds" flushCache="true" >
+		delete from <include refid="table_name" /> where id in
+		<foreach collection="list" index="index" item="ids" open="(" separator="," close=")">  
+            #{ids}
+        </foreach>                                          
+   </delete>
+   <!-- 删除数据 -->
+   <delete id="deleteById" parameterType="Role" flushCache="true" >
+		delete from <include refid="table_name" />  where id=#{id} 
+   </delete>
+   <!-- map删除数据 -->
+   <delete id="deleteByMap" parameterType="Map" flushCache="true" >
+		delete from <include refid="table_name" />   <include refid="condition"/>
+   </delete> 
+    
+    
+	
+	<!--根据主键查询-->
+	<select id="findById" parameterType="Integer" resultMap="resultRoleMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="primaryCondition"/> 
+	</select>
+	
+	<!--根据实体属性查询-->
+	<select id="findByMap" parameterType="Map" resultMap="resultRoleMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="condition"/>
+	</select>
+	
+	<!--查询全部记录-->
+    <select id="findAll" resultMap="resultRoleMap" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+    </select>   
+    
+    <!--excel导出记录-->
+    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+        <include refid="condition"/>
+    </select> 
+    
+    <select id="pro" parameterType="Map" resultMap="resultRoleMap" useCache="false"
+        statementType="CALLABLE">  
+        <![CDATA[ 
+        call xxx(
+        #{v_total,mode=OUT,jdbcType=INTEGER},
+        #{startRow,mode=IN,jdbcType=INTEGER},
+        #{endRow,mode=IN,jdbcType=INTEGER});
+        ]]>
+    </select>
+    
+    <select id="getRolesByUid" resultMap="resultRoleMap" parameterType="Integer" useCache="false">
+    	select r.* from sys_role r,sys_user_role ur
+		where r.id=ur.role_id
+		and ur.user_id=#{id}
+    </select>
+
+</mapper>

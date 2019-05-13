@@ -1,0 +1,216 @@
+@charset "utf-8";
+.yw-header .yw-logo {
+  padding: 5px 10px;
+  color: #ffffff;
+  font: bold 20px / 100% "Microsoft YaHei";
+}
+.yw-header .yw-logo .iconfont {
+  font-size: 42px;
+  font-weight: normal;
+  padding: 20px 5px 20px 10px;
+}
+.yw-header .yw-logo .icon-rmyy-logo {
+  background: url(../img/rmyy-logo.png) no-repeat;
+  width: 50px;
+  height: 26px;
+  display: inline-block;
+  background-size: 80px 65px;
+}
+.yw-header .layui-nav {
+  height: 100%;
+}
+.yw-header .layui-nav .layui-nav-item {
+  line-height: 37px!important;
+  cursor: pointer;
+}
+.yw-header .layui-nav .layui-nav-item > a {
+  color: rgba(255, 255, 255, 0.85);
+}
+.yw-header .layui-nav .layui-nav-item > a.yw-a-noword {
+  padding: 0 15px;
+}
+.yw-header .layui-nav .layui-nav-item > a:hover {
+  color: #ffffff;
+}
+.yw-header .layui-nav .layui-nav-item > a .layui-icon-login-wechat {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+.yw-header .layui-nav .layui-nav-item > .layui-nav-child {
+  margin-top: 20px;
+  left: auto;
+  right: 0px;
+}
+.yw-header .layui-nav .layui-icon,
+.yw-header .layui-nav .iconfont {
+  height: 33px;
+  font-size: 26px;
+  text-align: center;
+  vertical-align: top;
+}
+.yw-header .layui-nav .layui-icon.yw-iconfont-noword,
+.yw-header .layui-nav .iconfont.yw-iconfont-noword {
+  top: 0 !important;
+  line-height: 69px;
+}
+.yw-header .layui-layout-right {
+  height: 100%;
+}
+.yw-header .layui-layout-right .layui-nav:nth-of-type(1) {
+  padding: 0 0 0 10px;
+}
+.yw-header .layui-layout-right .layui-nav:nth-of-type(1) .layui-icon,
+.yw-header .layui-layout-right .layui-nav:nth-of-type(1) .iconfont {
+  position: relative;
+  top: 6px;
+}
+.layui-layout-admin .layui-header {
+  height: 70px;
+}
+.layui-layout-admin .layui-header .layui-nav .layui-nav-item {
+  height: 100%;
+}
+.layui-layout-admin .layui-header .layui-nav .layui-nav-more {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid dashed dashed;
+  border-color: #ffffff transparent transparent;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all .2s;
+  -webkit-transition: all .2s;
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  margin-top: -3px;
+  border-width: 6px;
+  border-top-color: rgba(255, 255, 255, 0.7);
+}
+.layui-layout-admin .layui-header .layui-nav .layui-nav-mored {
+  margin-top: -9px;
+  border-style: dashed dashed solid;
+  border-color: transparent transparent #ffffff;
+}
+.layui-layout-admin .layui-header .layui-nav .layui-nav-child dd.layui-this a {
+  background-color: #5fb878;
+  color: #ffffff;
+}
+.layui-layout-admin .layui-side.yw-side-menu {
+  top: 69px;
+}
+.layui-layout-admin .layadmin-pagetabs.yw-pagetabs {
+  top: 69px;
+}
+.layui-layout-admin .layadmin-pagetabs.yw-pagetabs-noside {
+  top: 69px;
+  left: 0;
+}
+.layui-layout-admin .layui-body.yw-body {
+  top: 110px !important;
+}
+.layui-layout-admin .yw-header .layui-nav .layui-this:after,
+.layui-layout-admin .yw-header .layui-nav-bar,
+.yw-nav-tree .layui-nav-itemed:after {
+  background-color: #187fcc !important;
+  height: 100% ;
+  z-index: -1;
+}
+.layui-layout-admin .layui-header .layui-nav .layui-this:after:hover,
+.layui-layout-admin .layui-header .layui-nav-bar:hover,
+.yw-nav-tree .layui-nav-itemed:after:hover {
+  background-color: transparent;
+}
+.layui-layout-admin .yw-header .layui-nav .layui-nav-child dd.layui-this a {
+  background-color: #1e9fff;
+}
+.yw-caption {
+  position: absolute;
+  top: 69px;
+  left: 220px;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-indent: 30px;
+  border-bottom: 1px solid #e2e2e2;
+  background-color: #ffffff;
+}
+.yw-caption-noside {
+  left: 0;
+}
+.yw-caption .layui-breadcrumb a:hover {
+  color: #1e9fff !important;
+}
+/*伸缩按钮*/
+.layui-layout-admin .yw-logo.yw-menu-home {
+  position: relative;
+  top: 0!important;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 45px;
+  text-align: left;
+  box-sizing: border-box;
+  color: rgba(255, 255, 255, 0.7);
+}
+.layui-layout-admin .yw-logo.yw-menu-home .layui-icon {
+  position: absolute;
+  left: 20px;
+}
+.layui-layout-admin .yw-logo.yw-menu-home .layui-icon.yw-icon-wrap {
+  left: 0;
+  color: rgba(255, 255, 255, 0.7);
+  position: relative;
+}
+.yw-icon-menu {
+  position: absolute;
+  left: 190px;
+  top: 0;
+}
+.layui-side-menu .layui-nav {
+  margin-top: 0!important;
+}
+.layui-side-menu .layui-nav .layui-nav-item .layui-icon.yw-icon-wrap {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.JS-nav .layui-nav-item a {
+  color: #505050 !important;
+}
+.layui-nav .layui-nav-more {
+  border-top-color: #505050 !important;
+}
+.layui-nav-itemed > .layui-nav-child {
+  background-color: #fff !important;
+}
+.layui-layout-admin .yw-logo.yw-menu-home {
+  color: #505050 !important;
+}
+.layui-layout-admin .yw-logo.yw-menu-home .layui-icon.yw-icon-wrap {
+  color: #505050 !important;
+}
+.layui-nav-tree .layui-nav-child a {
+  color: #505050 !important;
+}
+.layui-nav-tree .layui-nav-child dd.layui-this,
+.layui-nav-tree .layui-nav-child dd.layui-this a,
+.layui-nav-tree .layui-this,
+.layui-nav-tree .layui-this > a,
+.layui-nav-tree .layui-this > a:hover {
+  color: #fff !important;
+}
+.layui-nav-itemed > a,
+.layui-nav-tree .layui-nav-title a,
+.layui-nav-tree .layui-nav-title a:hover {
+  color: #505050 !important;
+}
+.layui-nav .layui-nav-mored,
+.layui-nav-itemed > a .layui-nav-more {
+  border-color: transparent transparent #505050 !important;
+}
+.layui-side-menu,
+.layadmin-setTheme-side {
+  background-color: #f1f1f3 !important;
+}
+.layadmin-side-shrink .layui-side-menu .layui-nav > .layui-nav-itemed > a {
+  background: #fff !important;
+}

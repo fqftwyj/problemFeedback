@@ -1,0 +1,480 @@
+@charset "utf-8";
+/* ---------------全局参数配置Start---------------- */
+/* -----------------默认配置 --------------------*/
+/* ----------------- 默认配置END ----------------*/
+html {
+  *position: static;
+  min-height: 100%;
+  color: #505050;
+  background: #fff;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+/* 内外边距通常让各个浏览器样式的表现位置不同 */
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+textarea,
+p,
+blockquote,
+th,
+td,
+hr,
+button,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  margin: 0;
+  padding: 0;
+}
+/* a 标签样式重置  */
+a {
+  color: #666;
+}
+a:focus {
+  outline: none;
+}
+a:hover,
+a:active {
+  outline: none;
+  text-decoration: none;
+}
+/* 默认不显示下划线，保持页面简洁 */
+ins,
+a {
+  text-decoration: none;
+}
+/*img*/
+img {
+  border: 0;
+  vertical-align: middle;
+}
+a img,
+img {
+  -ms-interpolation-mode: bicubic;
+}
+/*表单重置*/
+input,
+select,
+textarea,
+button {
+  outline: none;
+}
+button,
+input {
+  border: 0;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+/* chrome 下字体过小的问题 */
+.fn-webkit-adjust {
+  -webkit-text-size-adjust: none;
+}
+/* hide */
+.hide {
+  display: none!important;
+}
+/* 清理浮动 */
+.fn-clear:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.fn-clear {
+  zoom: 1;
+  /* for IE6 IE7 */
+}
+/* 清理浮动 */
+.fn-clear:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.fn-clear {
+  zoom: 1;
+  /* for IE6 IE7 */
+}
+.ui-grid-1,
+.ui-grid-2,
+.ui-grid-3,
+.ui-grid-4,
+.ui-grid-5,
+.ui-grid-6,
+.ui-grid-7,
+.ui-grid-8,
+.ui-grid-9,
+.ui-grid-10,
+.ui-grid-11,
+.ui-grid-12 {
+  float: left;
+  position: relative;
+}
+.ui-grid-12 {
+  width: 100%;
+}
+.ui-grid-11 {
+  width: 91.66666667%;
+}
+.ui-grid-10 {
+  width: 83.33333333%;
+}
+.ui-grid-9 {
+  width: 75%;
+}
+.ui-grid-8 {
+  width: 66.66666667%;
+}
+.ui-grid-7 {
+  width: 58.33333333%;
+}
+.ui-grid-6 {
+  width: 50%;
+}
+.ui-grid-5 {
+  width: 41.66666667%;
+}
+.ui-grid-4 {
+  width: 33.33333333%;
+}
+.ui-grid-3 {
+  width: 25%;
+}
+.ui-grid-2 {
+  width: 16.66666667%;
+}
+.ui-grid-1 {
+  width: 8.33333333%;
+}
+.ui-pull-12 {
+  right: 100%;
+}
+.ui-pull-11 {
+  right: 91.66666667%;
+}
+.ui-pull-10 {
+  right: 83.33333333%;
+}
+.ui-pull-9 {
+  right: 75%;
+}
+.ui-pull-8 {
+  right: 66.66666667%;
+}
+.ui-pull-7 {
+  right: 58.33333333%;
+}
+.ui-pull-6 {
+  right: 50%;
+}
+.ui-pull-5 {
+  right: 41.66666667%;
+}
+.ui-pull-4 {
+  right: 33.33333333%;
+}
+.ui-pull-3 {
+  right: 25%;
+}
+.ui-pull-2 {
+  right: 16.66666667%;
+}
+.ui-pull-1 {
+  right: 8.33333333%;
+}
+.ui-pull-0 {
+  right: auto;
+}
+.ui-push-12 {
+  left: 100%;
+}
+.ui-push-11 {
+  left: 91.66666667%;
+}
+.ui-push-10 {
+  left: 83.33333333%;
+}
+.ui-push-9 {
+  left: 75%;
+}
+.ui-push-8 {
+  left: 66.66666667%;
+}
+.ui-push-7 {
+  left: 58.33333333%;
+}
+.ui-push-6 {
+  left: 50%;
+}
+.ui-push-5 {
+  left: 41.66666667%;
+}
+.ui-push-4 {
+  left: 33.33333333%;
+}
+.ui-push-3 {
+  left: 25%;
+}
+.ui-push-2 {
+  left: 16.66666667%;
+}
+.ui-push-1 {
+  left: 8.33333333%;
+}
+.ui-push-0 {
+  left: auto;
+}
+.ui-offset-12 {
+  margin-left: 100%;
+}
+.ui-offset-11 {
+  margin-left: 91.66666667%;
+}
+.ui-offset-10 {
+  margin-left: 83.33333333%;
+}
+.ui-offset-9 {
+  margin-left: 75%;
+}
+.ui-offset-8 {
+  margin-left: 66.66666667%;
+}
+.ui-offset-7 {
+  margin-left: 58.33333333%;
+}
+.ui-offset-6 {
+  margin-left: 50%;
+}
+.ui-offset-5 {
+  margin-left: 41.66666667%;
+}
+.ui-offset-4 {
+  margin-left: 33.33333333%;
+}
+.ui-offset-3 {
+  margin-left: 25%;
+}
+.ui-offset-2 {
+  margin-left: 16.66666667%;
+}
+.ui-offset-1 {
+  margin-left: 8.33333333%;
+}
+.ui-offset-0 {
+  margin-left: 0;
+}
+html {
+  min-height: 100%;
+}
+html body {
+  z-index: 99999;
+  min-height: 100%;
+  min-width: 1280px;
+  font: normal 12px / 1rem "microsoft Yahei";
+  color: #505050;
+}
+.span {
+  width: 0;
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.ui-login {
+  display: block;
+  background-color: #0064df;
+  background-image: url(../../img/login/bgLogin.png);
+  background-size: 100% 100%;
+  position: fixed;
+  height: 100%;
+  min-width: 750px;
+}
+.logLayout {
+  text-align: center;
+  width: 100%;
+  height: 82px;
+  position: absolute;
+  top: 28%;
+}
+.logo-wrap {
+  width: 97%;
+  margin: 0 auto;
+  /* width: 510px; */
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+}
+.logLayout .img-wrap {
+  display: inline-block;
+  /* float: left; */
+  width: 80px;
+  height: 85px;
+  background: url('../../img/login/logo.png') no-repeat;
+}
+.logLayout .words-wrap {
+  vertical-align: top;
+  display: inline-block;
+  /* float: right;
+    width: 430px; */
+  height: 67px;
+  line-height: 67px;
+  font-size: 45px;
+  font-weight: 700;
+  color: #fff;
+  text-indent: 10px;
+  text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
+}
+.login-log {
+  display: block;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+}
+.login-content {
+  height: 115px;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 67%;
+}
+.conLayout {
+  height: 100%;
+  width: 760px;
+  margin: 0 auto;
+}
+.conLayout > label {
+  float: left;
+  font: bold 24px/115px "microsoft yahei";
+  padding: 0px 10px;
+  color: white;
+}
+.contentLayout {
+  width: 630px;
+  height: 100%;
+  float: left;
+}
+.inputLayout {
+  width: 176px;
+  height: 30px;
+  border-radius: 50px;
+  background-color: white;
+  /* border-radius: 50px; */
+  float: left;
+  margin: 42px 0px 0px 10px;
+  margin-left: 30px;
+}
+.inputLayout > input {
+  height: 30px;
+  width: 100px;
+  margin-left: 15px;
+  margin-right: 5px;
+}
+.inputLayout i {
+  width: 23px;
+  height: 24px;
+  float: right;
+  margin-top: 3px;
+  margin-right: 6px;
+}
+.userLog {
+  background: url('../../img/login/index-m.png') no-repeat -140px -239px;
+}
+.passLog {
+  background: url('../../img/login/index-m.png') no-repeat -240px -239px;
+}
+.alertMes {
+  width: 100%;
+  height: 30px;
+  margin-left: 40px;
+  float: left;
+  font: normal 12px/30px "microsoft yahei";
+  color: #ff8a00;
+}
+.alertMesPass {
+  margin-left: 255px;
+}
+.alertMes-tip {
+  width: 208px;
+  height: 30px;
+  float: left;
+}
+.alertMes-tip > i,
+.alertMes-tip > label {
+  float: left;
+}
+.alertMes-tip > i {
+  background: url('../../img/login/index-s.png') no-repeat -270px -1305px;
+  width: 24px;
+  height: 24px;
+}
+.yw-radius-large:hover {
+  opacity: .8;
+  color: #fff;
+}
+.yw-radius-large {
+  display: inline-block;
+  height: 30px;
+  padding: 0 20px;
+  font: 14px/30px "Microsoft YaHei";
+  background-color: #2993ff;
+  color: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  margin: 42px 10px 0px 16px;
+  width: 100px;
+}
+.sysLink {
+  display: inline-block;
+  color: #a4e6ff;
+  text-decoration: underline;
+}
+.login-footer {
+  position: absolute !important;
+  text-align: center;
+  color: #ffffff;
+  opacity: .5;
+  top: 96%;
+}
+@media (min-width: 1024px) and (max-width: 1500px) {
+  .conLayout > label {
+    font: bold 20px/115px "microsoft yahei";
+  }
+}
+@media (min-width: 1440px) and (max-width: 1500px) {
+  .login-log {
+    background-size: 100% 90%;
+  }
+}

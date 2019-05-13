@@ -1,0 +1,42 @@
+@charset "utf-8";
+.yw-header .layui-nav {
+  padding: 0;
+}
+.yw-header .yw-float {
+  float: left;
+}
+.yw-layout-admin .yw-side-menu {
+  display: none;
+}
+.yw-layout-admin .yw-pagetabs {
+  left: 0;
+  padding: 0 20px;
+}
+.yw-layout-admin .yw-pagetabs .JS-li {
+  background-color: #fff !important;
+}
+.yw-layout-admin .yw-body {
+  top: 110px !important;
+  left: 0px;
+}
+.yw-first-child {
+  padding: 0 !important;
+  border-right: none !important;
+}
+.JS-tab-title .layui-this {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fff !important;
+  border-right: none !important;
+  padding: 0 !important;
+}
+.JS-tab-title .layui-this i {
+  display: none;
+}
+.yw-no {
+  display: none;
+}
+.yw-active {
+  display: block;
+}

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+ * RolePermissionMapper
+ * 角色权限关系表
+ * @author  crj
+ * @version v1.0.0
+ * 描述：自动生成的代码
+ * 时间：2018-08-07 15:00:08
+-->
+<mapper namespace="com.yuanwang.sys.dao.RolePermissionMapper" >
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <resultMap id="resultRolePermissionMap" type="RolePermission" > 
+			<id column="id" property="id" jdbcType="INTEGER" /><!---->
+			<result column="role_id" property="roleId" jdbcType="INTEGER" /><!--角色id-->
+			<result column="permission_id" property="permissionId" jdbcType="INTEGER" /><!--权限id-->
+	</resultMap>
+
+
+	<!-- 表名 -->
+	<sql id="table_name">
+		sys_role_permission
+	</sql>
+	
+	<!-- 主键条件 -->
+    <sql id="primaryCondition">
+    <where>
+    id = #{id}
+    </where>
+    </sql>
+    
+    <!-- 查询全部 -->
+    <sql id="findAll">
+        select * from <include refid="table_name" />
+    </sql>
+    <!-- 通用条件判断 -->
+    <sql id="condition">
+    	<where>
+    	  <if test="operator=='or'">
+    	  (
+    	  </if>
+    		<trim prefixOverrides="and|or">
+	    	<if test="roleId!=null">
+    		 role_id = #{roleId}
+    		</if>
+	    	<if test="permissionId!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_id = #{permissionId}
+    		</if>
+	    	</trim>
+	    	<if test="operator=='or'">
+    		)
+	    	</if>
+	    	<if test="excludeId!=null">
+    		 <![CDATA[
+    		 and id <> #{excludeId}
+    		 ]]>
+    		</if>
+    	</where>
+    </sql>
+    <sql id="orderBy">
+        <if test="sql_keyword_orderBy!=null and sql_keyword_orderBy!=''">
+    		order by ${sql_keyword_orderBy} ${sql_keyword_sort}
+    	</if>
+    </sql>
+    
+	
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="RolePermission"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true"> 
+        insert into <include refid="table_name" />(
+	        role_id,
+	        permission_id) values(
+	         #{roleId},
+	         #{permissionId}
+	        )
+	        
+	        <selectKey resultType="int" keyProperty="id">  
+	          SELECT  
+	          LAST_INSERT_ID()  
+	        </selectKey>
+   </insert>
+   
+   <!--批量插入数据 -->
+   <insert id="insertBatch" parameterType="java.util.List">
+		insert into <include refid="table_name" />(role_id,permission_id)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.roleId},#{item.permissionId})
+		</foreach>
+	</insert>
+     <!-- 更新数据 -->
+    <update id="update" parameterType="RolePermission" flushCache="true" >
+    	update <include refid="table_name" /> 
+    	<set>
+        	<if test="roleId!=null">
+        	role_id = #{roleId},
+        	 </if>
+        	<if test="permissionId!=null">
+        	permission_id = #{permissionId},
+        	 </if>
+        </set>
+        <include refid="primaryCondition"/> 
+   </update>
+   <!-- 删除数据 -->
+   <delete id="deleteByIds" flushCache="true" >
+		delete from <include refid="table_name" /> where id in
+		<foreach collection="list" index="index" item="ids" open="(" separator="," close=")">  
+            #{ids}
+        </foreach>                                          
+   </delete>
+   <!-- 删除数据 -->
+   <delete id="deleteById" parameterType="RolePermission" flushCache="true" >
+		delete from <include refid="table_name" />  where id=#{id} 
+   </delete>
+   <!-- map删除数据 -->
+   <delete id="deleteByMap" parameterType="Map" flushCache="true" >
+		delete from <include refid="table_name" />   <include refid="condition"/>
+   </delete> 
+    
+    
+	
+	<!--根据主键查询-->
+	<select id="findById" parameterType="Integer" resultMap="resultRolePermissionMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="primaryCondition"/> 
+	</select>
+	
+	<!--根据实体属性查询-->
+	<select id="findByMap" parameterType="Map" resultMap="resultRolePermissionMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="condition"/>
+	</select>
+	
+	<!--查询全部记录-->
+    <select id="findAll" resultMap="resultRolePermissionMap" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+    </select>   
+    
+    <!--excel导出记录-->
+    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+        <include refid="condition"/>
+    </select> 
+    
+    <select id="pro" parameterType="Map" resultMap="resultRolePermissionMap" useCache="false"
+        statementType="CALLABLE">  
+        <![CDATA[ 
+        call xxx(
+        #{v_total,mode=OUT,jdbcType=INTEGER},
+        #{startRow,mode=IN,jdbcType=INTEGER},
+        #{endRow,mode=IN,jdbcType=INTEGER});
+        ]]>
+    </select>
+   
+   
+   
+</mapper>

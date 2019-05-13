@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>权限表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/style/admin.css" media="all">
+  <link href="${request.contextPath}/static/ywUi/plugin/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md3">
+        <!-- Ztree -->
+        <div id="tree">
+      <div style="padding: 10px;" class="layui-layer-wrap">
+       <ul id="typeTree" class="ztree"></ul>
+      </div>
+    </div>
+
+        <div class="layui-form-item layui-hide">
+          <input type="button" lay-submit lay-filter="LAY-distribute-submit" id="LAY-distribute-submit" value="确认">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<script src="${request.contextPath}/static/wUi/js/sys/role.js"></script>-->
+<script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
+<script src="${request.contextPath}/static/ywUi/plugin/zTree_v3/js/jquery-1.4.4.min.js"></script>
+<script src="${request.contextPath}/static/ywUi/plugin/zTree_v3/js/jquery.ztree.all.js"></script>
+<script type="text/javascript">
+    var zTree;
+    var setting = {
+        data : {
+            simpleData : {
+                enable : true, //设置启用简单数据格式[{id, pId, name}, {id, pId, name}]
+                idKey : "id",  //节点数据中保存唯一标识的属性名称
+                pIdKey : "pId",  //节点数据中保存其父节点唯一标识的属性名称
+                rootPId : null,  //根节点id
+                type: "type"
+            }
+        },
+        check: {
+            enable: true,   //true / false 分别表示 显示 / 不显示 复选框或单选框
+            autoCheckTrigger: true,   //true / false 分别表示 触发 / 不触发 事件回调函数
+            chkStyle: "checkbox",   //勾选框类型(checkbox 或 radio）
+            chkboxType: { "Y": "", "N": "" }   //勾选 checkbox 对于父子节点的关联关系
+            /*
+        Y: 选择复选框时   N: 取消复选框选中  p: 父级   s: 子级
+       */
+        },
+    };
+
+    var privilegeStr;
+    $(document).ready(function(){
+        //发送异步请求加载分类信息,更新Ztree节点内容
+         var url = "queryPermissionTree";
+         $.getJSON(url,function(result){
+            //访问zTree方法通过数据初始化节点信息
+           zTree=$.fn.zTree.init($("#typeTree"),setting,result);
+        //zTree.expandAll(false);
+          var nodes= zTree.getNodes();
+          zTree.reAsyncChildNodes(nodes[0],"refresh");
+          zTree.expandNode(nodes[0]);
+          //反显选中
+          <#list roleList as role>
+              var pid =parseInt('${(role.permissionId?c)}');
+              var treeNode = zTree.getNodeByParam("id", pid,null);
+              zTree.checkNode(treeNode,true,true);
+          </#list>
+        });
+    });
+
+    layui.config({
+        base: '${request.contextPath}/static/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+        role: '../../ywUi/js/sys/role'
+    }).use(['index', 'role', 'table'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table;
+
+        //监听搜索
+        form.on('submit(LAY-role-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('LAY-role-table', {
+                where: field
+            });
+        });
+        layui.table.reload('LAY-role-table', {
+            where: {
+                parentId:1
+            }
+        });
+
+        $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+    function getTree(){
+        return zTree;
+    }
+</script>
+</body>
+</html>
+

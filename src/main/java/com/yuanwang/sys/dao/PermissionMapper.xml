@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+ * PermissionMapper
+ * 权限表
+ * @author  crj
+ * @version v1.0.0
+ * 描述：自动生成的代码
+ * 时间：2018-09-10 15:00:10
+-->
+<mapper namespace="com.yuanwang.sys.dao.PermissionMapper" >
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <resultMap id="resultPermissionMap" type="Permission" > 
+			<id column="id" property="id" jdbcType="INTEGER" /><!---->
+			<result column="created_time" property="createdTime" jdbcType="TIMESTAMP" /><!--创建时间-->
+			<result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" /><!--更新时间-->
+			<result column="permission_name" property="permissionName" jdbcType="VARCHAR" /><!--权限名-->
+			<result column="permission_code" property="permissionCode" jdbcType="VARCHAR" /><!--编号-->
+			<result column="permission_type" property="permissionType" jdbcType="INTEGER" /><!--权限类型【enum】(0:普通菜单:menu,1:链接:link,2:功能:method)-->
+			<result column="permission_url" property="permissionUrl" jdbcType="VARCHAR" /><!--权限url-->
+			<result column="permission_icon" property="permissionIcon" jdbcType="VARCHAR" /><!---->
+			<result column="description" property="description" jdbcType="VARCHAR" /><!--描述-->
+			<result column="sort" property="sort" jdbcType="INTEGER" /><!--排序-->
+			<result column="parent_id" property="parentId" jdbcType="INTEGER" /><!--父权限id-->
+			<collection property="sonPermission" column="{parentId=id}" javaType="ArrayList" ofType="Permission" select="com.yuanwang.sys.dao.PermissionMapper.findByPid"/>
+	</resultMap>
+
+
+	<!-- 表名 -->
+	<sql id="table_name">
+		sys_permission
+	</sql>
+	
+	<!-- 主键条件 -->
+    <sql id="primaryCondition">
+    <where>
+    id = #{id}
+    </where>
+    </sql>
+    
+    <!-- 查询全部 -->
+    <sql id="findAll">
+        select * from <include refid="table_name" />
+    </sql>
+    <!-- 通用条件判断 -->
+    <sql id="condition">
+    	<where>
+    	  <if test="operator=='or'">
+    	  (
+    	  </if>
+    		<trim prefixOverrides="and|or">
+	    	<if test="createdTime!=null and createdTime!=''">
+    		 created_time = #{createdTime}
+    		</if>
+	    	<if test="updatedTime!=null and updatedTime!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> updated_time = #{updatedTime}
+    		</if>
+	    	<if test="permissionName!=null and permissionName!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_name = #{permissionName}
+    		</if>
+	    	<if test="permissionCode!=null and permissionCode!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_code = #{permissionCode}
+    		</if>
+	    	<if test="permissionType!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_type = #{permissionType}
+    		</if>
+	    	<if test="permissionUrl!=null and permissionUrl!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_url = #{permissionUrl}
+    		</if>
+	    	<if test="permissionIcon!=null and permissionIcon!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_icon = #{permissionIcon}
+    		</if>
+	    	<if test="description!=null and description!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> description = #{description}
+    		</if>
+	    	<if test="sort!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> sort = #{sort}
+    		</if>
+	    	<if test="parentId!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> parent_id = #{parentId}
+    		</if>
+	    	</trim>
+	    	<if test="operator=='or'">
+    		)
+	    	</if>
+	    	<if test="excludeId!=null">
+    		 <![CDATA[
+    		 and id <> #{excludeId}
+    		 ]]>
+    		</if>
+    	</where>
+    </sql>
+    <sql id="orderBy">
+        <if test="sql_keyword_orderBy!=null and sql_keyword_orderBy!=''">
+    		order by ${sql_keyword_orderBy} ${sql_keyword_sort}
+    	</if>
+    </sql>
+    
+	
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Permission"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true"> 
+        insert into <include refid="table_name" />(
+			id,
+	        created_time,
+	        updated_time,
+	        permission_name,
+	        permission_code,
+	        permission_type,
+	        permission_url,
+	        permission_icon,
+	        description,
+	        sort,
+	        parent_id) values(
+			 #{id},
+	         now(),
+	         #{updatedTime},
+	         #{permissionName},
+	         #{permissionCode},
+	         #{permissionType},
+	         #{permissionUrl},
+	         #{permissionIcon},
+	         #{description},
+	         #{sort},
+	         #{parentId}
+	        )
+	        
+	        <selectKey resultType="int" keyProperty="id">  
+	          SELECT  
+	          LAST_INSERT_ID()  
+	        </selectKey>
+   </insert>
+     <!-- 更新数据 -->
+    <update id="update" parameterType="Permission" flushCache="true" >
+    	update <include refid="table_name" /> 
+    	<set>
+        	<if test="createdTime!=null">
+        	created_time = #{createdTime},
+        	 </if>
+        	<if test="updatedTime!=null">
+        	updated_time = #{updatedTime},
+        	 </if>
+        	<if test="permissionName!=null">
+        	permission_name = #{permissionName},
+        	 </if>
+        	<if test="permissionCode!=null">
+        	permission_code = #{permissionCode},
+        	 </if>
+        	<if test="permissionType!=null">
+        	permission_type = #{permissionType},
+        	 </if>
+        	<if test="permissionUrl!=null">
+        	permission_url = #{permissionUrl},
+        	 </if>
+        	<if test="permissionIcon!=null">
+        	permission_icon = #{permissionIcon},
+        	 </if>
+        	<if test="description!=null">
+        	description = #{description},
+        	 </if>
+        	<if test="sort!=null">
+        	sort = #{sort},
+        	 </if>
+        	<if test="parentId!=null">
+        	parent_id = #{parentId},
+        	 </if>
+        </set>
+        <include refid="primaryCondition"/> 
+   </update>
+   <!-- 删除数据 -->
+   <delete id="deleteByIds" flushCache="true" >
+		delete from <include refid="table_name" /> where id in
+		<foreach collection="list" index="index" item="ids" open="(" separator="," close=")">  
+            #{ids}
+        </foreach>                                          
+   </delete>
+   <!-- 删除数据 -->
+   <delete id="deleteById" parameterType="Permission" flushCache="true" >
+		delete from <include refid="table_name" />  where id=#{id} 
+   </delete>
+   <!-- map删除数据 -->
+   <delete id="deleteByMap" parameterType="Map" flushCache="true" >
+		delete from <include refid="table_name" />   <include refid="condition"/>
+   </delete> 
+    
+    
+	
+	<!--根据主键查询-->
+	<select id="findById" parameterType="Integer" resultMap="resultPermissionMap" useCache="false" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="primaryCondition"/> 
+	</select>
+	
+	<!--根据实体属性查询-->
+	<select id="findByMap" parameterType="Map" resultMap="resultPermissionMap" useCache="false" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="condition"/>
+	</select>
+	
+	<!--查询全部记录-->
+    <select id="findAll" resultMap="resultPermissionMap" useCache="false" flushCache="false">
+        <include refid="findAll"/> 
+    </select>   
+    
+    <!--excel导出记录-->
+    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+        <include refid="condition"/>
+    </select> 
+    
+    <select id="pro" parameterType="Map" resultMap="resultPermissionMap" useCache="false"
+        statementType="CALLABLE">  
+        <![CDATA[ 
+        call xxx(
+        #{v_total,mode=OUT,jdbcType=INTEGER},
+        #{startRow,mode=IN,jdbcType=INTEGER},
+        #{endRow,mode=IN,jdbcType=INTEGER});
+        ]]>
+    </select>
+    
+    <select id="getPermissionsByUid" resultMap="resultPermissionMap" parameterType="Integer" useCache="false">
+    	select p.* from sys_permission p,sys_role_permission rp,sys_user_role ur
+		where p.id=rp.permission_id
+		and rp.role_id=ur.role_id
+		and ur.user_id=#{id}
+		order by p.sort
+    </select>
+    
+    <select id="findByPid" resultType="Permission" parameterType="Map" useCache="true">
+    	select p.* from sys_permission p where parent_id=#{parentId} ORDER BY id ASC
+    </select>
+
+	<select id="findMaxIdPermission" resultType="Permission" parameterType="Map">
+		select * from sys_permission where parent_Id=#{parentId} ORDER BY id desc limit 1
+	</select>
+
+</mapper>

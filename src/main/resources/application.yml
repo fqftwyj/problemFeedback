@@ -7,7 +7,7 @@ spring:
     datasource:
         name: finacemanage
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://172.16.63.65:3306/${spring.datasource.name}?useSSL=false
+        url: jdbc:mysql://localhost:3306/${spring.datasource.name}?useSSL=false
         username: root
         password: 123456
         type: com.alibaba.druid.pool.DruidDataSource

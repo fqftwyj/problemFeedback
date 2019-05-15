@@ -61,6 +61,7 @@ spring:
 # 配置请求头传输大小
 server:
   max-http-header-size: 10000000
+
   
 # Shiro
 shiro:

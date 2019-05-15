@@ -46,8 +46,7 @@ public class StartUpRunner implements ApplicationRunner{
 	
 	@Value("${spring.datasource.password}")
 	private String password;
-	
-	
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		// TODO Auto-generated method stub

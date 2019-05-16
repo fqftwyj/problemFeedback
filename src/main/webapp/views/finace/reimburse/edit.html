@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>编辑</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+  <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item layui-hide">
+        <input type="button" name="id" class="layui-input" value="${result.id?c}">
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">员工编号</label>
+      <div class="layui-input-inline">
+        <input type="text" name="staffCode" lay-verify="required" placeholder="请输入员工编号" autocomplete="off" class="layui-input" value="${result.staffCode!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">报销类别【enum】(1:外出培训:outtrain)</label>
+      <div class="layui-input-inline">
+	  <select name='reimburseType'>
+	       <option value="">请输入</option>
+	       <#list reimburseTypeEnum as obj>
+	       <option value="${obj}" <#if obj==result.reimburseType>selected</#if> >${obj.desc}</option>
+	       </#list>
+	  </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">报销类别【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)</label>
+      <div class="layui-input-inline">
+	  <select name='reimburseState'>
+	       <option value="">请输入</option>
+	       <#list reimburseStateEnum as obj>
+	       <option value="${obj}" <#if obj==result.reimburseState>selected</#if> >${obj.desc}</option>
+	       </#list>
+	  </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label"> 报销日期</label>
+      <div class="layui-input-inline">
+        <input type="text" name="reimburseDate" id="reimburseDate" lay-verify="required" placeholder="请输入 报销日期" autocomplete="off" class="layui-input" value="${result.reimburseDate?datetime}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">报销成员</label>
+      <div class="layui-input-inline">
+        <input type="text" name="reimburseMembers" lay-verify="required" placeholder="请输入报销成员" autocomplete="off" class="layui-input" value="${result.reimburseMembers!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">报销理由</label>
+      <div class="layui-input-inline">
+        <input type="text" name="reimburseReason" lay-verify="required" placeholder="请输入报销理由" autocomplete="off" class="layui-input" value="${result.reimburseReason!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">报销事项</label>
+      <div class="layui-input-inline">
+        <input type="text" name="reimburseItems" lay-verify="required" placeholder="请输入报销事项" autocomplete="off" class="layui-input" value="${result.reimburseItems!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">报销费用</label>
+      <div class="layui-input-inline">
+        <input type="text" name="reimburseCost" lay-verify="required" placeholder="请输入报销费用" autocomplete="off" class="layui-input" value="${result.reimburseCost!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">上传文件路径</label>
+      <div class="layui-input-inline">
+        <input type="text" name="uploadPath" lay-verify="required" placeholder="请输入上传文件路径" autocomplete="off" class="layui-input" value="${result.uploadPath!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">上传文件名称</label>
+      <div class="layui-input-inline">
+        <input type="text" name="uploadName" lay-verify="required" placeholder="请输入上传文件名称" autocomplete="off" class="layui-input" value="${result.uploadName!}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">创建时间</label>
+      <div class="layui-input-inline">
+        <input type="text" name="createTime" id="createTime" lay-verify="required" placeholder="请输入创建时间" autocomplete="off" class="layui-input" value="${result.createTime?datetime}">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">更新时间</label>
+      <div class="layui-input-inline">
+        <input type="text" name="updateTime" id="updateTime" lay-verify="required" placeholder="请输入更新时间" autocomplete="off" class="layui-input" value="${result.updateTime?datetime}">
+      </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-reimburse-submit" id="LAY-reimburse-submit" value="确认">
+    </div>
+  </div>
+
+  <script src="${request.contextPath}/static/layui/layui.js"></script>  
+  <script>
+  layui.config({
+    base: '${request.contextPath}/static/yw/' //静态资源所在路径
+  }).extend({
+    index: 'index', //主入口模块
+    verfy:'../../ywUi/js/commons/verfy'
+  }).use(['index','form','verfy','laydate'], function(){
+    var $ = layui.$
+    ,form = layui.form 
+    ,laydate = layui.laydate;
+    
+    laydate.render({
+      elem:'#reimburseDate',
+      type:'datetime'
+    });
+    laydate.render({
+      elem:'#createTime',
+      type:'datetime'
+    });
+    laydate.render({
+      elem:'#updateTime',
+      type:'datetime'
+    });
+  })
+  </script>
+</body>
+</html>

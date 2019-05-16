@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+ * ReimburseMapper
+ * 
+ * @author  crj
+ * @version v1.0.0
+ * 描述：自动生成的代码
+ * 时间：2019-05-16 11:15:07
+-->
+<mapper namespace="com.yuanwang.finace.dao.ReimburseMapper" >
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <resultMap id="resultReimburseMap" type="Reimburse" > 
+			<id column="id" property="id" jdbcType="INTEGER" /><!--自增id-->
+			<result column="staff_code" property="staffCode" jdbcType="VARCHAR" /><!--员工编号-->
+			<result column="reimburse_type" property="reimburseType" jdbcType="INTEGER" /><!--报销类别【enum】(1:外出培训:outtrain)-->
+			<result column="reimburse_state" property="reimburseState" jdbcType="INTEGER" /><!--报销类别【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)-->
+			<result column="reimburse_date" property="reimburseDate" jdbcType="TIMESTAMP" /><!-- 报销日期-->
+			<result column="reimburse_members" property="reimburseMembers" jdbcType="VARCHAR" /><!--报销成员-->
+			<result column="reimburse_reason" property="reimburseReason" jdbcType="VARCHAR" /><!--报销理由-->
+			<result column="reimburse_items" property="reimburseItems" jdbcType="VARCHAR" /><!--报销事项-->
+			<result column="reimburse_cost" property="reimburseCost" jdbcType="VARCHAR" /><!--报销费用-->
+			<result column="upload_path" property="uploadPath" jdbcType="VARCHAR" /><!--上传文件路径-->
+			<result column="upload_name" property="uploadName" jdbcType="VARCHAR" /><!--上传文件名称-->
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->
+	</resultMap>
+
+
+	<!-- 表名 -->
+	<sql id="table_name">
+		finace_reimburse
+	</sql>
+	
+	<!-- 主键条件 -->
+    <sql id="primaryCondition">
+    <where>
+    id = #{id}
+    </where>
+    </sql>
+    
+    <!-- 查询全部 -->
+    <sql id="findAll">
+        select * from <include refid="table_name" />
+    </sql>
+    <!-- 通用条件判断 -->
+    <sql id="condition">
+    	<where>
+    	  <if test="operator=='or'">
+    	  (
+    	  </if>
+    		<trim prefixOverrides="and|or">
+	    	<if test="staffCode!=null and staffCode!=''">
+    		 staff_code = #{staffCode}
+    		</if>
+	    	<if test="reimburseType!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_type = #{reimburseType}
+    		</if>
+	    	<if test="reimburseState!=null">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_state = #{reimburseState}
+    		</if>
+	    	<if test="reimburseDate!=null and reimburseDate!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_date = #{reimburseDate}
+    		</if>
+	    	<if test="reimburseMembers!=null and reimburseMembers!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_members = #{reimburseMembers}
+    		</if>
+	    	<if test="reimburseReason!=null and reimburseReason!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_reason = #{reimburseReason}
+    		</if>
+	    	<if test="reimburseItems!=null and reimburseItems!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_items = #{reimburseItems}
+    		</if>
+	    	<if test="reimburseCost!=null and reimburseCost!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_cost = #{reimburseCost}
+    		</if>
+	    	<if test="uploadPath!=null and uploadPath!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> upload_path = #{uploadPath}
+    		</if>
+	    	<if test="uploadName!=null and uploadName!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> upload_name = #{uploadName}
+    		</if>
+	    	<if test="createTime!=null and createTime!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> create_time = #{createTime}
+    		</if>
+	    	<if test="updateTime!=null and updateTime!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> update_time = #{updateTime}
+    		</if>
+	    	</trim>
+	    	<if test="operator=='or'">
+    		)
+	    	</if>
+	    	<if test="excludeId!=null">
+    		 <![CDATA[
+    		 and id <> #{excludeId}
+    		 ]]>
+    		</if>
+    	</where>
+    </sql>
+    <sql id="orderBy">
+        <if test="sql_keyword_orderBy!=null and sql_keyword_orderBy!=''">
+    		order by ${sql_keyword_orderBy} ${sql_keyword_sort}
+    	</if>
+    </sql>
+    
+	
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Reimburse"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true"> 
+        insert into <include refid="table_name" />(
+	        staff_code,
+	        reimburse_type,
+	        reimburse_state,
+	        reimburse_date,
+	        reimburse_members,
+	        reimburse_reason,
+	        reimburse_items,
+	        reimburse_cost,
+	        upload_path,
+	        upload_name,
+	        create_time,
+	        update_time) values(
+	         #{staffCode},
+	         #{reimburseType},
+	         #{reimburseState},
+	         #{reimburseDate},
+	         #{reimburseMembers},
+	         #{reimburseReason},
+	         #{reimburseItems},
+	         #{reimburseCost},
+	         #{uploadPath},
+	         #{uploadName},
+	         #{createTime},
+	         #{updateTime}
+	        )
+	        
+	        <selectKey resultType="int" keyProperty="id">  
+	          SELECT  
+	          LAST_INSERT_ID()  
+	        </selectKey>
+   </insert>
+     <!-- 更新数据 -->
+    <update id="update" parameterType="Reimburse" flushCache="true" >
+    	update <include refid="table_name" /> 
+    	<set>
+        	<if test="staffCode!=null">
+        	staff_code = #{staffCode},
+        	 </if>
+        	<if test="reimburseType!=null">
+        	reimburse_type = #{reimburseType},
+        	 </if>
+        	<if test="reimburseState!=null">
+        	reimburse_state = #{reimburseState},
+        	 </if>
+        	<if test="reimburseDate!=null">
+        	reimburse_date = #{reimburseDate},
+        	 </if>
+        	<if test="reimburseMembers!=null">
+        	reimburse_members = #{reimburseMembers},
+        	 </if>
+        	<if test="reimburseReason!=null">
+        	reimburse_reason = #{reimburseReason},
+        	 </if>
+        	<if test="reimburseItems!=null">
+        	reimburse_items = #{reimburseItems},
+        	 </if>
+        	<if test="reimburseCost!=null">
+        	reimburse_cost = #{reimburseCost},
+        	 </if>
+        	<if test="uploadPath!=null">
+        	upload_path = #{uploadPath},
+        	 </if>
+        	<if test="uploadName!=null">
+        	upload_name = #{uploadName},
+        	 </if>
+        	<if test="createTime!=null">
+        	create_time = #{createTime},
+        	 </if>
+        	<if test="updateTime!=null">
+        	update_time = #{updateTime},
+        	 </if>
+        </set>
+        <include refid="primaryCondition"/> 
+   </update>
+   <!-- 删除数据 -->
+   <delete id="deleteByIds" flushCache="true" >
+		delete from <include refid="table_name" /> where id in
+		<foreach collection="list" index="index" item="ids" open="(" separator="," close=")">  
+            #{ids}
+        </foreach>                                          
+   </delete>
+   <!-- 删除数据 -->
+   <delete id="deleteById" parameterType="Reimburse" flushCache="true" >
+		delete from <include refid="table_name" />  where id=#{id} 
+   </delete>
+   <!-- map删除数据 -->
+   <delete id="deleteByMap" parameterType="Map" flushCache="true" >
+		delete from <include refid="table_name" />   <include refid="condition"/>
+   </delete> 
+    
+    
+	
+	<!--根据主键查询-->
+	<select id="findById" parameterType="Integer" resultMap="resultReimburseMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="primaryCondition"/> 
+	</select>
+	
+	<!--根据实体属性查询-->
+	<select id="findByMap" parameterType="Map" resultMap="resultReimburseMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="condition"/>
+	</select>
+	
+	<!--查询全部记录-->
+    <select id="findAll" resultMap="resultReimburseMap" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+    </select>   
+    
+    <!--excel导出记录-->
+    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+        <include refid="condition"/>
+    </select> 
+    
+    <select id="pro" parameterType="Map" resultMap="resultReimburseMap" useCache="false"
+        statementType="CALLABLE">  
+        <![CDATA[ 
+        call xxx(
+        #{v_total,mode=OUT,jdbcType=INTEGER},
+        #{startRow,mode=IN,jdbcType=INTEGER},
+        #{endRow,mode=IN,jdbcType=INTEGER});
+        ]]>
+    </select>
+   
+</mapper>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+ * StaffMapper
+ * 
+ * @author  crj
+ * @version v1.0.0
+ * 描述：自动生成的代码
+ * 时间：2019-05-16 09:47:26
+-->
+<mapper namespace="com.yuanwang.sys.dao.StaffMapper" >
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <resultMap id="resultStaffMap" type="Staff" > 
+			<id column="id" property="id" jdbcType="INTEGER" /><!---->
+			<result column="office_code" property="officeCode" jdbcType="VARCHAR" /><!--科室编号-->
+			<result column="staff_code" property="staffCode" jdbcType="VARCHAR" /><!--员工编号-->
+			<result column="staff_name" property="staffName" jdbcType="VARCHAR" /><!--员工名称-->
+			<result column="phone" property="phone" jdbcType="VARCHAR" /><!--联系方式-->
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->
+	</resultMap>
+
+
+	<!-- 表名 -->
+	<sql id="table_name">
+		sys_staff
+	</sql>
+	
+	<!-- 主键条件 -->
+    <sql id="primaryCondition">
+    <where>
+    id = #{id}
+    </where>
+    </sql>
+    
+    <!-- 查询全部 -->
+    <sql id="findAll">
+        select * from <include refid="table_name" />
+    </sql>
+    <!-- 通用条件判断 -->
+    <sql id="condition">
+    	<where>
+    	  <if test="operator=='or'">
+    	  (
+    	  </if>
+    		<trim prefixOverrides="and|or">
+	    	<if test="officeCode!=null and officeCode!=''">
+    		 office_code = #{officeCode}
+    		</if>
+	    	<if test="staffCode!=null and staffCode!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> staff_code = #{staffCode}
+    		</if>
+	    	<if test="staffName!=null and staffName!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> staff_name = #{staffName}
+    		</if>
+	    	<if test="phone!=null and phone!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> phone = #{phone}
+    		</if>
+	    	<if test="createTime!=null and createTime!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> create_time = #{createTime}
+    		</if>
+	    	<if test="updateTime!=null and updateTime!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> update_time = #{updateTime}
+    		</if>
+	    	</trim>
+	    	<if test="operator=='or'">
+    		)
+	    	</if>
+	    	<if test="excludeId!=null">
+    		 <![CDATA[
+    		 and id <> #{excludeId}
+    		 ]]>
+    		</if>
+    	</where>
+    </sql>
+    <sql id="orderBy">
+        <if test="sql_keyword_orderBy!=null and sql_keyword_orderBy!=''">
+    		order by ${sql_keyword_orderBy} ${sql_keyword_sort}
+    	</if>
+    </sql>
+    
+	
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Staff"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" flushCache="true"> 
+        insert into <include refid="table_name" />(
+	        office_code,
+	        staff_code,
+	        staff_name,
+	        phone,
+	        create_time,
+	        update_time) values(
+	         #{officeCode},
+	         #{staffCode},
+	         #{staffName},
+	         #{phone},
+	         #{createTime},
+	         #{updateTime}
+	        )
+	        
+	        <selectKey resultType="int" keyProperty="id">  
+	          SELECT  
+	          LAST_INSERT_ID()  
+	        </selectKey>
+   </insert>
+     <!-- 更新数据 -->
+    <update id="update" parameterType="Staff" flushCache="true" >
+    	update <include refid="table_name" /> 
+    	<set>
+        	<if test="officeCode!=null">
+        	office_code = #{officeCode},
+        	 </if>
+        	<if test="staffCode!=null">
+        	staff_code = #{staffCode},
+        	 </if>
+        	<if test="staffName!=null">
+        	staff_name = #{staffName},
+        	 </if>
+        	<if test="phone!=null">
+        	phone = #{phone},
+        	 </if>
+        	<if test="createTime!=null">
+        	create_time = #{createTime},
+        	 </if>
+        	<if test="updateTime!=null">
+        	update_time = #{updateTime},
+        	 </if>
+        </set>
+        <include refid="primaryCondition"/> 
+   </update>
+   <!-- 删除数据 -->
+   <delete id="deleteByIds" flushCache="true" >
+		delete from <include refid="table_name" /> where id in
+		<foreach collection="list" index="index" item="ids" open="(" separator="," close=")">  
+            #{ids}
+        </foreach>                                          
+   </delete>
+   <!-- 删除数据 -->
+   <delete id="deleteById" parameterType="Staff" flushCache="true" >
+		delete from <include refid="table_name" />  where id=#{id} 
+   </delete>
+   <!-- map删除数据 -->
+   <delete id="deleteByMap" parameterType="Map" flushCache="true" >
+		delete from <include refid="table_name" />   <include refid="condition"/>
+   </delete> 
+    
+    
+	
+	<!--根据主键查询-->
+	<select id="findById" parameterType="Integer" resultMap="resultStaffMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="primaryCondition"/> 
+	</select>
+	
+	<!--根据实体属性查询-->
+	<select id="findByMap" parameterType="Map" resultMap="resultStaffMap" useCache="true" flushCache="false">
+	    <include refid="findAll"/>
+	    <include refid="condition"/>
+	</select>
+	
+	<!--查询全部记录-->
+    <select id="findAll" resultMap="resultStaffMap" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+    </select>   
+    
+    <!--excel导出记录-->
+    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="true" flushCache="false">
+        <include refid="findAll"/> 
+        <include refid="condition"/>
+    </select> 
+    
+    <select id="pro" parameterType="Map" resultMap="resultStaffMap" useCache="false"
+        statementType="CALLABLE">  
+        <![CDATA[ 
+        call xxx(
+        #{v_total,mode=OUT,jdbcType=INTEGER},
+        #{startRow,mode=IN,jdbcType=INTEGER},
+        #{endRow,mode=IN,jdbcType=INTEGER});
+        ]]>
+    </select>
+   
+</mapper>

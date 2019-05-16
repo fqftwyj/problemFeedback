@@ -42,12 +42,12 @@
 		</dependency>
 		
 		<!-- Spring Boot Web 依赖 -->
-	<!--	<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>-->
+		</dependency>
 		<!-- Spring Boot tomcat启动 -->
-		<dependency>
+	<!--	<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -56,7 +56,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>-->
 
 		<!-- Spring Boot Mybatis 依赖 -->
 		<dependency>
@@ -188,12 +188,7 @@
 		  <artifactId>fastjson</artifactId>
 		  <version>1.2.41</version>
 		</dependency>
-		<!--alibaba fastjson依赖 -->
-		<!--<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>4.1.0</version>
-		</dependency>-->
+
 	</dependencies>
 
 	<build>

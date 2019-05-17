@@ -1,131 +1,250 @@
-
-
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8">
-  <title>新增</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/layui/css/layui.css" media="all">
-  <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/style/admin.css" media="all">
+    <meta charset="utf-8">
+    <title>新的定时任务系统表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/style/admin.css" media="all">
+
 </head>
 <body>
+<div class="layui-fluid" style="
+    background-color: white;">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-col-md11">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">科室：</label>
+                        <div class="layui-input-block">
+                            <select name='jobStatus'>
+                                <#list reimburseTypeEnum as obj>
+                                <option value="${obj}">${obj.desc}</option>
+                            </#list>
 
-  <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
-    <div class="layui-form-item">
-      <label class="layui-form-label">员工编号</label>
-      <div class="layui-input-inline">
-        <input type="text" name="staffCode" lay-verify="required" placeholder="请输入员工编号" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销类别</label>
-      <div class="layui-input-inline">
-	  <select name='reimburseType'>
-	       <option value="">请输入</option>
-	       <#list reimburseTypeEnum as obj>
-	       <option value="${obj}">${obj.desc}</option>
-	       </#list>
-	  </select>
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销类别</label>
-      <div class="layui-input-inline">
-	  <select name='reimburseState'>
-	       <option value="">请输入</option>
-	       <#list reimburseStateEnum as obj>
-	       <option value="${obj}">${obj.desc}</option>
-	       </#list>
-	  </select>
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label"> 报销日期</label>
-      <div class="layui-input-inline">
-        <input type="text" name="reimburseDate" id="reimburseDate" lay-verify="required" placeholder="请输入 报销日期" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销成员</label>
-      <div class="layui-input-inline">
-        <input type="text" name="reimburseMembers" lay-verify="required" placeholder="请输入报销成员" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销理由</label>
-      <div class="layui-input-inline">
-        <input type="text" name="reimburseReason" lay-verify="required" placeholder="请输入报销理由" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销事项</label>
-      <div class="layui-input-inline">
-        <input type="text" name="reimburseItems" lay-verify="required" placeholder="请输入报销事项" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销费用</label>
-      <div class="layui-input-inline">
-        <input type="text" name="reimburseCost" lay-verify="required" placeholder="请输入报销费用" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">上传文件路径</label>
-      <div class="layui-input-inline">
-        <input type="text" name="uploadPath" lay-verify="required" placeholder="请输入上传文件路径" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">上传文件名称</label>
-      <div class="layui-input-inline">
-        <input type="text" name="uploadName" lay-verify="required" placeholder="请输入上传文件名称" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">创建时间</label>
-      <div class="layui-input-inline">
-        <input type="text" name="createTime" id="createTime" lay-verify="required" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">更新时间</label>
-      <div class="layui-input-inline">
-        <input type="text" name="updateTime" id="updateTime" lay-verify="required" placeholder="请输入更新时间" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="LAY-reimburse-submit" id="LAY-reimburse-submit" value="确认">
-    </div>
-  </div>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">出差人：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">报销日期：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="description" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md11">
+                    <div class="layui-inline layui-col-md9">
+                        <label class="layui-form-label">出差事由：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="description" placeholder="请输入" autocomplete="off" class="layui-textarea">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body" style="overflow: hidden;">
+            <div style="overflow: hidden;margin-bottom: 20px;">
+                <div style="color: #1890ff; font-weight: bold;text-indent: 30px;position: relative;margin-bottom: 10px;">
+                    车船费
+                    <i class="layui-icon layui-icon-add-1" style="position: absolute;top: 0; left: 60px;font-size: 18px;"></i>
+                    <i class="layui-icon layui-icon-about" style="position: absolute;top: 0; left: 90px;font-size: 18px;"></i>
+                    <i class="layui-icon  layui-icon-close" style="position: absolute;top: 0; left: 120px;font-size: 18px;"></i>
 
-  <script src="${request.contextPath}/static/layui/layui.js"></script>  
- <script>
-  layui.config({
-    base: '${request.contextPath}/static/yw/' //静态资源所在路径
-  }).extend({
-    index: 'index', //主入口模块
-    verfy:'../../ywUi/js/commons/verfy'
-  }).use(['index','form','verfy','laydate'], function(){
-    var $ = layui.$
-    ,form = layui.form 
-    ,laydate = layui.laydate;
-    
-    laydate.render({
-      elem:'#reimburseDate',
-      type:'datetime'
-    });
-    laydate.render({
-      elem:'#createTime',
-      type:'datetime'
-    });
-    laydate.render({
-      elem:'#updateTime',
-      type:'datetime'
-    });
-  })
-  </script>
+                </div>
+
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">出发时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">出发时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">到达时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">到达地点：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">单据张数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">车船费：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-form">
+                        <label class="layui-form-label">车船类别：</label>
+                        <div class="layui-input-block">
+                            <select name='jobStatus'>
+                                <option value="">汽车</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="overflow: hidden;margin-bottom: 20px;">
+                <div style="color: #1890ff; font-weight: bold;text-indent: 30px;position: relative;margin-bottom: 10px;">
+                    出差费
+                    <i class="layui-icon layui-icon-add-circle-fine" style="position: absolute;top: 0; left: 60px;font-size: 18px;"></i>
+                    <i class="layui-icon layui-icon-about" style="position: absolute;top: 0; left: 90px;font-size: 18px;"></i>
+                </div>
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">天数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">金额：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-form">
+                        <label class="layui-form-label">标准：</label>
+                        <div class="layui-input-block">
+                            <select name='jobStatus'>
+                                <option value="">汽车</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="overflow: hidden;margin-bottom: 20px;">
+                <div style="color: #1890ff; font-weight: bold;text-indent: 30px;position: relative;margin-bottom: 10px;">
+                    出差补贴
+                    <i class="layui-icon layui-icon-add-circle-fine" style="position: absolute;top: 0; left: 60px;font-size: 18px;"></i>
+                    <i class="layui-icon layui-icon-about" style="position: absolute;top: 0; left: 90px;font-size: 18px;"></i>
+                </div>
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">天数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">单据张数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-form">
+                        <label class="layui-form-label">金额：</label>
+                        <div class="layui-input-block">
+                            <select name='jobStatus'>
+                                <option value="">汽车</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="overflow: hidden;margin-bottom: 20px;">
+                <div style="color: #1890ff; font-weight: bold;text-indent: 30px;margin-bottom: 10px;">合计</div>
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;">车船费+出差补贴费：</label>
+                        <div class="layui-input-block" style="margin-left: 170px;">
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">其它费用：</label>
+                        <div class="layui-input-block" >
+                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="overflow: hidden;">
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <button type="button" class="layui-btn" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>附件上传
+                    </button>
+                </div>
+            </div>
+            <div style="overflow: hidden;margin-bottom: 30px;">
+                <div class="layui-col-md11" style="margin-bottom: 20px;">
+                    <span style="color: red;margin-left: 20px;">注：</span>
+                    <span>签字完整的外出培训审批表、培训（进修）通知单、培训费/进修费发票（报销人背面签字）、
+住宿费发票（报销人背面签字）、交通费发票（报销人背面签字）、报销人银行卡复印件。压缩包（zip或rar）格式上传</span>
+                </div>
+            </div>
+      </div>
+    </div>
+<!-- </div>-->
+
+<script src="${request.contextPath}/static/layui/layui.js"></script>
+<script>
+
+    layui.config({
+        base: '${request.contextPath}/static/yw/' //静态资源所在路径
+    }).extend({
+        index: 'index', //主入口模块
+        verfy:'../../ywUi/js/commons/verfy'
+    }).use(['index', 'scheduleJob', 'table'], function(){
+        var $ = layui.$,
+            form = layui.form,
+            table = layui.table;
+
+     /*   //下拉框选择前后的颜色
+        $(function() {
+            var unSelected = "#d5d5d5";
+            var selected = "#333";
+            $("select").css("color", unSelected);
+            $("option").css("color", selected);
+            $(".native-select-box select").change(function() {
+                var selItem = $(this).find("option:selected").val();
+                if(selItem == $(this).find('option:first').val()) {
+                    $(this).css("color", unSelected);
+                } else {
+                    $(this).css("color", selected);
+                }
+            })
+            $(".native-select-box").on('click', function() {
+                if($(this).hasClass("show")) {
+                    $(this).removeClass("show");
+                } else {
+                    $(this).addClass("show");
+                }
+            })
+        })
+        //下拉框选择前后的颜色
+
+    });*/
+</script>
 </body>
+
 </html>

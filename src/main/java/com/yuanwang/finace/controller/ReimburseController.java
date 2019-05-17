@@ -77,6 +77,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_BUILD)
 	public void createJump(ModelMap map){
+		Map<String,Object> search=new HashMap<String,Object>();
 		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 	}

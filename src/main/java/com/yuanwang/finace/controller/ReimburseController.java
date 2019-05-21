@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
+import com.yuanwang.sys.entity.Office;
+import com.yuanwang.sys.service.OfficeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +44,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 
 	@Resource
 	private ReimburseService reimburseService;
+	@Resource
+	private OfficeService officeService;
 	
 	
 	/**跳转主页面
@@ -49,6 +53,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_INDEX)
 	public void indexJump(ModelMap map) {
+
 		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		map.put("reviewStateEnum", ReviewStateEnum.values());
@@ -78,10 +83,12 @@ public class ReimburseController extends BaseController<Reimburse>{
 	@RequestMapping(CONSTANT_BUILD)
 	public void createJump(ModelMap map){
 		Map<String,Object> search=new HashMap<String,Object>();
+		//获取科室列表
+		List<Office>  officeList=officeService.findAll();
+		map.put("officeList", officeList);
 		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 	}
-	
 	/**新增功能
 	 * @param t 新增对象
 	 * @return 新增结果

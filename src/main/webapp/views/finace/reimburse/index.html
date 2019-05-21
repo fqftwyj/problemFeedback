@@ -150,7 +150,8 @@
           type: 2
           ,title: '新建流程'
           ,content: 'build'
-          ,area: ['1000px', '600px']
+			,maxmin: true
+			,area: ['100%', '100%']
           ,btn: ['确定', '取消']
           ,yes: function(index, layero){
             var iframeWindow = window['layui-layer-iframe'+ index]
@@ -186,6 +187,7 @@
       var type = $(this).data('type');
       active[type] ? active[type].call(this) : '';
     });
+
   });
   </script>
 </body>

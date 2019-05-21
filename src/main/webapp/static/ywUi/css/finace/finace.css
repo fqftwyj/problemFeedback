@@ -1,0 +1,69 @@
+.reimburse-background-color{
+    background-color: white;
+}
+.layui-card-body  .layui-card-body-scroll{
+    overflow: hidden;
+}
+.layui-card-body .reimburse-card-body-title{
+    overflow: hidden;margin-bottom: 20px;
+}
+.reimburse-card-body-title .mbottom{
+    margin-bottom: 20px;
+}
+.reimburse-card-body-title-text {
+    color: #1890ff;
+    font-weight: bold;
+    text-indent: 30px;
+    position: relative;
+    margin-bottom: 10px;
+}
+.reimburse-card-body-title-text .title-text-icon{
+    position: absolute;top: 0; font-size: 18px;
+}
+.reimburse-card-body-title-text .title-text-icon-first{
+    left: 90px;
+    cursor: pointer;
+}
+.reimburse-card-body-title-text .title-text-icon-second{
+    left: 140px;
+    cursor: pointer;
+}
+.reimburse-card-body-title-text .title-text-icon-third{
+    left: 120px;
+    cursor: pointer;
+}
+.layui-inline .layui-form-label-width{
+    width: 140px;
+}
+.layui-inline .layui-input-block-left{
+    margin-left: 170px;
+}
+.layui-card-body .reimburse-attach-explation-div{
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+.layui-card-body .reimburse-attach-explation-div .reimburse-attach-explation-text{
+    color: red;
+    margin-left: 20px;
+}
+.reimburse-card-body-title-text-i-float{
+    float: left;
+    cursor: pointer;
+}
+.reimburse-card-body-title-text .title-text-icon-second-separator{
+    margin-left: -50px;height: 40px;line-height: 40px;
+}
+.reimburse-del-div{
+    margin-left: 0px;
+    min-height: 30px;
+}
+.layui-inline .layui-input-block-special{
+    float: left;
+    min-height: 36px;
+    margin-left: -2px;
+}
+.reimburse-card-body-title .separator-line-css{
+    display:inline-block;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}

@@ -1,3 +1,4 @@
+/*
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,3 +193,4 @@ public class ChineseNumber {
         //壹仟玖佰玖拾肆圆壹角壹分整
         //壹仟玖佰玖拾肆万壹仟壹佰壹拾伍圆整
 }
+*/

@@ -138,11 +138,11 @@
 		    <artifactId>poi</artifactId>
 		    <version>3.9</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>3.9</version>
-		</dependency>
+		</dependency>-->
 		
 		<!-- zip压缩依赖的包 -->
 		<dependency>
@@ -189,7 +189,7 @@
 		  <version>1.2.41</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
-		<dependency>
+	<!--	<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>4.1.0</version>
@@ -199,12 +199,13 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/freemarker/freemarker -->
+		&lt;!&ndash; https://mvnrepository.com/artifact/freemarker/freemarker &ndash;&gt;
 		<dependency>
 			<groupId>freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.9</version>
-		</dependency>
+		</dependency>-->
+
 	</dependencies>
 
 	<build>

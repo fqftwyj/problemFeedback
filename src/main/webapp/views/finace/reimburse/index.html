@@ -154,38 +154,7 @@
 			,area: ['100%', '100%']
           ,btn: ['确定', '取消']
           ,yes: function(index, layero){
-				//计算车船和出差补贴的总和和其它费用的总和
-				var $form=$("#reimburseDivForm");
-				//车船费
-				var carboatfees=$form.find("input[name='carboatfee']");
-				var totalcarboatfee=0;
-				carboatfees.each(function (obj) {
-					var v=$(obj).val();
-					if(v.trim()!=''){
-						totalcarboatfee+=v;
-					}
-				});
-				//出差补贴费
-				var travelmoneys=$form.find("input[name='travelmoney']");
-				var totaltravelmoneys=0;
-				travelmoneys.each(function (obj) {
-					var v=$(obj).val();
-					if(v.trim()!=''){
-						totaltravelmoneys+=v;
-					}
-				});
-				//其它费用
-				var otherfeemoneys=$form.find("input[name='otherfeemoney']");
-				var totalotherfeemoney=0;
-				otherfeemoneys.each(function (obj) {
-					var v=$(obj).val();
-					if(v.trim()!=''){
-						totalotherfeemoney+=v;
-					}
-				});
-				$("#totalCarBoatTravel").val(totalcarboatfee+totaltravelmoneys);
-				$("#totalotherFee").val(totalotherfeemoney);
-				//请再次确认你的合计金额是否正确
+
 
             var iframeWindow = window['layui-layer-iframe'+ index]
             ,submitID = 'LAY-reimburse-submit'

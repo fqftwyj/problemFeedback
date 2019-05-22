@@ -81,6 +81,103 @@ layui.define(['table', 'form','laydate'], function(exports){
                 var $this = $(this);
                 $this.parents('.'+iId+'MotherDiv').remove();
 
+            }).on('click', 'i.'+iId, function () {
+
+                //计算车船和出差补贴的总和和其它费用的总和
+                var $form=$("#reimburseDivForm");
+                //车船费
+                var carboatfees=$form.find("input[name='carboatfee']");
+                var totalcarboatfee=0.00;
+                carboatfees.each(function () {
+                    var v=Number($(this).val());
+                    /*if(v.trim()!=''){*/
+                        totalcarboatfee+=v;
+                    /*}*/
+                });
+                //出差补贴费
+                var travelmoneys=$form.find("input[name='travelmoney']");
+                var totaltravelmoneys=0.00;
+                travelmoneys.each(function () {
+                    var v=Number($(this).val());
+                    /*if(v.trim()!=''){*/
+                        totaltravelmoneys+=v;
+                   /* }*/
+                });
+                //其它费用
+                var otherfeemoneys=$form.find("input[name='otherfeemoney']");
+                var totalotherfeemoney=0.00;
+                otherfeemoneys.each(function () {
+                    var v=Number($(this).val());
+                    console.log(v)
+                   /* if(v.trim()!=''){*/
+                        totalotherfeemoney+=v;
+                   /* }*/
+                });
+                var totalCarBoatTravel=(totalcarboatfee+totaltravelmoneys).toFixed(2);
+                var totalotherFee=totalotherfeemoney.toFixed(2);
+                $("#totalCarBoatTravel").val(totalCarBoatTravel);
+                $("#totalotherFee").val(totalotherFee);
+                //请再次确认你的合计金额是否正确
+
+
+                //组装复杂数据
+                var itemDataObjData=[];
+                var itemDataObj=new Object();
+                //车船费
+                var  carboatfeeiItemsData = [];
+                var carboatfeeitem1= new Object();
+                carboatfeeitem1.startoffTime="2019-05-01";
+                carboatfeeitem1.startoffLocation='杭州';
+                carboatfeeitem1.arriveTime="2019-05-05";
+                carboatfeeitem1.type='北京';
+                carboatfeeitem1.documentsNum=2;
+                carboatfeeitem1.carboatfee=250.00;
+                carboatfeeiItemsData .push(carboatfeeitem1);
+
+                var carboatfeeitem2= new Object();
+                carboatfeeitem2.startoffTime="2019-05-01";
+                carboatfeeitem2.startoffLocation='杭州';
+                carboatfeeitem2.arriveTime="2019-05-05";
+                carboatfeeitem2.type='北京';
+                carboatfeeitem2.documentsNum=2;
+                carboatfeeitem2.carboatfee=250.00;
+                carboatfeeiItemsData .push(carboatfeeitem2);
+
+                //出差补贴费
+                var  travelAllowanceItemsData = [];
+                var  travelAllowanceItem1= new Object();
+                travelAllowanceItem1.days=4;
+                travelAllowanceItem1.standard=25;
+                travelAllowanceItem1.money=100.00;
+                travelAllowanceItemsData .push(travelAllowanceItem1);
+
+                var  travelAllowanceItem2= new Object();
+                travelAllowanceItem2.days=4;
+                travelAllowanceItem2.standard=25;
+                travelAllowanceItem2.money=200.00;
+                travelAllowanceItemsData .push(travelAllowanceItem2);
+                //其它费用
+                var  otherFeeItemsData = [];
+                var otherFeeItem1= new Object();
+                otherFeeItem1.item='劳务费';
+                otherFeeItem1.documentsNum=2;
+                otherFeeItem1.money=100.00;
+                otherFeeItemsData .push(otherFeeItem1);
+
+
+                var otherFeeItem2= new Object();
+                otherFeeItem2.item='劳务费2';
+                otherFeeItem2.documentsNum=2;
+                otherFeeItem2.money=200.00;
+                otherFeeItemsData .push(otherFeeItem2);
+
+                itemDataObj.carboatfeeiItemsData=carboatfeeiItemsData;
+                itemDataObj.travelAllowanceItemsData=travelAllowanceItemsData;
+                itemDataObj.otherFeeItemsData=otherFeeItemsData;
+                itemDataObjData.push(itemDataObj);
+
+                var json_str = JSON.stringify(itemDataObjData);
+                console.log(json_str)
             });
         },initdate:function () {
             laydate.render({
@@ -129,6 +226,9 @@ layui.define(['table', 'form','laydate'], function(exports){
     reimburseFuns.bindConAddDel('otherfee');
     //绑定出差补贴自动计
     reimburseFuns.bindAutoCaculate();
+    //合计绑定
+    reimburseFuns.bindConAddDel('totalCaculate');
+
     //上传文件
     layui.use('upload', function(){
         var $ = layui.jquery

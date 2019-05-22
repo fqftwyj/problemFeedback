@@ -1,3 +1,4 @@
+/*
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -41,40 +42,56 @@ public class POIExcelTest {
         //参数：起始行号，终止行号， 起始列号，终止列号
         Font font = wb.createFont();
         font.setFontName("黑体");
-        /*  font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);*/
+        */
+/*  font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);*//*
+
 
         CellStyle cs1 = wb.createCellStyle();
-        /*   cs1.setAlignment(CellStyle.ALIGN_CENTER);*/
+        */
+/*   cs1.setAlignment(CellStyle.ALIGN_CENTER);*//*
+
         cs1.setDataFormat(wb.createDataFormat().getFormat("yyyyMMdd"));
         cs1.setFont(font);
 
         CellStyle cs2 = wb.createCellStyle();
-        /*  cs2.setAlignment(CellStyle.ALIGN_CENTER);*/
+        */
+/*  cs2.setAlignment(CellStyle.ALIGN_CENTER);*//*
+
         cs2.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00"));
         cs2.setFont(font);
 
         CellStyle cs3 = wb.createCellStyle();
-        /* cs3.setAlignment(CellStyle.ALIGN_CENTER);*/
+        */
+/* cs3.setAlignment(CellStyle.ALIGN_CENTER);*//*
+
         cs3.setFont(font);
 
         row = sheet.getRow(0);
         Cell cell = row.getCell(0);
-        /*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*/
+        */
+/*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*//*
+
         cell.setCellValue("建行运行中心：\n\t" + "现有" + refundLogs.length + "表退款交易，请配合汇付天下公司进行审核");
 
         sheet.createRow(4);
         row = sheet.createRow(5);
 
         cell = row.createCell(0);
-        /*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*/
+        */
+/*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*//*
+
         cell.setCellValue("商户编号：");
         cell = row.createCell(1);
-        /* cell.setCellType(HSSFCell.CELL_TYPE_STRING);*/
+        */
+/* cell.setCellType(HSSFCell.CELL_TYPE_STRING);*//*
+
         cell.setCellValue("45433242");
 
         row = sheet.createRow(6);
         cell = row.createCell(0);
-        /*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*/
+        */
+/*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*//*
+
         cell.setCellValue("交易明细：");
 
         row = sheet.createRow(7);
@@ -99,7 +116,9 @@ public class POIExcelTest {
             cell.setCellValue(refundLog[0]);
 
             cell = row.getCell(1);
-            /*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*/
+            */
+/*  cell.setCellType(HSSFCell.CELL_TYPE_STRING);*//*
+
             cell.setCellStyle(cs3);
             cell.setCellValue(refundLog[1]);
 
@@ -109,7 +128,9 @@ public class POIExcelTest {
             trans_amt += Double.parseDouble(refundLog[2]);
 
             cell = row.getCell(3);
-            /*  cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);*/
+            */
+/*  cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);*//*
+
             cell.setCellStyle(cs2);
             cell.setCellValue(refundLog[3]);
             ref_amt += Double.parseDouble(refundLog[3]);
@@ -131,3 +152,4 @@ public class POIExcelTest {
 
     }
 }
+*/

@@ -2,16 +2,6 @@ layui.define(['table', 'form'], function(exports){
   var $ = layui.$
   ,table = layui.table
   ,form = layui.form;
-    //鼠标悬停提示特效
-    $("#carboatInfo").hover(function() {
-        openMsg();
-    }, function() {
-        layer.close(subtips);
-    });
-    function openMsg() {
-        subtips = layer.tips('车船类别', '#carboatInfo',{tips:[1,'#ff6700'],time: 30000});
-    }
-
 
   table.render({
     elem: '#LAY-reimburse-table'

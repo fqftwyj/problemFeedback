@@ -1,15 +1,13 @@
 package com.yuanwang.finace.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
 import com.yuanwang.sys.entity.Office;
@@ -30,6 +28,11 @@ import com.yuanwang.common.utils.excelexport.ExcelFacts;
 import com.yuanwang.finace.entity.Reimburse;
 import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
 import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.ModelAndView;
+
 /**
  * ReimburseController
  * 
@@ -222,7 +225,51 @@ public class ReimburseController extends BaseController<Reimburse>{
 		excel.exportXLS(request, response);
 		return null;
 	}
-	
+	@ResponseBody
+	@RequestMapping("reimburseFilepload")
+	public String reimburseFilepload(HttpServletRequest request) {
+
+		CommonsMultipartResolver multipartResolver =
+				new CommonsMultipartResolver(request.getSession().getServletContext());
+		//检查form中是否有enctype="multipart/form-data"
+		JSONObject jsonObject = new JSONObject();
+		if (multipartResolver.isMultipart(request)) {
+			//将request变成多request
+			MultipartHttpServletRequest multiRequest =
+					(MultipartHttpServletRequest) request;
+
+			//获取multiRequest中所有的文件名
+			Iterator iter = multiRequest.getFileNames();
+			while (iter.hasNext()) {
+				//一次遍历所有的文件
+				MultipartFile file = multiRequest.getFile(iter.next().toString());
+
+				if (null != file && file.getSize() > 20 * 1024 * 1024) {
+
+					jsonObject.put("msg", "传输文件过大，上传失败！");
+				} else if (file != null) {
+					String result = null;
+					try {
+						/*result = vehicleWhitelistService.batchImportVehicleWhitelistByXls(file);*/
+						result="yes";
+						if ("yes".equals(result)) {
+							jsonObject.put("msg", true);
+						} else {
+							jsonObject.put("msg", result);
+						}
+
+					} catch (Exception e) {
+						jsonObject.put("msg", result);
+					/*	logger.error(result);*/
+					}
+
+				}
+			}
+		}
+
+		return jsonObject.toString();
+
+	}
 	/*
 	@RequestMapping("callPro")
 	@ResponseBody

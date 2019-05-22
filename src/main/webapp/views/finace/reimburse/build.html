@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="layui-fluid  reimburse-background-color" id="reimburseDivForm">
-    <div class="layui-form ">
+    <div class="layui-form " lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
         <div class="layui-form-item">
             <div class="layui-col-md11">
                 <div class="layui-inline">
@@ -42,7 +42,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">报销日期：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="description" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="reimburse_date" id="reimburse_date" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>
@@ -70,14 +70,14 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">出发时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
+                            <input type="text" name="departureTime"  placeholder="请输入" autocomplete="off"
+                                   class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">出发时间：</label>
+                        <label class="layui-form-label">出发地点：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="departurePlace" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
@@ -86,37 +86,23 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">到达时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
+                            <input type="text" name="arrivalTime"  placeholder="请输入" autocomplete="off"
+                                   class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">到达地点：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="arrivalPlace" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
                 </div>
                 <div class="layui-col-md11 mbottom">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">单据张数：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">车船费：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                    </div>
                     <div class="layui-inline layui-form">
                         <label class="layui-form-label">车船类别：</label>
-                        <div class="layui-input-block">
-                            <select name='jobStatus'>
+                        <div class="layui-input-block" style="width: 182px;">
+                            <select name='carboatType' >
                                 <option value="汽车">汽车</option>
                                 <option value="火车">火车</option>
                                 <option value="飞机">飞机</option>
@@ -124,6 +110,21 @@
                             </select>
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">单据张数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">车船费：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="carboatfee" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
                     <div class="layui-inline layui-form">
                         <div class="reimburse-del-div" >
                             <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
@@ -140,14 +141,14 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">出发时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
+                            <input type="text" name="departureTime" placeholder="yyyy-MM-dd" autocomplete="off"
+                                   class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">出发时间：</label>
+                        <label class="layui-form-label">出发地点：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="departurePlace" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
@@ -156,37 +157,23 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">到达时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
+                            <input type="text" name="arrivalTime"  placeholder="yyyy-MM-dd" autocomplete="off"
+                                   class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">到达地点：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="arrivalPlace" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
                 </div>
                 <div class="layui-col-md11 mbottom">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">单据张数：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">车船费：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                    </div>
                     <div class="layui-inline layui-form">
                         <label class="layui-form-label">车船类别：</label>
-                        <div class="layui-input-block">
-                            <select name='jobStatus'>
+                        <div class="layui-input-block" style="width: 182px;">
+                            <select name='carboatType' >
                                 <option value="汽车">汽车</option>
                                 <option value="火车">火车</option>
                                 <option value="飞机">飞机</option>
@@ -194,6 +181,21 @@
                             </select>
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">单据张数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">车船费：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="carboatfee" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
                     <div class="layui-inline layui-form">
                         <div class="reimburse-del-div" >
                             <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
@@ -213,20 +215,56 @@
                 <i class="layui-icon layui-icon-about title-text-icon title-text-icon-second"
                    id="travelStandardInfo"></i>
             </div>
-            <div class="separator-line-css travelStandardMotherDiv" style="display:none"  id="travelStandardMotherHideDiv">
-            <div class="separator-line-css travelStandardMotherDiv"  id="travelStandardMotherDiv">
+            <div class="travelStandardMotherDiv" style="display: none;" id="travelStandardMotherHideDiv">
+                <div class="layui-col-md11 mbottom" >
+                    <div class="layui-inline">
+                        <label class="layui-form-label">天数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="days" placeholder="请输入" autocomplete="off"
+                                   class="layui-input days" >
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-form">
+                        <label class="layui-form-label" >标准：</label>
+                        <div class="layui-input-block" style="width: 182px;">
+                            <select name='travelStandard'  lay-filter="travelStandard">
+                                <option value="25">25</option>
+                                <option value="55">55</option>
+                                <option value="42.5">42.5</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">金额：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="travelmoney" readonly="readonly" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-form">
+                        <div class="reimburse-del-div" >
+                            <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+                                <i class="layui-icon layui-icon-close title-text-icon travelStandardDel"  ></i>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="travelStandardMotherDiv"  id="travelStandardMotherDiv">
             <div class="layui-col-md11 mbottom" >
                 <div class="layui-inline">
                     <label class="layui-form-label">天数：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
-                               class="layui-input">
+                        <input type="text" name="days" lay-filter="days" placeholder="请输入整数" autocomplete="off"
+                               class="layui-input days">
                     </div>
                 </div>
                 <div class="layui-inline layui-form">
                     <label class="layui-form-label">标准：</label>
-                    <div class="layui-input-block">
-                        <select name='jobStatus'>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select name='travelStandard' lay-filter="travelStandard">
                             <option value="25">25</option>
                             <option value="55">55</option>
                             <option value="42.5">42.5</option>
@@ -236,7 +274,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">金额：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="travelmoney" readonly="readonly" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -257,28 +295,27 @@
                 <i class="layui-icon layui-icon-add-1 title-text-icon title-text-icon-first otherfeeAdd" ></i>
                 <i class="layui-icon layui-icon-about title-text-icon title-text-icon-second" id='otherfeeInfo'></i>
             </div>
-            <div class="separator-line-css otherfeeMotherDiv" style="display:none" id="otherfeeMotherHideDiv">
+            <div class="otherfeeMotherDiv" style="display:none" id="otherfeeMotherHideDiv">
                 <div class="layui-col-md11 mbottom" >
                     <div class="layui-inline">
-                        <label class="layui-form-label">天数：</label>
+                        <label class="layui-form-label">项目：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="itemname" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">单据张数：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline layui-form">
                         <label class="layui-form-label">金额：</label>
                         <div class="layui-input-block">
-                            <select name='jobStatus'>
-                                <option value="">汽车</option>
-                            </select>
+                            <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline layui-form">
@@ -291,28 +328,27 @@
                     </div>
                 </div>
             </div>
-            <div class="separator-line-css otherfeeMotherDiv"  id="otherfeeMotherDiv">
+            <div class="otherfeeMotherDiv"  id="otherfeeMotherDiv">
             <div class="layui-col-md11 mbottom" >
                 <div class="layui-inline">
-                    <label class="layui-form-label">天数：</label>
+                    <label class="layui-form-label">项目：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="itemname" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">单据张数：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline layui-form">
                     <label class="layui-form-label">金额：</label>
                     <div class="layui-input-block">
-                        <select name='jobStatus'>
-                            <option value="">汽车</option>
-                        </select>
+                        <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline layui-form">
@@ -332,14 +368,14 @@
                 <div class="layui-inline">
                     <label class="layui-form-label layui-form-label-width">车船费+出差补贴费：</label>
                     <div class="layui-input-block layui-input-block-left">
-                        <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="totalCarBoatTravel" id="totalCarBoatTravel" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">其它费用：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="totalotherFee" id="totalotherFee" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -347,9 +383,14 @@
         </div>
         <div class="layui-card-body-scroll">
             <div class="layui-col-md11 mbottom">
-                <button type="button" class="layui-btn" id="test1">
+            <!--    <button type="button" class="layui-btn" id="test1">
                     <i class="layui-icon">&#xe67c;</i>附件上传
-                </button>
+                </button>-->
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-normal" id="selectFile">上传文件</button>
+                    <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
+                    <p id="allFileText"></p>
+                </div>
             </div>
         </div>
         <div class="reimburse-attach-explation-div">
@@ -371,11 +412,11 @@
         index: 'lib/index', //主入口模块
         verfy: '../../ywUi/js/commons/verfy',
         reimburseAdd: '../../ywUi/js/finace/reimburseAdd'
-    }).use(['index', 'reimburseAdd', 'form', 'verfy', 'laydate'], function () {
-        debugger
+    }).use(['index', 'reimburseAdd', 'form', 'verfy'], function () {
         var $ = layui.$,
             form = layui.form,
             table = layui.table;
+
 
     });
 

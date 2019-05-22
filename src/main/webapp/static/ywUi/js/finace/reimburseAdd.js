@@ -1,7 +1,11 @@
-layui.define(['table', 'form'], function(exports){
+layui.define(['table', 'form','laydate'], function(exports){
   var $ = layui.$
   ,table = layui.table
-  ,form = layui.form;
+  ,form = layui.form,
+   laydate=layui.laydate;
+    //常规用法
+
+
     //鼠标悬停提示特效
     //车船费报销
     $("#carboatInfo").hover(function() {
@@ -59,35 +63,99 @@ layui.define(['table', 'form'], function(exports){
     var $form = $('#reimburseDivForm');
     var reimburseFuns={
         bindConAddDel:function(iId){
-            var $table = $('#'+iId+'MotherDiv', $form);
+            //克隆隐藏的对象
+            var $table = $('#'+iId+'MotherHideDiv', $form);
             $( $form).on('click', 'i.'+iId+'Add', function () {
                 var $this = $(this);
                 var $new = $table.clone();
-                debugger
-                var $lastObj=$this.parent().parent().children('.'+iId+'MotherDiv:last');
-                if($lastObj!=undefined && $lastObj.length>0){
-                    $lastObj.after($new);
-                }else{
-                     $table = $('#'+iId+'MotherHideDiv', $form);
-                     $new = $table.clone();
-                     $lastObj=$this.parent().parent();
-                     $lastObj.after($new);
-                     $this.parents('.'+iId+'MotherDiv:last').css('display','block');
-                }
-
+                $new.find("input.datetime").removeAttr("lay-key");
+                var $lastObj=$this.parent().parent();
+                $lastObj.append($new);
+                //表单重新渲染
+                form.render();
+                //日期重新渲染
+                reimburseFuns.initdate();
+                reimburseFuns.bindAutoCaculate();
+                $this.parent().parent().find('.'+iId+'MotherDiv:last').css('display','block');
             }).on('click', 'i.'+iId+'Del', function () {
                 var $this = $(this);
-                    $this.parents('.'+iId+'MotherDiv').remove();
+                $this.parents('.'+iId+'MotherDiv').remove();
 
             });
+        },initdate:function () {
+            laydate.render({
+                elem: '#reimburse_date',
+                type: 'date'
+            });
+            //同时绑定多个
+            lay('.datetime').each(function(){
+                laydate.render({
+                    elem: this
+                        ,type:'date'
+                    ,trigger: 'click'
+                });
+            });
+
+        },bindAutoCaculate:function(){
+            //绑定标准下拉的时候出差补贴自动计算金额
+            form.on('select(travelStandard)', function(data){
+                var $mobj=$(data.elem).parents(".travelStandardMotherDiv");
+                var days=$mobj.find("input[name='days']").val();
+                var $moneyObj= $mobj.find("input[name='travelmoney']");
+                //如果不是正整数的时候结果为“”
+                if(days==''){
+                    $moneyObj.val("");
+                }else{
+                    $moneyObj.val(data.value*days=='NAN'?"":data.value*days);
+                }
+            });
+            //绑定天数键盘输入或的时候出差补贴自动计算金额
+            $(".days").mouseout(function() {
+                var $mobj=$(this).parents(".travelStandardMotherDiv");
+                var standard=$mobj.find("select[name='travelStandard']").val();
+                var days=$(this).val();
+                var $moneyObj= $mobj.find("input[name='travelmoney']");
+                $moneyObj.val(standard*days=='NAN'?"":standard*days);
+            });
+
         }
     };
+    reimburseFuns.initdate();
     //车船费绑定
     reimburseFuns.bindConAddDel('carboatfee');
     //出差补贴绑定
     reimburseFuns.bindConAddDel('travelStandard');
     //其它费用绑定
     reimburseFuns.bindConAddDel('otherfee');
+    //绑定出差补贴自动计
+    reimburseFuns.bindAutoCaculate();
+    //上传文件
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+
+        //上传文件
+        upload.render({
+            elem: '#selectFile'
+            ,url: 'finace/reimburse//reimburseFilepload.do'
+            ,accept: 'file'
+            ,auto: false
+            ,bindAction: '#startUploadFile'
+            ,size: 1024*40 //限制文件大小，单位 KB
+            ,done: function(result){
+                if(result.msg != true){
+                    layer.msg(result.msg, {icon:1});
+                }else if(result.msg == true){
+                    layer.msg("上传成功!",{icon:1});
+                }else{
+                    layer.msg("上传失败!",{icon:1});
+                }
+            }
+        });
+
+    });
+
+
 
 
   exports('reimburseAdd', {})

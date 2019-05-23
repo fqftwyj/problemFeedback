@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <title>新的定时任务系统表</title>
@@ -20,7 +19,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">科室：</label>
                     <div class="layui-input-block" style="display: block;">
-                        <select name='jobStatus'>
+                        <select name='officeCode'>
                             <option value="">请输入</option>
                             <#list officeList as obj>
                             <option value="${obj.officeCode}">${obj.officeName}</option>
@@ -31,7 +30,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">出差人：</label>
                     <div class="layui-input-block-special" >
-                        <input type="text" name="cronExpression" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="reimburseMembers" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                     <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
@@ -42,7 +41,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">报销日期：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="reimburse_date" id="reimburse_date" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="reimburseDate" id="reimburse_date" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>
@@ -50,14 +49,14 @@
                 <div class="layui-inline layui-col-md9">
                     <label class="layui-form-label">出差事由：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="description" placeholder="请输入" autocomplete="off"
-                               class="layui-textarea">
+                        <textarea placeholder="请输入内容"  name="reimburseReason" class="layui-textarea"></textarea>
                     </div>
+
                 </div>
             </div>
+
         </div>
-    </div>
-    <div class="layui-card-body  layui-card-body-scroll">
+        <div class="layui-card-body  layui-card-body-scroll">
         <div class="reimburse-card-body-title">
             <div class="reimburse-card-body-title-text">
                 车船费
@@ -370,14 +369,14 @@
                 <div class="layui-inline">
                     <label class="layui-form-label layui-form-label-width">车船费+出差补贴费：</label>
                     <div class="layui-input-block layui-input-block-left">
-                        <input type="text" name="totalCarBoatTravel" id="totalCarBoatTravel" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="totalCarBoatTravel" id="totalCarBoatTravel" placeholder="请输入"  readonly="readonly" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">其它费用：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="totalotherFee" id="totalotherFee" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="totalotherFee" id="totalotherFee" placeholder="请输入" autocomplete="off" readonly="readonly"
                                class="layui-input">
                     </div>
                 </div>
@@ -403,8 +402,11 @@
             </div>
         </div>
     </div>
+        <div class="layui-form-item layui-hide">
+             <input type="button" lay-submit lay-filter="LAY-reimburse-submit" id="LAY-reimburse-submit" value="确认">
+        </div>
+    </div>
 </div>
-
 <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
 <script>
 
@@ -420,9 +422,9 @@
             table = layui.table;
 
 
+
     });
 
 </script>
 </body>
-
 </html>

@@ -9,17 +9,19 @@ import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
  * @author  crj
  * @version v1.0.0
  * 描述：自动生成的代码
- * @since 2019-05-16 11:15:07
+ * @since 2019-05-23 09:26:49
  */
 public class Reimburse extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 
 	//员工编号
 	private String staffCode;	
+	//科室编号
+	private String officeCode;	
 	private ReimburseTypeEnum reimburseType;
 	private ReimburseStateEnum reimburseState;
 	// 报销日期
-	private Date reimburseDate;	
+	private String reimburseDate;
 	//报销成员
 	private String reimburseMembers;	
 	//报销理由
@@ -33,9 +35,9 @@ public class Reimburse extends BaseEntity{
 	//上传文件名称
 	private String uploadName;	
 	//创建时间
-	private Date createTime;	
+	private Date createTime;
 	//更新时间
-	private Date updateTime;	
+	private Date updateTime;
 	
 	/**获取员工编号
 	*/
@@ -48,6 +50,17 @@ public class Reimburse extends BaseEntity{
 	public void  setStaffCode(String staffCode){
 		this.staffCode = staffCode;
 	}
+	/**获取科室编号
+	*/
+	public String getOfficeCode(){
+		return this.officeCode;
+	}
+	/**设置科室编号
+	 * @param officeCode
+	 */
+	public void  setOfficeCode(String officeCode){
+		this.officeCode = officeCode;
+	}
 	/**获取报销类别【enum】(1:外出培训:outtrain)
 	*/
 	public ReimburseTypeEnum getReimburseType(){
@@ -59,29 +72,27 @@ public class Reimburse extends BaseEntity{
 	public void  setReimburseType(ReimburseTypeEnum reimburseType){
 		this.reimburseType = reimburseType;
 	}
-	/**获取报销类别【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)
+	/**获取报销状态【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)
 	*/
 	public ReimburseStateEnum getReimburseState(){
 		return this.reimburseState;
 	}
-	/**设置报销类别【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)
+	/**设置报销状态【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)
 	 * @param reimburseState
 	 */
 	public void  setReimburseState(ReimburseStateEnum reimburseState){
 		this.reimburseState = reimburseState;
 	}
-	/**获取 报销日期
-	*/
-	public Date getReimburseDate(){
-		return this.reimburseDate;
-	}
-	/**设置 报销日期
-	 * @param reimburseDate
-	 */
-	public void  setReimburseDate(Date reimburseDate){
-		this.reimburseDate = reimburseDate;
-	}
-	/**获取报销成员
+
+    public String getReimburseDate() {
+        return reimburseDate;
+    }
+
+    public void setReimburseDate(String reimburseDate) {
+        this.reimburseDate = reimburseDate;
+    }
+
+    /**获取报销成员
 	*/
 	public String getReimburseMembers(){
 		return this.reimburseMembers;

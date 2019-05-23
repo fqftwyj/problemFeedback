@@ -8,12 +8,12 @@ layui.define(['table', 'form'], function(exports){
     ,url: 'list' //模拟接口
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'reimburseType', title: '报销类别'}
-      ,{field: 'reimburseState', title: '报销状态'}
+      ,{field: 'reimburseType', title: '报销类别',templet: '#table-reimburse-reimburseType'}
+      ,{field: 'reimburseState', title: '报销状态',templet: '#table-reimburse-reimburseState'}
       ,{field: 'reimburseMembers', title: '报销成员'}
       ,{field: 'reviewState', title: '审查状态'}
       ,{field: 'reviewOpinion', title: '审查意见'}
-      ,{field: 'reimburseDate', title: ' 报销日期'}
+      ,{field: 'reimburseDate', title: ' 报销日期', templet:'#able-reimburse-reimburseDate'}
       ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
     ]]
     ,page: true
@@ -49,8 +49,8 @@ layui.define(['table', 'form'], function(exports){
         type: 2
         ,title: '编辑'
         ,content: 'edit?id='+obj.data.id
-        ,maxmin: true
-        ,area: ['420px', '240px']
+    /*    ,maxmin: true*/
+        ,area: ['100%', '100%']
         ,btn: ['确定', '取消']
         ,yes: function(index, layero){
           var iframeWindow = window['layui-layer-iframe'+ index]

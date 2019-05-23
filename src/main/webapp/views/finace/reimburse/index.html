@@ -90,11 +90,36 @@
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
+		  <script type="text/html" id="table-reimburse-reimburseType">
+			  {{# if(d.reimburseType=="OUTTRAIN"){ }}
+			  外出培训
+			  {{# }}}
+		  </script>
+		  <script type="text/html" id="table-reimburse-reimburseState">
+			  {{# if(d.reimburseState=="HASSUBMIT"){ }}
+			  已上报
+			  {{# }else if(d.reimburseState=="NOTSUBMIT"){ }}
+			  未上报
+			  {{# }}}
+		  </script>
+		  <!--时间格式化-->
+		  <script src="${request.contextPath}/static/ywUi/js/commons/dateformat.js"></script>
+		  <script id="table-reimburse-reimburseDate" type="text/html">
+			  {{#
+				  var date = new Date();
+				  date.setTime(d.reimburseDate);
+				  return date.Format("yyyy-MM-dd");
+			  }}
+		  </script>
+
       </div>
     </div>
   </div>
 
   <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
+
+
+
   <script>
   layui.config({
 	  base: '${request.contextPath}/static/layuiadmin/' //静态资源所在路径
@@ -146,45 +171,134 @@
         });
       },
       add: function(){
-        layer.open({
-          type: 2
-          ,title: '新建流程'
-          ,content: 'build'
-		/*	,maxmin: true*/
-			,area: ['100%', '100%']
-          ,btn: ['确定', '取消']
-          ,yes: function(index, layero){
+      	//先选择报销类型，再新增流程
+		  layer.open({
+			  type: 2
+			  ,title: '新建流程'
+			  ,content: 'buildFirst'
+			  ,area: ['400px', '250px']
+			  ,btn: ['确定', '取消']
+			  ,yes: function(index, layero){
+				  var iframeWindow = window['layui-layer-iframe'+ index]
+						  ,submitID = 'LAY-reimburse-first-submit'
+						  ,submit = layero.find('iframe').contents().find('#'+ submitID);
+				  //监听提交
+				  var reimburseType;
+				  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+					  reimburseType=data.field.reimburseType;
+				  });
+				  submit.trigger('click');
+                  layer.close(index);  //关闭弹层
+				  layer.open({
+					  type: 2
+					  ,title: '新建流程'
+					  ,content: 'build'
+					  /*	,maxmin: true*/
+					  ,area: ['100%', '100%']
+					  ,btn: ['确定', '取消']
+					  ,yes: function(index, layero){
+						  debugger
+						  var iframeWindow = window['layui-layer-iframe'+ index]
+								  ,submitID = 'LAY-reimburse-submit'
+								  ,submit = layero.find('iframe').contents().find('#'+ submitID);
+						  //监听提交
+						  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+							  var newData=new Object();
+							  newData.officeCode= data.field.officeCode;
+							  newData.reimburseMembers= data.field.reimburseMembers;
+							  newData.reimburseDate= data.field.reimburseDate;
+							  newData.reimburseReason= data.field.reimburseReason;
+							  newData.reimburseType=reimburseType;
+							  var json_str=assembleFeesData();
+							  newData.reimburseItems=json_str;
+							  var totalCarBoatTravel= data.field.totalCarBoatTravel;
+							  var totalotherFee=data.field.totalotherFee;
+							  //组装合计的数量
+							  var totalFeeObjArray=new Array();
+							  var totalFeeObj=new Object();
+							  totalFeeObj.totalCarBoatTravel=totalCarBoatTravel;
+							  totalFeeObj.totalotherFee=totalotherFee;
+							  totalFeeObjArray.push(totalFeeObj);
+							  var totalFeeStr=JSON.stringify(totalFeeObjArray);
+							  newData.reimburseCost=totalFeeStr;
+							  /*  var field = data.field; //获取提交的字段*/
+							  console.log(data.field)
+							  console.log(newData)
 
+							  //提交 Ajax 成功后，静态更新表格中的数据
+							  $.ajax({
+								  url:'create',
+								  data:newData,
+								  type:'POST',
+								  success: function(e){
+									  if(e.code==0){
+										  table.reload('LAY-reimburse-table');
+										  layer.msg(e.msg);
+										  layer.close(index);  //关闭弹层
+									  }else{
+										  layer.msg(e.msg);
+									  }
+								  }
+							  });
+						  });
 
-            var iframeWindow = window['layui-layer-iframe'+ index]
-            ,submitID = 'LAY-reimburse-submit'
-            ,submit = layero.find('iframe').contents().find('#'+ submitID);
-            //监听提交
-            iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-              var field = data.field; //获取提交的字段
-              //提交 Ajax 成功后，静态更新表格中的数据
-              $.ajax({
-	        	url:'create',
-	        	data:field,
-	        	type:'POST',
-	        	success: function(e){
-	        		if(e.code==0){
-		        		table.reload('LAY-reimburse-table');
-		        		layer.msg(e.msg);
-		        		layer.close(index);  //关闭弹层
-	        		}else{
-	        			layer.msg(e.msg);
-	        		}
-	            }
-	          });
-            });  
-            
-            submit.trigger('click');
-          }
-        }); 
+						  submit.trigger('click');
+					  }
+				  });
+			  }
+		  });
+
       }
-    }  
-    
+    }
+    //组装复杂数据
+    function assembleFeesData(){
+		var itemDataObjData = [];
+		var itemDataObj = new Object();
+		//车船费
+		var carboatfeeiItemsData = [];
+		var carboatfeeMotherDivs = $(".carboatfeeMotherDiv:visible");
+		carboatfeeMotherDivs.each(function () {
+			var carboatfeeitem = new Object();
+			carboatfeeitem.departureTime = $(this).find("input[name='departureTime']").val().trim();
+			carboatfeeitem.departurePlace = $(this).find("input[name='departurePlace']").val().trim();
+			carboatfeeitem.arrivalTime = $(this).find("input[name='arrivalTime']").val().trim();
+			carboatfeeitem.arrivalPlace = $(this).find("input[name='arrivalPlace']").val().trim();
+			carboatfeeitem.carboatType = $(this).find("select[name='carboatType']").val();
+			carboatfeeitem.docNumber = $(this).find("input[name='docNumber']").val().trim();
+			carboatfeeitem.carboatfee = $(this).find("input[name='carboatfee']").val().trim();
+			carboatfeeiItemsData.push(carboatfeeitem);
+		});
+
+		//出差补贴费
+		var travelAllowanceItemsData = [];
+		var travelStandardMotherDivs = $(".travelStandardMotherDiv:visible");
+		travelStandardMotherDivs.each(function () {
+			var travelAllowanceItem = new Object();
+			travelAllowanceItem.days = $(this).find("input[name='days']").val().trim();
+			travelAllowanceItem.travelStandard = $(this).find("select[name='travelStandard']").val();
+			travelAllowanceItem.travelmoney = $(this).find("input[name='travelmoney']").val().trim();
+			travelAllowanceItemsData.push(travelAllowanceItem);
+		});
+
+		//其它费用
+		var otherFeeItemsData = [];
+		var otherfeeMotherDivs = $(".otherfeeMotherDiv:visible");
+		otherfeeMotherDivs.each(function () {
+			var otherFeeItem = new Object();
+			otherFeeItem.itemname = $(this).find("input[name='itemname']").val().trim();
+			otherFeeItem.otherdocnumber = $(this).find("input[name='otherdocnumber']").val().trim();
+			otherFeeItem.otherfeemoney = $(this).find("input[name='otherfeemoney']").val().trim();
+			otherFeeItemsData.push(otherFeeItem);
+		});
+
+		itemDataObj.carboatfeeiItemsData = carboatfeeiItemsData;
+		itemDataObj.travelAllowanceItemsData = travelAllowanceItemsData;
+		itemDataObj.otherFeeItemsData = otherFeeItemsData;
+		itemDataObjData.push(itemDataObj);
+
+		return JSON.stringify(itemDataObjData);
+	}
+
     $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
       var type = $(this).data('type');
       active[type] ? active[type].call(this) : '';

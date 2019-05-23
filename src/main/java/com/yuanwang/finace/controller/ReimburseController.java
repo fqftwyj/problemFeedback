@@ -7,10 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
 import com.yuanwang.sys.entity.Office;
+import com.yuanwang.sys.entity.User;
 import com.yuanwang.sys.service.OfficeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -79,17 +81,22 @@ public class ReimburseController extends BaseController<Reimburse>{
 		PageInfo<Reimburse> pageinfo = reimburseService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
 		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}
-	
-	/**跳转新增页面
+	/**跳转新增页面-第一步选择报销类型
+	 * @param map 传值对象,通过这个对象给前台传值
+	 */
+	@RequestMapping("buildFirst")
+	public void createJumpFirst(ModelMap map){
+		map.put("reimburseTypeEnums", ReimburseTypeEnum.values());
+
+	}
+	/**跳转新增页面第二步
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_BUILD)
 	public void createJump(ModelMap map){
-		Map<String,Object> search=new HashMap<String,Object>();
 		//获取科室列表
 		List<Office>  officeList=officeService.findAll();
 		map.put("officeList", officeList);
-		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 	}
 	/**新增功能
@@ -99,12 +106,17 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_CREATE)
 	@ResponseBody
-	public Result create(Reimburse reimburse){
+	public Result create(Reimburse reimburse,HttpSession session){
 		if(reimburse != null){
 			Map<String,Object> map=new HashMap<String,Object>();
 			/**
 			 * 放入查重字段 map.put("name","测试");
 			 */
+			User user=(User)session.getAttribute("user");
+			reimburse.setStaffCode(user.getUserName());
+			reimburse.setUploadName("");
+			reimburse.setUploadPath("");
+			reimburse.setReimburseState(ReimburseStateEnum.NOTSUBMIT);
 			Integer flag=reimburseService.save(reimburse,map,OperatorEnum.AND);
 			if(flag==2) {
 				return ResultUtil.error("已存在");
@@ -123,10 +135,34 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_EDIT)
 	public void updateJump(Integer id, ModelMap map){
+		//获取科室列表
+		List<Office>  officeList=officeService.findAll();
+		map.put("officeList", officeList);
+		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		Reimburse result = reimburseService.find(id);
 		map.put("result", result);
-		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
-		map.put("reimburseStateEnum", ReimburseStateEnum.values());
+		String str = "[{\"carboatfeeiItemsData\":[{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250},{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250}],\"travelAllowanceItemsData\":[{\"days\":4,\"standard\":25,\"money\":100},{\"days\":4,\"standard\":25,\"money\":200}],\"otherFeeItemsData\":[{\"item\":\"劳务费\",\"documentsNum\":2,\"money\":100},{\"item\":\"劳务费2\",\"documentsNum\":2,\"money\":200}]}]" ;  // 一个未转化的字符串
+		JSONArray json =  JSONArray.parseArray(str ); // 首先把字符串转成 JSONArray  对象
+		//组装车船费列表
+		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();
+		//组装出差补贴
+		List<Map<String, String>> travelAllowanceList =new ArrayList<Map<String, String>>();
+		//组装其他费用
+		List<Map<String, String>> otherFeeList =new ArrayList<Map<String, String>>();
+		if(json.size()>0) {
+			JSONArray carboatfeeArray = (JSONArray) json.getJSONObject(0).get("carboatfeeiItemsData");
+			JSONArray travelAllowanceArray = (JSONArray) json.getJSONObject(0).get("travelAllowanceItemsData");
+			JSONArray otherFeeArray = (JSONArray) json.getJSONObject(0).get("otherFeeItemsData");
+			//组装车船费列表
+			 carboatfeesList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+			//组装出差补贴
+			travelAllowanceList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+			//组装其他费用
+			otherFeeList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+		}
+		map.put("carboatfeesList", carboatfeesList);
+		map.put("travelAllowanceList", travelAllowanceList);
+		map.put("otherFeeList", otherFeeList);
 	}
 	
 	/**编辑功能

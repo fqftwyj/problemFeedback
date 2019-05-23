@@ -291,10 +291,7 @@ public class BaseMapper<T, P extends Serializable> {
 		}
 		return 0;
 	}
-	
-	
-	
-	
+
 	/**执行存储过程
 	 * @param methodId 自定义方法id
 	 * @param map 传入条件

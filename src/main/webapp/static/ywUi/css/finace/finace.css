@@ -4,10 +4,16 @@
 .layui-card-body  .layui-card-body-scroll{
     overflow: hidden;
 }
+.layui-card-body .reimburse-card-body-title {
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 1000px;
+}
+/*
 .layui-card-body .reimburse-card-body-title{
     overflow: hidden;
     margin-bottom: 20px;
-}
+}*/
 .reimburse-card-body-title .mbottom{
     margin-bottom: 20px;
 }

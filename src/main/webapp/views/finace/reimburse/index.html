@@ -54,7 +54,7 @@
 		<div class="layui-inline">
 			<label class="layui-form-label">审查状态</label>
 			<div class="layui-input-block">
-				<select name='reviewStateEnum'>
+				<select name='reviewState'>
 					<option value="">请输入</option>
 					<#list reviewStateEnum as obj>
 					<option value="${obj}">${obj.desc}</option>
@@ -85,32 +85,21 @@
           <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add">添加</button>
         </div>
         
-        <table id="LAY-reimburse-table" lay-filter="LAY-reimburse-table"></table>  
+        <table id="LAY-reimburse-table" lay-filter="LAY-reimburse-table"></table>
+		  <script type="text/html" id="table-reimburse-submit">
+			  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="submit"><i class="layui-icon layui-icon-upload-drag"></i>上报</a>
+		  </script>
         <script type="text/html" id="table-reimburse-operation">
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-download-circle"></i>导出</a>
         </script>
 		  <script type="text/html" id="table-reimburse-reimburseType">
 			  {{# if(d.reimburseType=="OUTTRAIN"){ }}
 			  外出培训
 			  {{# }}}
 		  </script>
-		  <script type="text/html" id="table-reimburse-reimburseState">
-			  {{# if(d.reimburseState=="HASSUBMIT"){ }}
-			  已上报
-			  {{# }else if(d.reimburseState=="NOTSUBMIT"){ }}
-			  未上报
-			  {{# }}}
-		  </script>
-		  <!--时间格式化-->
-		  <script src="${request.contextPath}/static/ywUi/js/commons/dateformat.js"></script>
-		  <script id="table-reimburse-reimburseDate" type="text/html">
-			  {{#
-				  var date = new Date();
-				  date.setTime(d.reimburseDate);
-				  return date.Format("yyyy-MM-dd");
-			  }}
-		  </script>
+
 
       </div>
     </div>
@@ -177,7 +166,7 @@
 			  ,title: '新建流程'
 			  ,content: 'buildFirst'
 			  ,area: ['400px', '250px']
-			  ,btn: ['确定', '取消']
+			  ,btn: ['下一步', '取消']
 			  ,yes: function(index, layero){
 				  var iframeWindow = window['layui-layer-iframe'+ index]
 						  ,submitID = 'LAY-reimburse-first-submit'
@@ -197,22 +186,23 @@
 					  ,area: ['100%', '100%']
 					  ,btn: ['确定', '取消']
 					  ,yes: function(index, layero){
-						  debugger
 						  var iframeWindow = window['layui-layer-iframe'+ index]
 								  ,submitID = 'LAY-reimburse-submit'
-								  ,submit = layero.find('iframe').contents().find('#'+ submitID);
+								  ,contentId= layero.find('iframe').contents(),
+								  submit = layero.find('iframe').contents().find('#'+ submitID);
 						  //监听提交
 						  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
 							  var newData=new Object();
-							  newData.officeCode= data.field.officeCode;
-							  newData.reimburseMembers= data.field.reimburseMembers;
-							  newData.reimburseDate= data.field.reimburseDate;
-							  newData.reimburseReason= data.field.reimburseReason;
+							  var dat=data.field;
+							  newData.officeCode=dat.officeCode;
+							  newData.reimburseMembers=dat.reimburseMembers;
+							  newData.reimburseDate=dat.reimburseDate;
+							  newData.reimburseReason=dat.reimburseReason;
 							  newData.reimburseType=reimburseType;
-							  var json_str=assembleFeesData();
+							  var json_str=assembleFeesData(contentId);
 							  newData.reimburseItems=json_str;
-							  var totalCarBoatTravel= data.field.totalCarBoatTravel;
-							  var totalotherFee=data.field.totalotherFee;
+							  var totalCarBoatTravel=dat.totalCarBoatTravel;
+							  var totalotherFee=dat.totalotherFee;
 							  //组装合计的数量
 							  var totalFeeObjArray=new Array();
 							  var totalFeeObj=new Object();
@@ -221,9 +211,6 @@
 							  totalFeeObjArray.push(totalFeeObj);
 							  var totalFeeStr=JSON.stringify(totalFeeObjArray);
 							  newData.reimburseCost=totalFeeStr;
-							  /*  var field = data.field; //获取提交的字段*/
-							  console.log(data.field)
-							  console.log(newData)
 
 							  //提交 Ajax 成功后，静态更新表格中的数据
 							  $.ajax({
@@ -251,12 +238,12 @@
       }
     }
     //组装复杂数据
-    function assembleFeesData(){
+    function assembleFeesData(contentId){
 		var itemDataObjData = [];
 		var itemDataObj = new Object();
 		//车船费
 		var carboatfeeiItemsData = [];
-		var carboatfeeMotherDivs = $(".carboatfeeMotherDiv:visible");
+		var carboatfeeMotherDivs = contentId.find(".carboatfeeMotherDiv:visible");
 		carboatfeeMotherDivs.each(function () {
 			var carboatfeeitem = new Object();
 			carboatfeeitem.departureTime = $(this).find("input[name='departureTime']").val().trim();
@@ -271,7 +258,7 @@
 
 		//出差补贴费
 		var travelAllowanceItemsData = [];
-		var travelStandardMotherDivs = $(".travelStandardMotherDiv:visible");
+		var travelStandardMotherDivs = contentId.find(".travelStandardMotherDiv:visible");
 		travelStandardMotherDivs.each(function () {
 			var travelAllowanceItem = new Object();
 			travelAllowanceItem.days = $(this).find("input[name='days']").val().trim();
@@ -282,7 +269,7 @@
 
 		//其它费用
 		var otherFeeItemsData = [];
-		var otherfeeMotherDivs = $(".otherfeeMotherDiv:visible");
+		var otherfeeMotherDivs = contentId.find(".otherfeeMotherDiv:visible");
 		otherfeeMotherDivs.each(function () {
 			var otherFeeItem = new Object();
 			otherFeeItem.itemname = $(this).find("input[name='itemname']").val().trim();

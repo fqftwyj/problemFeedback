@@ -22,7 +22,7 @@
             <select name='officeCode'>
               <option value="">请输入</option>
               <#list officeList as obj>
-              <option value="${obj.officeCode}" <#if obj==result.officeCode>selected</#if>>${obj.officeName}</option>
+              <option value="${obj.officeCode}" <#if obj.officeCode==result.officeCode>selected</#if>>${obj.officeName}</option>
             </#list>
             </select>
           </div>
@@ -38,12 +38,12 @@
                id="travelPeopleInfo"></i>
           </div>
         </div>
-        <div class="layui-inline">
+        <!--<div class="layui-inline">
           <label class="layui-form-label">报销日期：</label>
           <div class="layui-input-block">
             <input type="text" name="reimburseDate" value="${result.reimburseDate}" id="reimburse_date" placeholder="请输入" autocomplete="off" class="layui-input">
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="layui-col-md11">
         <div class="layui-inline layui-col-md9">
@@ -54,7 +54,8 @@
 
         </div>
       </div>
-
+    <input type="hidden" name="reimburseType" value="${result.reimburseType}" >
+    <input type="hidden" name="staffCode" value="${result.staffCode}" >
     </div>
     <div class="layui-card-body  layui-card-body-scroll">
       <div class="reimburse-card-body-title">
@@ -135,19 +136,20 @@
 
           </div>
         </div>
+        <#list carboatfeesList as obj>
         <div class="separator-line-css carboatfeeMotherDiv"  id="carboatfeeMotherDiv">
           <div class="layui-col-md11 mbottom">
             <div class="layui-inline">
               <label class="layui-form-label">出发时间：</label>
               <div class="layui-input-block">
                 <input type="text" name="departureTime" placeholder="yyyy-MM-dd" autocomplete="off"
-                       class="layui-input datetime">
+                       class="layui-input datetime" value="${obj.departureTime}">
               </div>
             </div>
             <div class="layui-inline">
               <label class="layui-form-label">出发地点：</label>
               <div class="layui-input-block">
-                <input type="text" name="departurePlace" placeholder="请输入" autocomplete="off"
+                <input type="text" name="departurePlace"  value="${obj.departurePlace}" placeholder="请输入" autocomplete="off"
                        class="layui-input">
               </div>
             </div>
@@ -156,14 +158,14 @@
             <div class="layui-inline">
               <label class="layui-form-label">到达时间：</label>
               <div class="layui-input-block">
-                <input type="text" name="arrivalTime"  placeholder="yyyy-MM-dd" autocomplete="off"
+                <input type="text" name="arrivalTime" value="${obj.arrivalTime}"  placeholder="yyyy-MM-dd" autocomplete="off"
                        class="layui-input datetime">
               </div>
             </div>
             <div class="layui-inline">
               <label class="layui-form-label">到达地点：</label>
               <div class="layui-input-block">
-                <input type="text" name="arrivalPlace" placeholder="请输入" autocomplete="off"
+                <input type="text" name="arrivalPlace" value="${obj.arrivalPlace}" placeholder="请输入" autocomplete="off"
                        class="layui-input">
               </div>
             </div>
@@ -173,10 +175,10 @@
               <label class="layui-form-label">车船类别：</label>
               <div class="layui-input-block" style="width: 182px;">
                 <select name='carboatType' >
-                  <option value="汽车">汽车</option>
-                  <option value="火车">火车</option>
-                  <option value="飞机">飞机</option>
-                  <option value="轮船">轮船</option>
+                  <option value="汽车" <#if obj.carboatType=='汽车'>selected</#if>>汽车</option>
+                  <option value="火车" <#if obj.carboatType=='火车'>selected</#if>>火车</option>
+                  <option value="飞机" <#if obj.carboatType=='飞机'>selected</#if>>飞机</option>
+                  <option value="轮船" <#if obj.carboatType=='轮船'>selected</#if>>轮船</option>
                 </select>
               </div>
             </div>
@@ -184,14 +186,14 @@
               <label class="layui-form-label">单据张数：</label>
               <div class="layui-input-block">
                 <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
-                       class="layui-input" value="">
+                       class="layui-input" value="${obj.docNumber}">
               </div>
             </div>
             <div class="layui-inline">
               <label class="layui-form-label">车船费：</label>
               <div class="layui-input-block">
                 <input type="text" name="carboatfee" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" value="${obj.carboatfee}">
               </div>
             </div>
 
@@ -206,6 +208,7 @@
 
           </div>
         </div>
+      </#list>
       </div>
       <div class="reimburse-card-body-title">
         <div class="reimburse-card-body-title-text">
@@ -251,22 +254,23 @@
             </div>
           </div>
         </div>
+        <#list travelAllowanceList as obj>
         <div class="travelStandardMotherDiv"  id="travelStandardMotherDiv">
           <div class="layui-col-md11 mbottom" >
             <div class="layui-inline">
               <label class="layui-form-label">天数：</label>
               <div class="layui-input-block">
                 <input type="text" name="days" lay-filter="days" placeholder="请输入整数" autocomplete="off"
-                       class="layui-input days">
+                       class="layui-input days" value="${obj.days}">
               </div>
             </div>
             <div class="layui-inline layui-form">
               <label class="layui-form-label">标准：</label>
               <div class="layui-input-block" style="width: 182px;">
                 <select name='travelStandard' lay-filter="travelStandard">
-                  <option value="25">25</option>
-                  <option value="55">55</option>
-                  <option value="42.5">42.5</option>
+                  <option value="25"  <#if obj.travelStandard=='25'>selected</#if>>25</option>
+                  <option value="55"  <#if obj.travelStandard=='55'>selected</#if>>55</option>
+                  <option value="42.5" <#if obj.travelStandard=='42.5'>selected</#if>>42.5</option>
                 </select>
               </div>
             </div>
@@ -274,7 +278,7 @@
               <label class="layui-form-label">金额：</label>
               <div class="layui-input-block">
                 <input type="text" name="travelmoney" readonly="readonly" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" value="${obj.travelmoney}">
               </div>
             </div>
             <div class="layui-inline layui-form">
@@ -287,6 +291,7 @@
             </div>
           </div>
         </div>
+      </#list>
       </div>
       <div class="reimburse-card-body-title">
         <div class="reimburse-card-body-title-text">
@@ -327,27 +332,28 @@
             </div>
           </div>
         </div>
+        <#list otherFeeList as obj>
         <div class="otherfeeMotherDiv"  id="otherfeeMotherDiv">
           <div class="layui-col-md11 mbottom" >
             <div class="layui-inline">
               <label class="layui-form-label">项目：</label>
               <div class="layui-input-block">
                 <input type="text" name="itemname" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" value="${obj.itemname}">
               </div>
             </div>
             <div class="layui-inline">
               <label class="layui-form-label">单据张数：</label>
               <div class="layui-input-block">
                 <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input"  value="${obj.otherdocnumber}">
               </div>
             </div>
             <div class="layui-inline layui-form">
               <label class="layui-form-label">金额：</label>
               <div class="layui-input-block">
                 <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" value="${obj.otherfeemoney}">
               </div>
             </div>
             <div class="layui-inline layui-form">
@@ -360,6 +366,7 @@
             </div>
           </div>
         </div>
+      </#list>
       </div>
       <div class="reimburse-card-body-title">
         <div class="reimburse-card-body-title-text">合计 <i class="layui-icon  layui-icon-rmb title-text-icon title-text-icon-first totalCaculate" ></i></div>

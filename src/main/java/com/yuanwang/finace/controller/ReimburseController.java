@@ -1,5 +1,6 @@
 package com.yuanwang.finace.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.yuanwang.finace.entity.Review;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
 import com.yuanwang.sys.entity.Office;
@@ -74,10 +76,22 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_LIST)
 	@ResponseBody
-	public Result index(Reimburse reimburse, ModelMap map,HttpSession session,Integer page,Integer limit){
+	public Result index(Reimburse reimburse, Review review, ModelMap map, HttpSession session, Integer page, Integer limit){
 		Map<String,Object> search=new HashMap<String,Object>();
 		search.put("reimburseType", reimburse.getReimburseType());
 		search.put("reimburseState", reimburse.getReimburseState());
+		search.put("reimburseMembers", reimburse.getReimburseMembers());
+	/*	search.put("reviewState", review.getReviewState());*/
+		if(reimburse.getReimburseDate()!=null){
+			String reimburseDate=reimburse.getReimburseDate();
+			if( reimburseDate.indexOf(" - ")!=-1){
+				String[] reimburseDateArr=reimburseDate.split( " - ");
+				search.put("reimburseStartDate", reimburseDateArr[0]);
+				search.put("reimburseEndDate", reimburseDateArr[1]);
+			}
+		}
+
+
 		PageInfo<Reimburse> pageinfo = reimburseService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
 		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}
@@ -141,8 +155,9 @@ public class ReimburseController extends BaseController<Reimburse>{
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		Reimburse result = reimburseService.find(id);
 		map.put("result", result);
-		String str = "[{\"carboatfeeiItemsData\":[{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250},{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250}],\"travelAllowanceItemsData\":[{\"days\":4,\"standard\":25,\"money\":100},{\"days\":4,\"standard\":25,\"money\":200}],\"otherFeeItemsData\":[{\"item\":\"劳务费\",\"documentsNum\":2,\"money\":100},{\"item\":\"劳务费2\",\"documentsNum\":2,\"money\":200}]}]" ;  // 一个未转化的字符串
-		JSONArray json =  JSONArray.parseArray(str ); // 首先把字符串转成 JSONArray  对象
+		/*String str = "[{\"carboatfeeiItemsData\":[{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250},{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250}],\"travelAllowanceItemsData\":[{\"days\":4,\"standard\":25,\"money\":100},{\"days\":4,\"standard\":25,\"money\":200}],\"otherFeeItemsData\":[{\"item\":\"劳务费\",\"documentsNum\":2,\"money\":100},{\"item\":\"劳务费2\",\"documentsNum\":2,\"money\":200}]}]" ;  // 一个未转化的字符串
+	*/
+		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
 		//组装车船费列表
 		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();
 		//组装出差补贴
@@ -156,9 +171,9 @@ public class ReimburseController extends BaseController<Reimburse>{
 			//组装车船费列表
 			 carboatfeesList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
 			//组装出差补贴
-			travelAllowanceList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+			travelAllowanceList = JSONArray.parseObject(travelAllowanceArray.toJSONString(), List.class);
 			//组装其他费用
-			otherFeeList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+			otherFeeList = JSONArray.parseObject(otherFeeArray.toJSONString(), List.class);
 		}
 		map.put("carboatfeesList", carboatfeesList);
 		map.put("travelAllowanceList", travelAllowanceList);
@@ -172,12 +187,24 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_UPDATE)
 	@ResponseBody
-	public Result update(Reimburse reimburse){ 
+	public Result update(Reimburse reimburse,int type){
 		if(reimburse != null&&reimburse.getId()!=null){
 			Map<String,Object> map=new HashMap<String,Object>();
 			/**
 			 * 放入查重字段 map.put("name","测试");
 			 */
+			if(type==1){
+				reimburse.setUploadName("");
+				reimburse.setUploadPath("");
+				reimburse.setReimburseState(ReimburseStateEnum.NOTSUBMIT);
+			}else{//修改上报状态
+				reimburse = reimburseService.find(reimburse.getId());
+				reimburse.setReimburseState(ReimburseStateEnum.HASSUBMIT);
+				//获取当前时间 年-月-日
+				Date d=new Date();
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+				reimburse.setReimburseDate(sdf.format(d));
+			}
 			Integer flag = reimburseService.update(reimburse,map,OperatorEnum.AND);
 			if(flag==2) {
 				return ResultUtil.error("已存在");

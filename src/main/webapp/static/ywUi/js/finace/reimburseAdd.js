@@ -146,15 +146,24 @@ layui.define(['table', 'form','laydate'], function(exports){
             });
             //绑定天数键盘输入或的时候出差补贴自动计算金额
             $(".days").mouseout(function() {
-                var $mobj=$(this).parents(".travelStandardMotherDiv");
-                var standard=$mobj.find("select[name='travelStandard']").val();
-                var days=$(this).val();
-                var $moneyObj= $mobj.find("input[name='travelmoney']");
-                $moneyObj.val(standard*days=='NAN'?"":standard*days);
+                reimburseFuns.autoCaculate($(this));
+            }).mouseleave(function() {
+                reimburseFuns.autoCaculate($(this));
+            }).blur(function() {
+                reimburseFuns.autoCaculate($(this));
+            }).keydown(function() {
+                reimburseFuns.autoCaculate($(this));
             });
 
+        },autoCaculate:function($obj){
+            var $mobj=$obj.parents(".travelStandardMotherDiv");
+            var standard=$mobj.find("select[name='travelStandard']").val();
+            var days=$obj.val();
+            var $moneyObj= $mobj.find("input[name='travelmoney']");
+            $moneyObj.val(standard*days=='NAN'?"":standard*days);
         }
     };
+ 
     reimburseFuns.initdate();
     //车船费绑定
     reimburseFuns.bindConAddDel('carboatfee');

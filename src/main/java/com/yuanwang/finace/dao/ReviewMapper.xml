@@ -36,6 +36,7 @@
     <sql id="findAll">
         select * from <include refid="table_name" />
     </sql>
+
     <!-- 通用条件判断 -->
     <sql id="condition">
     	<where>
@@ -141,7 +142,15 @@
 	    <include refid="findAll"/>
 	    <include refid="primaryCondition"/> 
 	</select>
-	
+	<!--根据主键查询-->
+	<select id="findByReimburseId" parameterType="Integer" resultMap="resultReviewMap" useCache="true" flushCache="false">
+		<include refid="findAll"/>
+		where reimburse_id= #{id}
+	</select>
+	<sql id="findByReimburseId">
+		select * from <include refid="table_name" />
+
+	</sql>
 	<!--根据实体属性查询-->
 	<select id="findByMap" parameterType="Map" resultMap="resultReviewMap" useCache="true" flushCache="false">
 	    <include refid="findAll"/>

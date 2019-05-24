@@ -38,7 +38,17 @@ public class Reimburse extends BaseEntity{
 	private Date createTime;
 	//更新时间
 	private Date updateTime;
-	
+
+	private Review review;
+
+	public Review getReview() {
+		return review;
+	}
+
+	public void setReview(Review review) {
+		this.review = review;
+	}
+
 	/**获取员工编号
 	*/
 	public String getStaffCode(){

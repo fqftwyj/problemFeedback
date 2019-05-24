@@ -16,7 +16,7 @@
 			<result column="office_code" property="officeCode" jdbcType="VARCHAR" /><!--科室编号-->
 			<result column="reimburse_type" property="reimburseType" jdbcType="INTEGER" /><!--报销类别【enum】(1:外出培训:outtrain)-->
 			<result column="reimburse_state" property="reimburseState" jdbcType="INTEGER" /><!--报销状态【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)-->
-			<result column="reimburse_date" property="reimburseDate" jdbcType="TIMESTAMP" /><!-- 报销日期-->
+			<result column="reimburse_date" property="reimburseDate" jdbcType="VARCHAR" /><!-- 报销日期-->
 			<result column="reimburse_members" property="reimburseMembers" jdbcType="VARCHAR" /><!--报销成员-->
 			<result column="reimburse_reason" property="reimburseReason" jdbcType="VARCHAR" /><!--报销理由-->
 			<result column="reimburse_items" property="reimburseItems" jdbcType="LONGVARCHAR" /><!--报销事项-->
@@ -25,6 +25,7 @@
 			<result column="upload_name" property="uploadName" jdbcType="VARCHAR" /><!--上传文件名称-->
 			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
 			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->
+		    <association column="id" property="review" javaType="Review" select="com.yuanwang.finace.dao.ReviewMapper.findByReimburseId"/>
 	</resultMap>
 
 
@@ -36,13 +37,18 @@
 	<!-- 主键条件 -->
     <sql id="primaryCondition">
     <where>
-    id = #{id}
+    rv.id = #{id}
     </where>
     </sql>
     
     <!-- 查询全部 -->
     <sql id="findAll">
-        select * from <include refid="table_name" />
+        select rv.id,rv.staff_code,rv.office_code,rv.reimburse_type,reimburse_state,ifnull(rw.review_opinion,'') as review_opinion,
+        ifnull(rw.review_state,0) as review_state,DATE_FORMAT(rv.reimburse_date,'%Y-%m-%d') as reimburse_date,rv.reimburse_members,
+		rv.reimburse_reason,rv.reimburse_items,rv.reimburse_cost,rv.upload_path,rv.upload_name
+        from <include refid="table_name" />  rv
+        left join finace_review rw
+        on rv.id=rw.reimburse_id
     </sql>
     <!-- 通用条件判断 -->
     <sql id="condition">
@@ -52,43 +58,53 @@
     	  </if>
     		<trim prefixOverrides="and|or">
 	    	<if test="staffCode!=null and staffCode!=''">
-    		 staff_code = #{staffCode}
+				rv.staff_code = #{staffCode}
     		</if>
 	    	<if test="officeCode!=null and officeCode!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> office_code = #{officeCode}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.office_code = #{officeCode}
     		</if>
 	    	<if test="reimburseType!=null">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_type = #{reimburseType}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.reimburse_type = #{reimburseType}
     		</if>
 	    	<if test="reimburseState!=null">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_state = #{reimburseState}
+
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.reimburse_state = #{reimburseState}
     		</if>
-	    	<if test="reimburseDate!=null and reimburseDate!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_date = #{reimburseDate}
+			<if test="reviewState!=null">
+				<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rw.reviewState = #{reviewState}
+			</if>
+	    	<if test="reimburseStartDate!=null and reimburseStartDate!=''">
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+    		 rv.reimburse_date <![CDATA[>=]]> #{reimburseStartDate}
     		</if>
-	    	<if test="reimburseMembers!=null and reimburseMembers!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_members = #{reimburseMembers}
-    		</if>
+			<if test="reimburseEndDate!=null and reimburseEndDate!=''">
+				<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+				  rv.reimburse_date <![CDATA[<=]]>  #{reimburseEndDate}
+			</if>
+			<if test="reimburseMembers!=null and reimburseMembers!=''">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+				rv.reimburse_members like concat('%',#{reimburseMembers},'%')
+			</if>
 	    	<if test="reimburseReason!=null and reimburseReason!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_reason = #{reimburseReason}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.reimburse_reason = #{reimburseReason}
     		</if>
 	    	<if test="reimburseItems!=null and reimburseItems!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_items = #{reimburseItems}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.reimburse_items = #{reimburseItems}
     		</if>
 	    	<if test="reimburseCost!=null and reimburseCost!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> reimburse_cost = #{reimburseCost}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.reimburse_cost = #{reimburseCost}
     		</if>
 	    	<if test="uploadPath!=null and uploadPath!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> upload_path = #{uploadPath}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.upload_path = #{uploadPath}
     		</if>
 	    	<if test="uploadName!=null and uploadName!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> upload_name = #{uploadName}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.upload_name = #{uploadName}
     		</if>
 	    	<if test="createTime!=null and createTime!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> create_time = #{createTime}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.create_time = #{createTime}
     		</if>
 	    	<if test="updateTime!=null and updateTime!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> update_time = #{updateTime}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.update_time = #{updateTime}
     		</if>
 	    	</trim>
 	    	<if test="operator=='or'">
@@ -188,7 +204,7 @@
         	update_time = now(),
         	 </if>
         </set>
-        <include refid="primaryCondition"/> 
+        where id= #{id}
    </update>
    <!-- 删除数据 -->
    <delete id="deleteByIds" flushCache="true" >
@@ -203,7 +219,7 @@
    </delete>
    <!-- map删除数据 -->
    <delete id="deleteByMap" parameterType="Map" flushCache="true" >
-		delete from <include refid="table_name" />   <include refid="condition"/>
+		delete from <include refid="table_name" />  rv  <include refid="condition"/>
    </delete> 
     
     

@@ -1,5 +1,6 @@
 package com.yuanwang.finace.controller;
 
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import com.yuanwang.sys.entity.User;
 import com.yuanwang.sys.service.OfficeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.ModelMap;
@@ -288,50 +290,80 @@ public class ReimburseController extends BaseController<Reimburse>{
 		excel.exportXLS(request, response);
 		return null;
 	}
-	@ResponseBody
-	@RequestMapping("reimburseFilepload")
-	public String reimburseFilepload(HttpServletRequest request) {
 
-		CommonsMultipartResolver multipartResolver =
-				new CommonsMultipartResolver(request.getSession().getServletContext());
-		//检查form中是否有enctype="multipart/form-data"
-		JSONObject jsonObject = new JSONObject();
-		if (multipartResolver.isMultipart(request)) {
-			//将request变成多request
-			MultipartHttpServletRequest multiRequest =
-					(MultipartHttpServletRequest) request;
 
-			//获取multiRequest中所有的文件名
-			Iterator iter = multiRequest.getFileNames();
-			while (iter.hasNext()) {
-				//一次遍历所有的文件
-				MultipartFile file = multiRequest.getFile(iter.next().toString());
+    //上传文件2
+	/*public String uploadImg(MultipartFile file) {
+		if (null != file) {
+			String myFileName = file.getOriginalFilename();// 文件原名称
+			String fileName = BasePath.getImgPath("yyyyMMddHHmmss")+
+					Integer.toHexString(new Random().nextInt()) +"."+ myFileName.
+					substring(myFileName.lastIndexOf(".") + 1);
+			String pat=FileProperties.getFilePath()+"/src/main/webapp/";//获取文件保存路径
+			String sqlPath="static/images/upload/storeHead/"+BasePath.getImgPath("yyyyMMdd")+"/";
 
-				if (null != file && file.getSize() > 20 * 1024 * 1024) {
+			File fileDir=new File(pat+sqlPath);
+			if (!fileDir.exists()) { //如果不存在 则创建
+				fileDir.mkdirs();
+			}
+			String path=pat+sqlPath+fileName;
+			File localFile = new File(path);
+			try {
+				file.transferTo(localFile);
+				return sqlPath+fileName;
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			System.out.println("文件为空");
+		}
+		return null;
+	}*/
 
-					jsonObject.put("msg", "传输文件过大，上传失败！");
-				} else if (file != null) {
-					String result = null;
-					try {
-						/*result = vehicleWhitelistService.batchImportVehicleWhitelistByXls(file);*/
-						result="yes";
-						if ("yes".equals(result)) {
-							jsonObject.put("msg", true);
-						} else {
-							jsonObject.put("msg", result);
-						}
+	//下载
 
-					} catch (Exception e) {
-						jsonObject.put("msg", result);
-					/*	logger.error(result);*/
-					}
+	@RequestMapping("download")
+	public String downLoad(HttpServletResponse response){
+		String filename="2.jpg";
+		String filePath = "F:/test" ;
+		File file = new File(filePath + "/" + filename);
+		if(file.exists()){ //判断文件父目录是否存在
+			response.setContentType("application/force-download");
+			response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
 
+			byte[] buffer = new byte[1024];
+			FileInputStream fis = null; //文件输入流
+			BufferedInputStream bis = null;
+
+			OutputStream os = null; //输出流
+			try {
+				os = response.getOutputStream();
+				fis = new FileInputStream(file);
+				bis = new BufferedInputStream(fis);
+				int i = bis.read(buffer);
+				while(i != -1){
+					os.write(buffer);
+					i = bis.read(buffer);
 				}
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("----------file download" + filename);
+			try {
+				bis.close();
+				fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-
-		return jsonObject.toString();
-
+		return null;
 	}
 	/*
 	@RequestMapping("callPro")

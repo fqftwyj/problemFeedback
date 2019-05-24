@@ -184,7 +184,7 @@ layui.define(['table', 'form','laydate'], function(exports){
         //上传文件
         upload.render({
             elem: '#selectFile'
-            ,url: 'finace/reimburse//reimburseFilepload.do'
+            ,url: 'reimburseFilepload'
             ,accept: 'file'
             ,auto: false
             ,bindAction: '#startUploadFile'

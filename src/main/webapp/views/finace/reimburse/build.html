@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="layui-fluid  reimburse-background-color" id="reimburseDivForm">
-    <div class="layui-form " lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form " lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;" >
         <div class="layui-form-item">
             <div class="layui-col-md11">
                 <div class="layui-inline">
@@ -384,16 +384,16 @@
         </div>
         <div class="layui-card-body-scroll">
             <div class="layui-col-md11 mbottom">
-            <!--    <button type="button" class="layui-btn" id="test1">
-                    <i class="layui-icon">&#xe67c;</i>附件上传
-                </button>-->
-                <div class="layui-upload">
-                    <button type="button" class="layui-btn layui-btn-normal" id="selectFile">上传文件</button>
-                    <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
-                    <p id="allFileText"></p>
-                </div>
+
+            <div class="layui-upload">
+                <button type="button" class="layui-btn " id="selectFile">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
+                <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
+                <p id="allFileText"></p>
             </div>
         </div>
+        </div>
+
+
         <div class="reimburse-attach-explation-div">
             <div class="layui-col-md11 mbottom">
                 <span class="reimburse-attach-explation-text">注：</span>
@@ -402,6 +402,8 @@
             </div>
         </div>
     </div>
+        <input name="uploadName" type="text"  >
+        <input name="userName" type="text"  value="${user.userName}">
         <div class="layui-form-item layui-hide">
              <input type="button" lay-submit lay-filter="LAY-reimburse-submit" id="LAY-reimburse-submit" value="确认">
         </div>
@@ -416,14 +418,46 @@
         index: 'lib/index', //主入口模块
         verfy: '../../ywUi/js/commons/verfy',
         reimburseAdd: '../../ywUi/js/finace/reimburseAdd'
-    }).use(['index', 'reimburseAdd', 'form', 'verfy'], function () {
+    }).use(['index', 'reimburseAdd', 'form', 'verfy', 'upload'], function () {
         var $ = layui.$,
             form = layui.form,
+           upload = layui.upload,
             table = layui.table;
+        var userName=$("input[name='userName']").val();
+        upload.render({
+            elem: '#selectFile',
+            url: '/upload/uploadFile',
+            auto: false,//选择文件后不自动上传
+            bindAction: '#startUploadFile',
+            //上传前的回调
+            before: function () {
+                this.data = {
+                    type: $('input[name="userName"]').val()
+                }
+            },
+            //选择文件后的回调
+          /*  choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#preview').attr('src', result);
+                })
+            },*/
+            //操作成功的回调
+            done: function (res, index, upload) {
+                var code = res.code === 0 ? 1 : 2;
+              $("input[name='uploadName']").val(res.image);
+                layer.alert(res.msg, {icon: code}, function () {
+                    parent.window.location.reload();
+                })
+            },
+            //上传错误回调
+            error: function (index, upload) {
+                layer.alert('上传失败！' + index);
+            }
+        });
+    })
 
 
 
-    });
 
 </script>
 </body>

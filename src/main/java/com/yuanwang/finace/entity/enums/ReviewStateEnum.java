@@ -5,13 +5,14 @@ package com.yuanwang.finace.entity.enums;
  * @author  crj
  * @version v1.0.0
  * 描述：自动生成的代码
- * @since 2019-05-24 15:11:21
+ * @since 2019-05-24 16:33:50
  */
 public enum ReviewStateEnum{
 
     NOTREVIEW(0,"未审查"),
     ISREVIEW(1,"审查中"),
-    PASSREVIEW(2,"审查通过");
+    PASSREVIEW(2,"审查通过"),
+    NOTPASSREVIEW(3,"审查不通过");
 	
 	private int value;
 	private String desc;

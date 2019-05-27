@@ -1,3 +1,4 @@
+/*
 package com.yuanwang.common.controller;
 
 import com.yuanwang.common.utils.UploadUtil;
@@ -12,19 +13,23 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+*/
 /**
  * @ClassName UploadController
  * @Description TODO
  * @Author 86159
  * @Date 2019/5/24 23:09
  * @Version 1.0
- **/
+ **//*
+
 @Controller
 @RequestMapping("/upload")
 public class UploadController {
     @RequestMapping("uploadFile")
     @ResponseBody
-/*    public Map<String,Object> uploadFile(MultipartFile file, HttpServletRequest request, @PathVariable String type){*/
+*/
+/*    public Map<String,Object> uploadFile(MultipartFile file, HttpServletRequest request, @PathVariable String type){*//*
+
     public Map<String,Object> uploadFile(MultipartFile file, HttpServletRequest request, HttpSession session){
         Map<String,Object> map=new HashMap<String,Object>( );
         try{
@@ -42,3 +47,4 @@ public class UploadController {
     }
 
 }
+*/

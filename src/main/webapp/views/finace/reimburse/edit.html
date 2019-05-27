@@ -382,12 +382,13 @@
           </div>
         </div>
       </div>
-     <input type="text" name="reimburseDate" value="${result.reimburseDate}"/>
+     <input type="hidden" name="reimburseDate" value="${result.reimburseDate}"/>
       <div class="layui-card-body-scroll">
         <div class="layui-col-md11 mbottom">
           <!--    <button type="button" class="layui-btn" id="test1">
                   <i class="layui-icon">&#xe67c;</i>附件上传
               </button>-->
+            <input type="hidden"  name="module" id="module" value="${userName}"/>
           <div class="layui-upload">
             <button type="button" class="layui-btn layui-btn-normal" id="selectFile">上传文件</button>
             <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>

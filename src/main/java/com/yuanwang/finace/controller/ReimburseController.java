@@ -34,10 +34,6 @@ import com.yuanwang.common.utils.excelexport.ExcelFacts;
 import com.yuanwang.finace.entity.Reimburse;
 import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
 import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * ReimburseController
@@ -151,7 +147,9 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_EDIT)
-	public void updateJump(Integer id, ModelMap map){
+	public void updateJump(Integer id, ModelMap map,HttpSession session){
+        User user=(User)session.getAttribute("user");
+        map.put("userName", user.getUserName());
 		//获取科室列表
 		List<Office>  officeList=officeService.findAll();
 		map.put("officeList", officeList);

@@ -1,8 +1,9 @@
-layui.define(['table', 'form','laydate'], function(exports){
+layui.define(['table', 'form','laydate','upload'], function(exports){
   var $ = layui.$
   ,table = layui.table
   ,form = layui.form,
-   laydate=layui.laydate;
+   laydate=layui.laydate,
+  upload=layui.upload;
     //常规用法
 
 
@@ -174,31 +175,39 @@ layui.define(['table', 'form','laydate'], function(exports){
     //合计绑定
     reimburseFuns.bindConAddDel('totalCaculate');
 
+
     //上传文件
-    layui.use('upload', function(){
-        var $ = layui.jquery
-            ,upload = layui.upload;
-
-        //上传文件
-        upload.render({
-            elem: '#selectFile'
-            ,url: 'reimburseFilepload'
-            ,accept: 'file'
-            ,auto: false
-            ,bindAction: '#startUploadFile'
-            ,size: 1024*40 //限制文件大小，单位 KB
-            ,done: function(result){
-                if(result.msg != true){
-                    layer.msg(result.msg, {icon:1});
-                }else if(result.msg == true){
-                    layer.msg("上传成功!",{icon:1});
-                }else{
-                    layer.msg("上传失败!",{icon:1});
-                }
+    upload.render({
+        elem: '#selectFile'
+        ,url: '/upload/fileUpload'
+        ,accept: 'file'
+        ,acceptMime:'zip|rar|7z'
+        ,exts:'zip|rar|7z',
+        auto:false,
+        multiple:true
+        ,data: {
+            module: function(){
+                return $('#module').val();
             }
-        });
-
+        }
+        ,auto: false
+        ,bindAction: '#startUploadFile'
+        ,size: 1024*40 //限制文件大小，单位 KB
+        ,before:function(){
+          layer.load();//上传loading
+        },
+        done: function(result){
+            if(result.msg != true){
+                layer.msg(result.msg, {icon:1});
+            }else if(result.msg == true){
+                layer.msg("上传成功!",{icon:1});
+            }else{
+                layer.msg("上传失败!",{icon:1});
+            }
+        }
     });
+
+
 
   exports('reimburseAdd', {})
 });

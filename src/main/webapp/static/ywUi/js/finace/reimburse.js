@@ -76,7 +76,6 @@ layui.define(['table', 'form'], function(exports){
           ,submit = layero.find('iframe').contents().find('#'+ submitID);
           //监听提交
           iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-            debugger
             var field = data.field; //获取提交的字段
               var newData=new Object();
               var dat=data.field;

@@ -1,21 +1,11 @@
 package com.yuanwang.common.controller;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-
+import java.io.*;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,9 +24,13 @@ public class FileController {
 	
 	private static String prefixPath;
 	
-	@Value("${web.upload-path}")
-	public void setPrefixPath(String prefixPath) {
-		FileController.prefixPath = prefixPath;
+    @PostConstruct
+	public void setPrefixPath(String prefixPath) throws FileNotFoundException {
+		File upload=new File(ResourceUtils.getURL("/upload/static").getPath());
+		if(!upload.exists()){
+			upload.mkdirs();
+		}
+		FileController.prefixPath = upload.getAbsolutePath();
 	}
 
 	/**文件上传

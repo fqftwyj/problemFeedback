@@ -424,7 +424,7 @@
            upload = layui.upload,
             table = layui.table;
         var userName=$("input[name='userName']").val();
-        upload.render({
+      /*  upload.render({
             elem: '#selectFile',
             url: '/upload/uploadFile',
             auto: false,//选择文件后不自动上传
@@ -436,11 +436,11 @@
                 }
             },
             //选择文件后的回调
-          /*  choose: function (obj) {
+          /!*  choose: function (obj) {
                 obj.preview(function (index, file, result) {
                     $('#preview').attr('src', result);
                 })
-            },*/
+            },*!/
             //操作成功的回调
             done: function (res, index, upload) {
                 var code = res.code === 0 ? 1 : 2;
@@ -453,7 +453,7 @@
             error: function (index, upload) {
                 layer.alert('上传失败！' + index);
             }
-        });
+        });*/
     })
 
 

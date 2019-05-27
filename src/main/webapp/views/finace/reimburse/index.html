@@ -89,7 +89,7 @@
 		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
 		  {{# } }}
 		  <!-- 这里同样支持 laytpl 语法，如： -->
-		  {{# if(d.review.reviewState =='PASSREVIEW'){ }}
+		  {{# if(d.review!=null && d.review.reviewState =='PASSREVIEW'){ }}
 		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-download-circle"></i>导出</a>
 		  {{# } }}
         </script>

@@ -11,16 +11,24 @@ layui.define(['table', 'form'], function(exports){
       , {field: 'reimburseType', title: '报销类别', templet: '#table-reimburse-reimburseType'}
       , {field: 'reimburseState', title: '报销状态', templet: function(d){
          if( d.reimburseState=="HASSUBMIT"){
-              return  '<span style="color: #58AB58;font-weight: bold;">  已上报</span>'
+              return  '<span style="color: #58AB58;font-weight: bold;">  已上报</span>';
          }else if(d.reimburseState=="NOTSUBMIT"){
-              return '<span style="color: #C14E4E;font-weight: bold;">  未上报</span>'
+              return '<span style="color: #C14E4E;font-weight: bold;">  未上报</span>';
          }
 
         }}
       , {field: 'reimburseMembers', title: '报销成员'}
       , {field: 'reviewState', title: '审查状态'}
       , {field: 'reviewOpinion', title: '审查意见'}
-      , {field: 'reimburseDate', title: ' 报销日期'}
+      , {field: 'reimburseDate', title: ' 报销日期', templet: function(d){
+        debugger
+          if( d.reimburseDate=="1900-01-01"){
+            return "";
+          }else {
+            return d.reimburseDate;
+          }
+
+  }}
       , {title: '提交上报', width:100, align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
       , {title: '操作', width: 250, align: 'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
     ]]
@@ -30,9 +38,7 @@ layui.define(['table', 'form'], function(exports){
     , text: {
       none: '暂无数据！'
     }, done: function (res, curr, count) { // 隐藏列
-      debugger
       if(res.data[curr].review.reviewState=='PASSREVIEW'){
-        debugger
         $(".layui-icon-download-circle").css("display", "block");
       }else{
         $(".layui-icon-download-circle").css("display", "none");
@@ -92,12 +98,12 @@ layui.define(['table', 'form'], function(exports){
               var totalCarBoatTravel=dat.totalCarBoatTravel;
               var totalotherFee=dat.totalotherFee;
               //组装合计的数量
-              var totalFeeObjArray=new Array();
+           /*   var totalFeeObjArray=new Array();*/
               var totalFeeObj=new Object();
               totalFeeObj.totalCarBoatTravel=totalCarBoatTravel;
               totalFeeObj.totalotherFee=totalotherFee;
-              totalFeeObjArray.push(totalFeeObj);
-              var totalFeeStr=JSON.stringify(totalFeeObjArray);
+           /*   totalFeeObjArray.push(totalFeeObj);*/
+              var totalFeeStr=JSON.stringify(totalFeeObj);
               newData.reimburseCost=totalFeeStr;
               newData.type=1;
               //提交 Ajax 成功后，静态更新表格中的数据

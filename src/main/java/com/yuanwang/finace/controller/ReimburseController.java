@@ -132,6 +132,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 			reimburse.setStaffCode(user.getUserName());
 			reimburse.setUploadName("");
 			reimburse.setUploadPath("");
+			reimburse.setReimburseDate("1900-1-1");
 			reimburse.setReimburseState(ReimburseStateEnum.NOTSUBMIT);
 			Integer flag=reimburseService.save(reimburse,map,OperatorEnum.AND);
 			if(flag==2) {
@@ -166,6 +167,9 @@ public class ReimburseController extends BaseController<Reimburse>{
 		List<Map<String, String>> travelAllowanceList =new ArrayList<Map<String, String>>();
 		//组装其他费用
 		List<Map<String, String>> otherFeeList =new ArrayList<Map<String, String>>();
+		//组装合计费用
+		JSONObject  totalFeeObj=new JSONObject();
+		List<Map<String, String>> totalFeeList =new ArrayList<Map<String, String>>();
 		if(json.size()>0) {
 			JSONArray carboatfeeArray = (JSONArray) json.getJSONObject(0).get("carboatfeeiItemsData");
 			JSONArray travelAllowanceArray = (JSONArray) json.getJSONObject(0).get("travelAllowanceItemsData");
@@ -177,9 +181,14 @@ public class ReimburseController extends BaseController<Reimburse>{
 			//组装其他费用
 			otherFeeList = JSONArray.parseObject(otherFeeArray.toJSONString(), List.class);
 		}
+		JSONArray tataljson =  JSONArray.parseArray(result.getReimburseCost() ); // 首先把字符串转成 JSONArray  对象
+		if(tataljson.size()>0){
+			totalFeeObj=(JSONObject) tataljson.get(0);
+		}
 		map.put("carboatfeesList", carboatfeesList);
 		map.put("travelAllowanceList", travelAllowanceList);
 		map.put("otherFeeList", otherFeeList);
+		map.put("totalFeeObj", totalFeeObj);
 	}
 	
 	/**编辑功能

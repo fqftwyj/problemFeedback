@@ -114,8 +114,6 @@ layui.define(['table', 'form','laydate'], function(exports){
                 $("#totalotherFee").val(totalotherFee);
                 //请再次确认你的合计金额是否正确
 
-
-
             });
         },initdate:function () {
             laydate.render({

@@ -20,7 +20,7 @@
           <label class="layui-form-label">科室：</label>
           <div class="layui-input-block" style="display: block;">
             <select name='officeCode'>
-              <option value="">请输入</option>
+          <!--    <option value="">请输入</option>-->
               <#list officeList as obj>
               <option value="${obj.officeCode}" <#if obj.officeCode==result.officeCode>selected</#if>>${obj.officeName}</option>
             </#list>
@@ -31,7 +31,7 @@
           <label class="layui-form-label">出差人：</label>
           <div class="layui-input-block-special" >
             <input type="text" name="reimburseMembers" placeholder="请输入" autocomplete="off"
-                   class="layui-input" value="${result.reimburseMembers}">
+                   class="layui-input" value="${result.reimburseMembers}" lay-verify="required">
           </div>
           <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
             <i class="layui-icon layui-icon-about title-text-icon  title-text-icon-second-separator"
@@ -49,7 +49,7 @@
         <div class="layui-inline layui-col-md9">
           <label class="layui-form-label">出差事由：</label>
           <div class="layui-input-block">
-            <textarea placeholder="请输入内容"  name="reimburseReason" class="layui-textarea">${result.reimburseReason}</textarea>
+            <textarea placeholder="请输入内容"  name="reimburseReason" class="layui-textarea" lay-verify="required">${result.reimburseReason}</textarea>
           </div>
 
         </div>
@@ -223,7 +223,7 @@
               <label class="layui-form-label">天数：</label>
               <div class="layui-input-block">
                 <input type="text" name="days" placeholder="请输入" autocomplete="off"
-                       class="layui-input days" >
+                       class="layui-input days" lay-verify="int" >
               </div>
             </div>
             <div class="layui-inline layui-form">
@@ -261,7 +261,7 @@
               <label class="layui-form-label">天数：</label>
               <div class="layui-input-block">
                 <input type="text" name="days" lay-filter="days" placeholder="请输入整数" autocomplete="off"
-                       class="layui-input days" value="${obj.days}">
+                       class="layui-input days" value="${obj.days}" lay-verify="int" >
               </div>
             </div>
             <div class="layui-inline layui-form">
@@ -312,14 +312,14 @@
               <label class="layui-form-label">单据张数：</label>
               <div class="layui-input-block">
                 <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" lay-verify="int">
               </div>
             </div>
             <div class="layui-inline layui-form">
               <label class="layui-form-label">金额：</label>
               <div class="layui-input-block">
                 <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" lay-verify="money">
               </div>
             </div>
             <div class="layui-inline layui-form">
@@ -346,14 +346,14 @@
               <label class="layui-form-label">单据张数：</label>
               <div class="layui-input-block">
                 <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
-                       class="layui-input"  value="${obj.otherdocnumber}">
+                       class="layui-input"  value="${obj.otherdocnumber}" lay-verify="int">
               </div>
             </div>
             <div class="layui-inline layui-form">
               <label class="layui-form-label">金额：</label>
               <div class="layui-input-block">
                 <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
-                       class="layui-input" value="${obj.otherfeemoney}">
+                       class="layui-input" value="${obj.otherfeemoney}" lay-verify="money">
               </div>
             </div>
             <div class="layui-inline layui-form">
@@ -377,14 +377,14 @@
             <label class="layui-form-label layui-form-label-width">车船费+出差补贴费：</label>
             <div class="layui-input-block layui-input-block-left">
               <input type="text" name="totalCarBoatTravel" id="totalCarBoatTravel" placeholder="请输入"  readonly="readonly" autocomplete="off"
-                     class="layui-input">
+                     class="layui-input" value="${totalFeeObj.totalCarBoatTravel}">
             </div>
           </div>
           <div class="layui-inline">
             <label class="layui-form-label">其它费用：</label>
             <div class="layui-input-block">
               <input type="text" name="totalotherFee" id="totalotherFee" placeholder="请输入" autocomplete="off" readonly="readonly"
-                     class="layui-input" >
+                     class="layui-input" value="${totalFeeObj.totalotherFee}">
             </div>
           </div>
         </div>

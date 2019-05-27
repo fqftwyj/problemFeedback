@@ -17,12 +17,6 @@
       <div class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
 	<div class="layui-col-md11">
-		 <!-- <div class="layui-inline">
-		    <label class="layui-form-label">员工编号</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="staffCode" placeholder="请输入" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>-->
 		  <div class="layui-inline">
 		    <label class="layui-form-label">报销类别</label>
 		    <div class="layui-input-block">
@@ -190,46 +184,62 @@
 								  ,submitID = 'LAY-reimburse-submit'
 								  ,contentId= layero.find('iframe').contents(),
 								  submit = layero.find('iframe').contents().find('#'+ submitID);
-						  //监听提交
-						  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-							  var newData=new Object();
-							  var dat=data.field;
-							  newData.officeCode=dat.officeCode;
-							  newData.reimburseMembers=dat.reimburseMembers;
-							  newData.reimburseDate=dat.reimburseDate;
-							  newData.reimburseReason=dat.reimburseReason;
-							  newData.reimburseType=reimburseType;
-							  var json_str=assembleFeesData(contentId);
-							  newData.reimburseItems=json_str;
-							  var totalCarBoatTravel=dat.totalCarBoatTravel;
-							  var totalotherFee=dat.totalotherFee;
-							  //组装合计的数量
-							  var totalFeeObjArray=new Array();
-							  var totalFeeObj=new Object();
-							  totalFeeObj.totalCarBoatTravel=totalCarBoatTravel;
-							  totalFeeObj.totalotherFee=totalotherFee;
-							  totalFeeObjArray.push(totalFeeObj);
-							  var totalFeeStr=JSON.stringify(totalFeeObjArray);
-							  newData.reimburseCost=totalFeeStr;
 
-							  //提交 Ajax 成功后，静态更新表格中的数据
-							  $.ajax({
-								  url:'create',
-								  data:newData,
-								  type:'POST',
-								  success: function(e){
-									  if(e.code==0){
-										  table.reload('LAY-reimburse-table');
-										  layer.msg(e.msg);
-										  layer.close(index);  //关闭弹层
-									  }else{
-										  layer.msg(e.msg);
+						  //计算车船和出差补贴的总和和其它费用的总和
+						  var $form=contentId.find("#reimburseDivForm");
+						  commomFun.autoCalTotal($form);
+
+						  //请再次确认你的合计金额是否正确
+						  layer.confirm('您确认你的合计金额是否正确', {
+							  btn: ['是','否'] //按钮
+						  }, function()
+						  {
+							  layer.closeAll('dialog');
+							  //监听提交
+							  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+
+								  var newData=new Object();
+								  var dat=data.field;
+								  newData.officeCode=dat.officeCode;
+								  newData.reimburseMembers=dat.reimburseMembers;
+								  newData.reimburseDate=dat.reimburseDate;
+								  newData.reimburseReason=dat.reimburseReason;
+								  newData.reimburseType=reimburseType;
+								  var json_str=commomFun.assembleFeesData(contentId);
+								  newData.reimburseItems=json_str;
+								  var totalCarBoatTravel=dat.totalCarBoatTravel;
+								  var totalotherFee=dat.totalotherFee;
+								  //组装合计的数量
+								  var totalFeeObjArray=new Array();
+								  var totalFeeObj=new Object();
+								  totalFeeObj.totalCarBoatTravel=totalCarBoatTravel;
+								  totalFeeObj.totalotherFee=totalotherFee;
+								  totalFeeObjArray.push(totalFeeObj);
+								  var totalFeeStr=JSON.stringify(totalFeeObjArray);
+								  newData.reimburseCost=totalFeeStr;
+
+								  //提交 Ajax 成功后，静态更新表格中的数据
+								  $.ajax({
+									  url:'create',
+									  data:newData,
+									  type:'POST',
+									  success: function(e){
+										  if(e.code==0){
+											  table.reload('LAY-reimburse-table');
+											  layer.msg(e.msg);
+											  layer.close(index);  //关闭弹层
+										  }else{
+											  layer.msg(e.msg);
+										  }
 									  }
-								  }
+								  });
 							  });
+
+							  submit.trigger('click');
+
 						  });
 
-						  submit.trigger('click');
+
 					  }
 				  });
 			  }
@@ -237,54 +247,86 @@
 
       }
     }
-    //组装复杂数据
-    function assembleFeesData(contentId){
-		var itemDataObjData = [];
-		var itemDataObj = new Object();
-		//车船费
-		var carboatfeeiItemsData = [];
-		var carboatfeeMotherDivs = contentId.find(".carboatfeeMotherDiv:visible");
-		carboatfeeMotherDivs.each(function () {
-			var carboatfeeitem = new Object();
-			carboatfeeitem.departureTime = $(this).find("input[name='departureTime']").val().trim();
-			carboatfeeitem.departurePlace = $(this).find("input[name='departurePlace']").val().trim();
-			carboatfeeitem.arrivalTime = $(this).find("input[name='arrivalTime']").val().trim();
-			carboatfeeitem.arrivalPlace = $(this).find("input[name='arrivalPlace']").val().trim();
-			carboatfeeitem.carboatType = $(this).find("select[name='carboatType']").val();
-			carboatfeeitem.docNumber = $(this).find("input[name='docNumber']").val().trim();
-			carboatfeeitem.carboatfee = $(this).find("input[name='carboatfee']").val().trim();
-			carboatfeeiItemsData.push(carboatfeeitem);
-		});
+    var commomFun={
+    	//提交前计算合计费用
+		autoCalTotal:function ($form) {
+			//车船费
+			var carboatfees=$form.find("input[name='carboatfee']");
+			var totalcarboatfee=0.00;
+			carboatfees.each(function () {
+				var v=Number($(this).val());
+				totalcarboatfee+=v;
+			});
+			//出差补贴费
+			var travelmoneys=$form.find("input[name='travelmoney']");
+			var totaltravelmoneys=0.00;
+			travelmoneys.each(function () {
+				var v=Number($(this).val());
+				totaltravelmoneys+=v;
 
-		//出差补贴费
-		var travelAllowanceItemsData = [];
-		var travelStandardMotherDivs = contentId.find(".travelStandardMotherDiv:visible");
-		travelStandardMotherDivs.each(function () {
-			var travelAllowanceItem = new Object();
-			travelAllowanceItem.days = $(this).find("input[name='days']").val().trim();
-			travelAllowanceItem.travelStandard = $(this).find("select[name='travelStandard']").val();
-			travelAllowanceItem.travelmoney = $(this).find("input[name='travelmoney']").val().trim();
-			travelAllowanceItemsData.push(travelAllowanceItem);
-		});
+			});
+			//其它费用
+			var otherfeemoneys=$form.find("input[name='otherfeemoney']");
+			var totalotherfeemoney=0.00;
+			otherfeemoneys.each(function () {
+				var v=Number($(this).val());
+				totalotherfeemoney+=v;
 
-		//其它费用
-		var otherFeeItemsData = [];
-		var otherfeeMotherDivs = contentId.find(".otherfeeMotherDiv:visible");
-		otherfeeMotherDivs.each(function () {
-			var otherFeeItem = new Object();
-			otherFeeItem.itemname = $(this).find("input[name='itemname']").val().trim();
-			otherFeeItem.otherdocnumber = $(this).find("input[name='otherdocnumber']").val().trim();
-			otherFeeItem.otherfeemoney = $(this).find("input[name='otherfeemoney']").val().trim();
-			otherFeeItemsData.push(otherFeeItem);
-		});
+			});
+			var totalCarBoatTravel=(totalcarboatfee+totaltravelmoneys).toFixed(2);
+			var totalotherFee=totalotherfeemoney.toFixed(2);
+			$form.find("#totalCarBoatTravel").val(totalCarBoatTravel);
+			$form.find("#totalotherFee").val(totalotherFee);
+		},assembleFeesData(contentId){  //组装复杂数据
+			var itemDataObjData = [];
+			var itemDataObj = new Object();
+			//车船费
+			var carboatfeeiItemsData = [];
+			var carboatfeeMotherDivs = contentId.find(".carboatfeeMotherDiv:visible");
+			carboatfeeMotherDivs.each(function () {
+				var carboatfeeitem = new Object();
+				carboatfeeitem.departureTime = $(this).find("input[name='departureTime']").val().trim();
+				carboatfeeitem.departurePlace = $(this).find("input[name='departurePlace']").val().trim();
+				carboatfeeitem.arrivalTime = $(this).find("input[name='arrivalTime']").val().trim();
+				carboatfeeitem.arrivalPlace = $(this).find("input[name='arrivalPlace']").val().trim();
+				carboatfeeitem.carboatType = $(this).find("select[name='carboatType']").val();
+				carboatfeeitem.docNumber = $(this).find("input[name='docNumber']").val().trim();
+				carboatfeeitem.carboatfee = $(this).find("input[name='carboatfee']").val().trim();
+				carboatfeeiItemsData.push(carboatfeeitem);
+			});
 
-		itemDataObj.carboatfeeiItemsData = carboatfeeiItemsData;
-		itemDataObj.travelAllowanceItemsData = travelAllowanceItemsData;
-		itemDataObj.otherFeeItemsData = otherFeeItemsData;
-		itemDataObjData.push(itemDataObj);
+			//出差补贴费
+			var travelAllowanceItemsData = [];
+			var travelStandardMotherDivs = contentId.find(".travelStandardMotherDiv:visible");
+			travelStandardMotherDivs.each(function () {
+				var travelAllowanceItem = new Object();
+				travelAllowanceItem.days = $(this).find("input[name='days']").val().trim();
+				travelAllowanceItem.travelStandard = $(this).find("select[name='travelStandard']").val();
+				travelAllowanceItem.travelmoney = $(this).find("input[name='travelmoney']").val().trim();
+				travelAllowanceItemsData.push(travelAllowanceItem);
+			});
 
-		return JSON.stringify(itemDataObjData);
-	}
+			//其它费用
+			var otherFeeItemsData = [];
+			var otherfeeMotherDivs = contentId.find(".otherfeeMotherDiv:visible");
+			otherfeeMotherDivs.each(function () {
+				var otherFeeItem = new Object();
+				otherFeeItem.itemname = $(this).find("input[name='itemname']").val().trim();
+				otherFeeItem.otherdocnumber = $(this).find("input[name='otherdocnumber']").val().trim();
+				otherFeeItem.otherfeemoney = $(this).find("input[name='otherfeemoney']").val().trim();
+				otherFeeItemsData.push(otherFeeItem);
+			});
+
+			itemDataObj.carboatfeeiItemsData = carboatfeeiItemsData;
+			itemDataObj.travelAllowanceItemsData = travelAllowanceItemsData;
+			itemDataObj.otherFeeItemsData = otherFeeItemsData;
+			itemDataObjData.push(itemDataObj);
+
+			return JSON.stringify(itemDataObjData);
+		}
+
+	};
+
 
     $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
       var type = $(this).data('type');

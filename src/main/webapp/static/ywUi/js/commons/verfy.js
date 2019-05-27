@@ -18,6 +18,13 @@ layui.define('form', function (exports) {
       if (!(/^1(3|4|5|7|8)\d{9}$/.test(value) || /^([0-9]{3,4}-)?[0-9]{7,8}$/.test(value) || value == '')) {
         return '请输入正确的联系电话';
       }
+    },
+    //验证金额
+    money:function(value, item){
+      if (!(/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(value) || value == '')) {
+        return '请输入正确的金额';
+      }
+
     }
   });
 

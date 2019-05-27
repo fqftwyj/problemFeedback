@@ -25,7 +25,7 @@
 			<result column="upload_name" property="uploadName" jdbcType="VARCHAR" /><!--上传文件名称-->
 			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
 			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->
-		    <association column="id" property="review" javaType="com.yuanwang.finace.entity.Review" select="com.yuanwang.finace.dao.ReviewMapper.findByReimburseId"/>
+		    <association column="id" property="review"  select="com.yuanwang.finace.dao.ReviewMapper.findByReimburseId"/>
 	</resultMap>
 
 

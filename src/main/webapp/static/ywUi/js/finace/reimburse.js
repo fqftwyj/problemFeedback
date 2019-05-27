@@ -21,7 +21,6 @@ layui.define(['table', 'form'], function(exports){
       , {field: 'reviewState', title: '审查状态'}
       , {field: 'reviewOpinion', title: '审查意见'}
       , {field: 'reimburseDate', title: ' 报销日期', templet: function(d){
-        debugger
           if( d.reimburseDate=="1900-01-01"){
             return "";
           }else {
@@ -38,11 +37,6 @@ layui.define(['table', 'form'], function(exports){
     , text: {
       none: '暂无数据！'
     }, done: function (res, curr, count) { // 隐藏列
-      if(res.data[curr].review.reviewState=='PASSREVIEW'){
-        $(".layui-icon-download-circle").css("display", "block");
-      }else{
-        $(".layui-icon-download-circle").css("display", "none");
-      }
 
 
     }
@@ -65,7 +59,6 @@ layui.define(['table', 'form'], function(exports){
 	        		}
 	            }
 	      });
-         
         });
     } else if(obj.event === 'edit'){
       var tr = $(obj.tr);
@@ -93,7 +86,7 @@ layui.define(['table', 'form'], function(exports){
               newData.reimburseReason=dat.reimburseReason;
               newData.reimburseType=dat.reimburseType;
               newData.staffCode=dat.staffCode;
-              var json_str=assembleFeesData(contentId);
+              var json_str=commomFun.assembleFeesData(contentId);
               newData.reimburseItems=json_str;
               var totalCarBoatTravel=dat.totalCarBoatTravel;
               var totalotherFee=dat.totalotherFee;
@@ -147,7 +140,85 @@ layui.define(['table', 'form'], function(exports){
       });
     }
   });
+  var commomFun={
+    //提交前计算合计费用
+    autoCalTotal:function ($form) {
+      //车船费
+      var carboatfees=$form.find("input[name='carboatfee']");
+      var totalcarboatfee=0.00;
+      carboatfees.each(function () {
+        var v=Number($(this).val());
+        totalcarboatfee+=v;
+      });
+      //出差补贴费
+      var travelmoneys=$form.find("input[name='travelmoney']");
+      var totaltravelmoneys=0.00;
+      travelmoneys.each(function () {
+        var v=Number($(this).val());
+        totaltravelmoneys+=v;
 
+      });
+      //其它费用
+      var otherfeemoneys=$form.find("input[name='otherfeemoney']");
+      var totalotherfeemoney=0.00;
+      otherfeemoneys.each(function () {
+        var v=Number($(this).val());
+        totalotherfeemoney+=v;
+
+      });
+      var totalCarBoatTravel=(totalcarboatfee+totaltravelmoneys).toFixed(2);
+      var totalotherFee=totalotherfeemoney.toFixed(2);
+      $form.find("#totalCarBoatTravel").val(totalCarBoatTravel);
+      $form.find("#totalotherFee").val(totalotherFee);
+    },assembleFeesData: function(contentId){  //组装复杂数据
+      var itemDataObjData = [];
+      var itemDataObj = new Object();
+      //车船费
+      var carboatfeeiItemsData = [];
+      var carboatfeeMotherDivs = contentId.find(".carboatfeeMotherDiv:visible");
+      carboatfeeMotherDivs.each(function () {
+        var carboatfeeitem = new Object();
+        carboatfeeitem.departureTime = $(this).find("input[name='departureTime']").val().trim();
+        carboatfeeitem.departurePlace = $(this).find("input[name='departurePlace']").val().trim();
+        carboatfeeitem.arrivalTime = $(this).find("input[name='arrivalTime']").val().trim();
+        carboatfeeitem.arrivalPlace = $(this).find("input[name='arrivalPlace']").val().trim();
+        carboatfeeitem.carboatType = $(this).find("select[name='carboatType']").val();
+        carboatfeeitem.docNumber = $(this).find("input[name='docNumber']").val().trim();
+        carboatfeeitem.carboatfee = $(this).find("input[name='carboatfee']").val().trim();
+        carboatfeeiItemsData.push(carboatfeeitem);
+      });
+
+      //出差补贴费
+      var travelAllowanceItemsData = [];
+      var travelStandardMotherDivs = contentId.find(".travelStandardMotherDiv:visible");
+      travelStandardMotherDivs.each(function () {
+        var travelAllowanceItem = new Object();
+        travelAllowanceItem.days = $(this).find("input[name='days']").val().trim();
+        travelAllowanceItem.travelStandard = $(this).find("select[name='travelStandard']").val();
+        travelAllowanceItem.travelmoney = $(this).find("input[name='travelmoney']").val().trim();
+        travelAllowanceItemsData.push(travelAllowanceItem);
+      });
+
+      //其它费用
+      var otherFeeItemsData = [];
+      var otherfeeMotherDivs = contentId.find(".otherfeeMotherDiv:visible");
+      otherfeeMotherDivs.each(function () {
+        var otherFeeItem = new Object();
+        otherFeeItem.itemname = $(this).find("input[name='itemname']").val().trim();
+        otherFeeItem.otherdocnumber = $(this).find("input[name='otherdocnumber']").val().trim();
+        otherFeeItem.otherfeemoney = $(this).find("input[name='otherfeemoney']").val().trim();
+        otherFeeItemsData.push(otherFeeItem);
+      });
+
+      itemDataObj.carboatfeeiItemsData = carboatfeeiItemsData;
+      itemDataObj.travelAllowanceItemsData = travelAllowanceItemsData;
+      itemDataObj.otherFeeItemsData = otherFeeItemsData;
+      itemDataObjData.push(itemDataObj);
+
+      return JSON.stringify(itemDataObjData);
+    }
+
+  };
   exports('reimburse', {})
 });
 

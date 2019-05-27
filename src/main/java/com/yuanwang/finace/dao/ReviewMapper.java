@@ -16,6 +16,6 @@ import com.yuanwang.common.core.BaseMapper;
  */
 @Repository
 public class ReviewMapper extends BaseMapper<Review, Integer> {
-	
+
 	
 }

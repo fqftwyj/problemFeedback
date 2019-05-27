@@ -147,10 +147,6 @@
 		<include refid="findAll"/>
 		where reimburse_id= #{id}
 	</select>
-	<sql id="findByReimburseId">
-		select * from <include refid="table_name" />
-
-	</sql>
 	<!--根据实体属性查询-->
 	<select id="findByMap" parameterType="Map" resultMap="resultReviewMap" useCache="true" flushCache="false">
 	    <include refid="findAll"/>

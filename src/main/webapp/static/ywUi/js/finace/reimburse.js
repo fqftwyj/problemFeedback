@@ -71,13 +71,13 @@ layui.define(['table', 'form'], function(exports){
         ,btn: ['确定', '取消']
         ,yes: function(index, layero){
           var iframeWindow = window['layui-layer-iframe'+ index]
-          ,submitID = 'LAY-reimburse-submit'
+          ,submitID = 'LAY-review-edit-submit'
            ,contentId= layero.find('iframe').contents()
           ,submit = layero.find('iframe').contents().find('#'+ submitID);
           //监听提交
           iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+            debugger
             var field = data.field; //获取提交的字段
-
               var newData=new Object();
               var dat=data.field;
               newData.officeCode=dat.officeCode;
@@ -99,6 +99,7 @@ layui.define(['table', 'form'], function(exports){
               var totalFeeStr=JSON.stringify(totalFeeObj);
               newData.reimburseCost=totalFeeStr;
               newData.type=1;
+              debugger
               //提交 Ajax 成功后，静态更新表格中的数据
               $.ajax({
                   url:'update',

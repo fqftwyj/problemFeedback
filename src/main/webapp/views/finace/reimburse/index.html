@@ -81,7 +81,11 @@
         
         <table id="LAY-reimburse-table" lay-filter="LAY-reimburse-table"></table>
 		  <script type="text/html" id="table-reimburse-submit">
+			  {{# if( d.reimburseState=="NOTSUBMIT"){ }}
 			  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="submit"><i class="layui-icon layui-icon-upload-drag"></i>上报</a>
+			  {{# } else {}}
+			  <a class="layui-btn layui-btn-disabled layui-btn-xs" ><i class="layui-icon layui-icon-upload-drag"></i>上报</a>
+			  {{# } }}
 		  </script>
         <script type="text/html" id="table-reimburse-operation">
 		  {{# if( d.reimburseState=="NOTSUBMIT"){ }}
@@ -171,6 +175,7 @@
 						  ,submitID = 'LAY-reimburse-first-submit'
 						  ,submit = layero.find('iframe').contents().find('#'+ submitID);
 				  //监听提交
+				  debugger
 				  var reimburseType;
 				  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
 					  reimburseType=data.field.reimburseType;
@@ -200,7 +205,6 @@
 							  layer.closeAll('dialog');
 							  //监听提交
 							  iframeWindow.layui.form.on('submit('+ submitID +')', function(data) {
-										console.log(1)
 									  var newData = new Object();
 									  var dat = data.field;
 									  newData.officeCode = dat.officeCode;
@@ -220,7 +224,6 @@
 									  totalFeeObjArray.push(totalFeeObj);
 									  var totalFeeStr = JSON.stringify(totalFeeObjArray);
 									  newData.reimburseCost = totalFeeStr;
-								      console.log(2)
 
 									  //提交 Ajax 成功后，静态更新表格中的数据
 									  $.ajax({
@@ -229,7 +232,6 @@
 										  type: 'POST',
 										  success: function (e) {
 											  if (e.code == 0) {
-												  console.log(3)
 												  table.reload('LAY-reimburse-table');
 												  layer.msg(e.msg);
 												  layer.close(index);  //关闭弹层

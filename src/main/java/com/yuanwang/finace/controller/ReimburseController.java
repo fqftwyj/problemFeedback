@@ -158,8 +158,6 @@ public class ReimburseController extends BaseController<Reimburse>{
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		Reimburse result = reimburseService.find(id);
 		map.put("result", result);
-		/*String str = "[{\"carboatfeeiItemsData\":[{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250},{\"startoffTime\":\"2019-05-01\",\"startoffLocation\":\"杭州\",\"arriveTime\":\"2019-05-05\",\"type\":\"北京\",\"documentsNum\":2,\"carboatfee\":250}],\"travelAllowanceItemsData\":[{\"days\":4,\"standard\":25,\"money\":100},{\"days\":4,\"standard\":25,\"money\":200}],\"otherFeeItemsData\":[{\"item\":\"劳务费\",\"documentsNum\":2,\"money\":100},{\"item\":\"劳务费2\",\"documentsNum\":2,\"money\":200}]}]" ;  // 一个未转化的字符串
-	*/
 		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
 		//组装车船费列表
 		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();

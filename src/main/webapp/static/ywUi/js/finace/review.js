@@ -58,6 +58,7 @@ layui.define(['table', 'form'], function(exports){
           ,submit = layero.find('iframe').contents().find('#'+ submitID);
 
           //监听提交
+              debugger
           iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
             var field = data.field; //获取提交的字段
             //提交 Ajax 成功后，静态更新表格中的数据

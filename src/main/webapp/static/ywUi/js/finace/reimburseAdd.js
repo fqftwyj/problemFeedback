@@ -3,7 +3,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
   ,table = layui.table
   ,form = layui.form,
    laydate=layui.laydate,
-  upload=layui.upload;
+   upload=layui.upload;
     //常规用法
 
 
@@ -201,13 +201,12 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
                 layer.msg(result.msg, {icon:1});
             }else if(result.msg == true){
                 layer.msg("上传成功!",{icon:1});
+
             }else{
                 layer.msg("上传失败!",{icon:1});
             }
         }
     });
-
-
 
   exports('reimburseAdd', {})
 });

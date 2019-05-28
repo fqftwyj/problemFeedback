@@ -1,4 +1,3 @@
-/*
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -22,20 +21,22 @@ public class fremarkerExcel {
     public static void main(String[] args) {
         fremarkerExcel test = new fremarkerExcel();
         try {
-            test.createWord();
+            Map<String, Object> dataMap = new HashMap<String, Object>();
+            test.createWord("F:\\workspace\\finaceManage\\src\\main\\resources\\excel",dataMap);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    public void createWord() {
-        Map<String, Object> dataMap = new HashMap<String, Object>();
+    public void createWord(String path, Map<String, Object> dataMap) {
+/*        Map<String, Object> dataMap = new HashMap<String, Object>();*/
         getData(dataMap);
 // configuration.setClassForTemplateLoading(this.getClass(), "/com");
 // //FTL文件所存在的位置
         try {
-            configuration.setDirectoryForTemplateLoading(new File("C:\\fq\\workSpacenew\\finaceManage\\src\\main\\resources\\excel"));
+           /* configuration.setDirectoryForTemplateLoading(new File("F:\\workspace\\finaceManage\\src\\main\\resources\\excel"));*/
+            configuration.setDirectoryForTemplateLoading(new File(path));
         } catch (IOException e2) {
             e2.printStackTrace();
         } // 线上 ：绝对路径
@@ -45,7 +46,9 @@ public class fremarkerExcel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        File outFile = new File("C:/fq/workSpacenew/finaceManage/src/main/resources/excel/outFilessa" + Math.random() * 10000 + ".xls"); // 生成文件的路径
+       /* File outFile = new File("F:/workspace/finaceManage/src/main/resources/exceloutFilessa" + Math.random() * 10000 + ".xls"); // 生成文件的路径
+        */  path=path.replaceAll("\\\\","/");
+        File outFile = new File(path + Math.random() * 10000 + ".xls"); // 生成文件的路径
         Writer out = null;
         try {
             try {
@@ -72,11 +75,6 @@ public class fremarkerExcel {
 
     // 这里赋值的时候需要注意,xml中需要的数据你必须提供给它,不然会报找不到某元素错的.
     private void getData(Map<String, Object> dataMap) {
-// dataMap.put("name", "张三");
-// dataMap.put("age", "22");
-// dataMap.put("sg", "170cm");
-
-
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < 10; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
@@ -91,4 +89,3 @@ public class fremarkerExcel {
     }
 
 }
-*/

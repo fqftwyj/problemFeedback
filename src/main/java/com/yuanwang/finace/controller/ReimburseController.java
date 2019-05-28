@@ -3,6 +3,7 @@ package com.yuanwang.finace.controller;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.yuanwang.common.controller.FileController;
 import com.yuanwang.finace.entity.Review;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
@@ -19,6 +21,7 @@ import com.yuanwang.sys.entity.User;
 import com.yuanwang.sys.service.OfficeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,7 +54,19 @@ public class ReimburseController extends BaseController<Reimburse>{
 	private ReimburseService reimburseService;
 	@Resource
 	private OfficeService officeService;
-	
+	private static String prefixPath;
+
+	@PostConstruct //指定该方法在对象被创建后马上调用 相当于配置文件中的init-method属性
+	public void setPrefixPath() throws FileNotFoundException {
+	/*	File path = new File(ResourceUtils.getURL("classpath:").getPath());
+		File upload = new File(path.getAbsolutePath(), "static/tmpupload/");*/
+		//指定文件上传的地址为系统安装的路径
+		File upload=new File(ResourceUtils.getURL("/upload/static").getPath());
+		if(!upload.exists()){
+			upload.mkdirs();
+		}
+		ReimburseController.prefixPath = upload.getAbsolutePath();
+	}
 	
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值

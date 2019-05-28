@@ -382,16 +382,21 @@
                 </div>
             </div>
         </div>
-        <div class="layui-card-body-scroll">
-            <div class="layui-col-md11 mbottom">
-
-            <div class="layui-upload">
-                <button type="button" class="layui-btn " id="selectFile">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
-                <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
-                <p id="allFileText"></p>
+            <div class="layui-card-body-scroll">
+                <div class="layui-col-md11 mbottom">
+                    <!--    <button type="button" class="layui-btn" id="test1">
+                            <i class="layui-icon">&#xe67c;</i>附件上传
+                        </button>-->
+                    <input type="hidden"  name="module" id="module" value="${userName}"/>
+                    <input type="hidden"  name="uploadPath" id="uploadPath" />
+                    <input type="hidden"  name="uploadName" id="uploadName" />
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn layui-btn-normal" id="selectFile">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
+                        <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
+                        <p id="allFileText"></p>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
 
 
         <div class="reimburse-attach-explation-div">
@@ -402,8 +407,7 @@
             </div>
         </div>
     </div>
-        <input name="uploadName" type="text"  >
-        <input name="userName" type="text"  value="${user.userName}">
+        <input name="userName" type="hidden"  value="${user.userName}">
         <div class="layui-form-item layui-hide">
              <input type="button" lay-submit lay-filter="LAY-reimburse-submit" id="LAY-reimburse-submit" value="确认">
         </div>

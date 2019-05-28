@@ -1,5 +1,6 @@
 package com.yuanwang.common.controller;
 import java.io.*;
+import java.net.URLEncoder;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,9 +24,12 @@ import com.yuanwang.common.result.ResultUtil;
 public class FileController {
 	
 	private static String prefixPath;
-	
-    @PostConstruct
-	public void setPrefixPath(String prefixPath) throws FileNotFoundException {
+
+	@PostConstruct //指定该方法在对象被创建后马上调用 相当于配置文件中的init-method属性
+	public void setPrefixPath() throws FileNotFoundException {
+	/*	File path = new File(ResourceUtils.getURL("classpath:").getPath());
+		File upload = new File(path.getAbsolutePath(), "static/tmpupload/");*/
+	  //指定文件上传的地址为系统安装的路径
 		File upload=new File(ResourceUtils.getURL("/upload/static").getPath());
 		if(!upload.exists()){
 			upload.mkdirs();
@@ -46,6 +50,7 @@ public class FileController {
 	public Result fileUpload(HttpServletRequest request,@RequestParam("file") MultipartFile[] files,String module) throws IllegalStateException, IOException {
 		String filePath = "";
 		String fileName=null;
+		String fileNames="";
 		BufferedOutputStream buffStream=null;
 		if(StringUtils.isBlank(module)){
 			return ResultUtil.error("参数缺失图片所属模块参数");
@@ -61,17 +66,19 @@ public class FileController {
 	            }
 				for(int i=0;i<files.length;i++){
 					fileName=files[i].getOriginalFilename();
+					fileNames=","+files[i].getOriginalFilename();
 					byte[] bytes=files[i].getBytes();
 					buffStream =new BufferedOutputStream(new FileOutputStream(new File(path+File.separator+startTime+fileName)));
 					buffStream.write(bytes);
-					filePath=",/static"+File.separator+module+File.separator+startTime+fileName+filePath;
+				/*	filePath=",/static"+File.separator+module+File.separator+startTime+fileName+filePath;*/
+					filePath=","+startTime+fileName+filePath;
 				}
 			} catch (Exception e) {
 					return ResultUtil.error(e.getMessage());
 			} finally{
 					buffStream.close();
 			}
-			return ResultUtil.success("上传成功",filePath.substring(1));
+			return ResultUtil.success("上传成功",filePath.substring(1)+";"+fileNames.substring(1));
 		}else{
 			return ResultUtil.error("上传文件为空");
 		}
@@ -89,19 +96,21 @@ public class FileController {
 	 */
 	@RequestMapping("fileDownload")
 	@ResponseBody
-	public static void fileDownload(String module, String filename,
+	public static void fileDownload(String module, String fileName,String filePath,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    //声明本次下载状态的记录对象
 	    //设置响应头和客户端保存文件名
 		String path=prefixPath+File.separator+module;
 	    response.setContentType("multipart/form-data;charset=utf-8");
-	    response.setHeader("Content-Disposition", "attachment;fileName=\"" + filename + "\"");
-	    
-	    
+		String downloadFileName = URLEncoder.encode(fileName,"UTF-8");
+		// 设置响应头，控制浏览器下载该文件
+		response.setHeader("Content-Disposition", "attachment;filename=" + downloadFileName);
+
+
 	    //用于记录以完成的下载的数据量，单位是byte
 	    try {
 	        //打开本地文件流
-	        InputStream inputStream = new FileInputStream(path+File.separator+filename);
+	        InputStream inputStream = new FileInputStream(path+File.separator+filePath);
 	        //激活下载操作
 	        OutputStream os = response.getOutputStream();
 	        //循环写入输出流

@@ -108,7 +108,7 @@
               <label class="layui-form-label">单据张数：</label>
               <div class="layui-input-block">
                 <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" lay-verify="int">
               </div>
             </div>
             <div class="layui-inline">
@@ -169,10 +169,10 @@
               <label class="layui-form-label">车船类别：</label>
               <div class="layui-input-block" style="width: 182px;">
                 <select name='carboatType' >
-                <!--  <option value="汽车" <#if obj.carboatType=='汽车'>selected</#if>>汽车</option>
+                  <option value="汽车" <#if obj.carboatType=='汽车'>selected</#if>>汽车</option>
                   <option value="火车" <#if obj.carboatType=='火车'>selected</#if>>火车</option>
                   <option value="飞机" <#if obj.carboatType=='飞机'>selected</#if>>飞机</option>
-                  <option value="轮船" <#if obj.carboatType=='轮船'>selected</#if>>轮船</option>-->
+                  <option value="轮船" <#if obj.carboatType=='轮船'>selected</#if>>轮船</option>
                 </select>
               </div>
             </div>
@@ -180,7 +180,7 @@
               <label class="layui-form-label">单据张数：</label>
               <div class="layui-input-block">
                 <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
-                       class="layui-input" value="${obj.docNumber}">
+                       class="layui-input" value="${obj.docNumber}" lay-verify="int">
               </div>
             </div>
             <div class="layui-inline">
@@ -262,9 +262,9 @@
               <label class="layui-form-label">标准：</label>
               <div class="layui-input-block" style="width: 182px;">
                 <select name='travelStandard' lay-filter="travelStandard">
-                <!--  <option value="25"  <#if obj.travelStandard=='25'>selected</#if>>25</option>
+                  <option value="25"  <#if obj.travelStandard=='25'>selected</#if>>25</option>
                   <option value="55"  <#if obj.travelStandard=='55'>selected</#if>>55</option>
-                  <option value="42.5" <#if obj.travelStandard=='42.5'>selected</#if>>42.5</option>-->
+                  <option value="42.5" <#if obj.travelStandard=='42.5'>selected</#if>>42.5</option>
                 </select>
               </div>
             </div>
@@ -370,33 +370,37 @@
             <label class="layui-form-label layui-form-label-width">车船费+出差补贴费：</label>
             <div class="layui-input-block layui-input-block-left">
               <input type="text" name="totalCarBoatTravel" id="totalCarBoatTravel" placeholder="请输入"  readonly="readonly" autocomplete="off"
-                     class="layui-input" value="${totalFeeObj.totalCarBoatTravel}">
+                     class="layui-input" value="${totalCarBoatTravel}">
             </div>
           </div>
           <div class="layui-inline">
             <label class="layui-form-label">其它费用：</label>
             <div class="layui-input-block">
               <input type="text" name="totalotherFee" id="totalotherFee" placeholder="请输入" autocomplete="off" readonly="readonly"
-                     class="layui-input" value="${totalFeeObj.totalotherFee}">
+                     class="layui-input" value="${totalotherFee}">
             </div>
           </div>
         </div>
       </div>
      <input type="hidden" name="reimburseDate" value="${result.reimburseDate}"/>
       <div class="layui-card-body-scroll">
-        <div class="layui-col-md11 mbottom">
-          <!--    <button type="button" class="layui-btn" id="test1">
-                  <i class="layui-icon">&#xe67c;</i>附件上传
-              </button>-->
-            <input type="hidden"  name="module" id="module" value="${userName}"/>
-            <input type="hidden"  name="uploadPath" id="uploadPath" value="${result.uploadPath}"/>
-          <div class="layui-upload">
-            <button type="button" class="layui-btn layui-btn-normal" id="selectFile">上传文件</button>
-            <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
-            <p id="allFileText"></p>
-          </div>
-        </div>
-      </div>
+  <div class="layui-col-md11 mbottom">
+    <!--    <button type="button" class="layui-btn" id="test1">
+            <i class="layui-icon">&#xe67c;</i>附件上传
+        </button>-->
+    <input type="hidden"  name="module" id="module" value="${userName}"/>
+    <input type="hidden"  name="id"  value="${result.id}"/>
+    <input type="hidden"  name="uploadPath" id="uploadPath" value="${result.uploadPath}"/>
+    <input type="hidden"  name="uploadName" id="uploadName" value="${result.uploadName}"/>
+    <div class="layui-upload">
+
+      <button type="button" class="layui-btn layui-btn-normal" id="selectFile">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
+      <span class="layui-inline layui-upload-choose" >      <a  data-name="${result.uploadName}" data-path="${result.uploadPath}"  data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
+      <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
+      <p id="allFileText"></p>
+    </div>
+  </div>
+</div>
       <div class="reimburse-attach-explation-div">
         <div class="layui-col-md11 mbottom">
           <span class="reimburse-attach-explation-text">注：</span>
@@ -411,6 +415,9 @@
 </div>
 </div>
 <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
+<!--zheli-->
+<script src="${request.contextPath}/static/ywUi/js/lib/jquery-2.1.0.js"></script>
+
 <script>
 
   layui.config({
@@ -424,9 +431,15 @@
             form = layui.form,
             table = layui.table;
 
-
-
   });
+//这里在这个页面再引入一个jquery.jsji
+  function fqdownload(url,ele){
+    var $this=$(ele);
+    var name=$this.data("name");
+    var path=$this.data("path");
+    var module=$this.data("module");
+    window.location=url+"fileName="+encodeURIComponent(name)+"&filePath="+encodeURIComponent(path)+"&module="+module;
+  }
 
 </script>
 </body>

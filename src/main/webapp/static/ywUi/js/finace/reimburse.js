@@ -74,27 +74,37 @@ layui.define(['table', 'form'], function(exports){
           ,submitID = 'LAY-review-edit-submit'
            ,contentId= layero.find('iframe').contents()
           ,submit = layero.find('iframe').contents().find('#'+ submitID);
+          //计算车船和出差补贴的总和和其它费用的总和
+          var $form = contentId.find("#reimburseDivForm");
+          commomFun.autoCalTotal($form);
+          //请再次确认你的合计金额是否正确
+          layer.confirm('您确认你的合计金额是否正确', {
+                btn: ['是', '否'] //按钮
+              }, function () {
+                layer.closeAll('dialog');
           //监听提交
           iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
             var field = data.field; //获取提交的字段
               var newData=new Object();
               var dat=data.field;
+              newData.id=dat.id;
+              newData.reimburseState=dat.reimburseState;
               newData.officeCode=dat.officeCode;
               newData.reimburseMembers=dat.reimburseMembers;
               newData.reimburseDate=dat.reimburseDate;
               newData.reimburseReason=dat.reimburseReason;
               newData.reimburseType=dat.reimburseType;
               newData.staffCode=dat.staffCode;
+              newData.uploadPath=dat.uploadPath;
+              newData.uploadName=dat.uploadName;
               var json_str=commomFun.assembleFeesData(contentId);
               newData.reimburseItems=json_str;
               var totalCarBoatTravel=dat.totalCarBoatTravel;
               var totalotherFee=dat.totalotherFee;
               //组装合计的数量
-           /*   var totalFeeObjArray=new Array();*/
               var totalFeeObj=new Object();
               totalFeeObj.totalCarBoatTravel=totalCarBoatTravel;
               totalFeeObj.totalotherFee=totalotherFee;
-           /*   totalFeeObjArray.push(totalFeeObj);*/
               var totalFeeStr=JSON.stringify(totalFeeObj);
               newData.reimburseCost=totalFeeStr;
               newData.type=1;
@@ -117,11 +127,13 @@ layui.define(['table', 'form'], function(exports){
           });
 
           submit.trigger('click');
+          });
         }
         ,success: function(layero, index){
           
         }
-      });
+
+    });
     }else if(obj.event === 'submit'){
       layer.confirm('确定要上报吗', function(index){
         $.ajax({

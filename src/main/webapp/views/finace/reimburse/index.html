@@ -175,7 +175,6 @@
 						  ,submitID = 'LAY-reimburse-first-submit'
 						  ,submit = layero.find('iframe').contents().find('#'+ submitID);
 				  //监听提交
-				  debugger
 				  var reimburseType;
 				  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
 					  reimburseType=data.field.reimburseType;
@@ -212,6 +211,8 @@
 									  newData.reimburseDate = dat.reimburseDate;
 									  newData.reimburseReason = dat.reimburseReason;
 									  newData.reimburseType = reimburseType;
+								      newData.uploadPath=dat.uploadPath;
+								      newData.uploadName=dat.uploadName;
 									  var json_str = commomFun.assembleFeesData(contentId);
 									  newData.reimburseItems = json_str;
 									  var totalCarBoatTravel = dat.totalCarBoatTravel;

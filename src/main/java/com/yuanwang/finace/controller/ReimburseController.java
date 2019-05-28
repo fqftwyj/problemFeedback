@@ -105,11 +105,13 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_BUILD)
-	public void createJump(ModelMap map){
+	public void createJump(ModelMap map,HttpSession session){
 		//获取科室列表
 		List<Office>  officeList=officeService.findAll();
 		map.put("officeList", officeList);
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
+		User user=(User)session.getAttribute("user");
+		map.put("userName", user.getUserName());
 	}
 	/**新增功能
 	 * @param t 新增对象
@@ -126,8 +128,6 @@ public class ReimburseController extends BaseController<Reimburse>{
 			 */
 			User user=(User)session.getAttribute("user");
 			reimburse.setStaffCode(user.getUserName());
-			reimburse.setUploadName("");
-			reimburse.setUploadPath("");
 			reimburse.setReimburseDate("1900-1-1");
 			reimburse.setReimburseState(ReimburseStateEnum.NOTSUBMIT);
 			Integer flag=reimburseService.save(reimburse,map,OperatorEnum.AND);
@@ -177,14 +177,15 @@ public class ReimburseController extends BaseController<Reimburse>{
 			//组装其他费用
 			otherFeeList = JSONArray.parseObject(otherFeeArray.toJSONString(), List.class);
 		}
-		JSONArray tataljson =  JSONArray.parseArray(result.getReimburseCost() ); // 首先把字符串转成 JSONArray  对象
+		JSONArray tataljson =  JSONArray.parseArray("["+result.getReimburseCost() +"]"); // 首先把字符串转成 JSONArray  对象
 		if(tataljson.size()>0){
-			totalFeeObj=(JSONObject) tataljson.get(0);
+			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
 		}
 		map.put("carboatfeesList", carboatfeesList);
 		map.put("travelAllowanceList", travelAllowanceList);
 		map.put("otherFeeList", otherFeeList);
-		map.put("totalFeeObj", totalFeeObj);
+		map.put("totalCarBoatTravel", totalFeeList.get(0).get("totalCarBoatTravel"));
+		map.put("totalotherFee", totalFeeList.get(0).get("totalotherFee"));
 	}
 	
 	/**编辑功能
@@ -195,16 +196,14 @@ public class ReimburseController extends BaseController<Reimburse>{
 	@RequestMapping(CONSTANT_UPDATE)
 	@ResponseBody
 	public Result update(Reimburse reimburse,int type){
-		if(reimburse != null&&reimburse.getId()!=null){
+		//id为null 看到了
+		if(reimburse != null && reimburse.getId()!=null){
 			Map<String,Object> map=new HashMap<String,Object>();
 			/**
 			 * 放入查重字段 map.put("name","测试");
 			 */
-			if(type==1){
-				reimburse.setUploadName("");
-				reimburse.setUploadPath("");
-				reimburse.setReimburseState(ReimburseStateEnum.NOTSUBMIT);
-			}else{//修改上报状态
+			if(type==2){
+				//修改上报状态
 				reimburse = reimburseService.find(reimburse.getId());
 				reimburse.setReimburseState(ReimburseStateEnum.HASSUBMIT);
 				//获取当前时间 年-月-日
@@ -222,25 +221,6 @@ public class ReimburseController extends BaseController<Reimburse>{
 			}
 		}
 		return ResultUtil.error("空数据");
-	}
-	
-	/**查看功能
-	 * @param id 主键id
-	 * @return 结果
-	 * @throws Exception 抛出异常
-	 */
-	@RequestMapping(CONSTANT_SHOW)
-	@ResponseBody
-	public Result show(Integer id){
-		if(id==null){
-			return ResultUtil.error("id不能为空");
-		}
-		Reimburse result = reimburseService.find(id);
-		if(result!=null) {
-			return ResultUtil.success("查询成功",result);
-		}else {
-			return ResultUtil.error("没有该数据");
-		}
 	}
 	
 	/**删除功能
@@ -268,7 +248,26 @@ public class ReimburseController extends BaseController<Reimburse>{
 			return ResultUtil.error("删除失败");
 		}
 	}
-	
+
+	/**查看功能
+	 * @param id 主键id
+	 * @return 结果
+	 * @throws Exception 抛出异常
+	 */
+	@RequestMapping(CONSTANT_SHOW)
+	@ResponseBody
+	public Result show(Integer id){
+		if(id==null){
+			return ResultUtil.error("id不能为空");
+		}
+		Reimburse result = reimburseService.find(id);
+		if(result!=null) {
+			return ResultUtil.success("查询成功",result);
+		}else {
+			return ResultUtil.error("没有该数据");
+		}
+	}
+
 	/**导出功能
 	 * @param t 查询条件
 	 * @param session 会话对象获取当前会话信息
@@ -297,85 +296,5 @@ public class ReimburseController extends BaseController<Reimburse>{
 	}
 
 
-    //上传文件2
-	/*public String uploadImg(MultipartFile file) {
-		if (null != file) {
-			String myFileName = file.getOriginalFilename();// 文件原名称
-			String fileName = BasePath.getImgPath("yyyyMMddHHmmss")+
-					Integer.toHexString(new Random().nextInt()) +"."+ myFileName.
-					substring(myFileName.lastIndexOf(".") + 1);
-			String pat=FileProperties.getFilePath()+"/src/main/webapp/";//获取文件保存路径
-			String sqlPath="static/images/upload/storeHead/"+BasePath.getImgPath("yyyyMMdd")+"/";
 
-			File fileDir=new File(pat+sqlPath);
-			if (!fileDir.exists()) { //如果不存在 则创建
-				fileDir.mkdirs();
-			}
-			String path=pat+sqlPath+fileName;
-			File localFile = new File(path);
-			try {
-				file.transferTo(localFile);
-				return sqlPath+fileName;
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else{
-			System.out.println("文件为空");
-		}
-		return null;
-	}*/
-
-	//下载
-
-	@RequestMapping("download")
-	public String downLoad(HttpServletResponse response){
-		String filename="2.jpg";
-		String filePath = "F:/test" ;
-		File file = new File(filePath + "/" + filename);
-		if(file.exists()){ //判断文件父目录是否存在
-			response.setContentType("application/force-download");
-			response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
-
-			byte[] buffer = new byte[1024];
-			FileInputStream fis = null; //文件输入流
-			BufferedInputStream bis = null;
-
-			OutputStream os = null; //输出流
-			try {
-				os = response.getOutputStream();
-				fis = new FileInputStream(file);
-				bis = new BufferedInputStream(fis);
-				int i = bis.read(buffer);
-				while(i != -1){
-					os.write(buffer);
-					i = bis.read(buffer);
-				}
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.out.println("----------file download" + filename);
-			try {
-				bis.close();
-				fis.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
-	/*
-	@RequestMapping("callPro")
-	@ResponseBody
-	public Result callPro() {
-		PageInfo<Reimburse> pageinfo = reimburseService.findListByProceAndPage("pro", 1);
-		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
-	}
-	*/
 }

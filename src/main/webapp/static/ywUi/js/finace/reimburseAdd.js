@@ -131,16 +131,18 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             });
 
         },bindAutoCaculate:function(){
+            
             //绑定标准下拉的时候出差补贴自动计算金额
             form.on('select(travelStandard)', function(data){
                 var $mobj=$(data.elem).parents(".travelStandardMotherDiv");
                 var days=$mobj.find("input[name='days']").val();
                 var $moneyObj= $mobj.find("input[name='travelmoney']");
                 //如果不是正整数的时候结果为“”
+
                 if(days==''){
                     $moneyObj.val("");
                 }else{
-                    $moneyObj.val(!isNaN(data.value*days)?"":data.value*days);
+                    $moneyObj.val(data.value*days=="NaN"?"":data.value*days);
                 }
             });
             //绑定天数键盘输入或的时候出差补贴自动计算金额
@@ -159,7 +161,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             var standard=$mobj.find("select[name='travelStandard']").val();
             var days=$obj.val();
             var $moneyObj= $mobj.find("input[name='travelmoney']");
-            $moneyObj.val(!isNaN(standard*days)?"":standard*days);
+            $moneyObj.val(standard*days=='NAN'?"":standard*days);
         }
     };
  
@@ -184,7 +186,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         ,acceptMime:'zip|rar|7z'
         ,exts:'zip|rar|7z',
         auto:false,
-        multiple:true
+        multiple:false
         ,data: {
             module: function(){
                 return $('#module').val();
@@ -194,12 +196,16 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         ,bindAction: '#startUploadFile'
         ,size: 1024*40 //限制文件大小，单位 KB
         ,before:function(){
-          layer.load();//上传loading
+       /*   layer.load();//上传loading*/
         },
         done: function(result){
-            if(result.msg != true){
+            
+            if(result.msg != '上传成功'){
                 layer.msg(result.msg, {icon:1});
-            }else if(result.msg == true){
+            }else if(result.msg == '上传成功'){
+                var dat=result.data.split(";");
+                $("#uploadPath").val(dat[0]);
+                $("#uploadName").val(dat[1]);
                 layer.msg("上传成功!",{icon:1});
 
             }else{
@@ -207,7 +213,6 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             }
         }
     });
-
   exports('reimburseAdd', {})
 });
 

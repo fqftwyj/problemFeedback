@@ -196,7 +196,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 			//组装其他费用
 			otherFeeList = JSONArray.parseObject(otherFeeArray.toJSONString(), List.class);
 		}
-		JSONArray tataljson =  JSONArray.parseArray("["+result.getReimburseCost() +"]"); // 首先把字符串转成 JSONArray  对象
+		JSONArray tataljson =  JSONArray.parseArray(result.getReimburseCost() ); // 首先把字符串转成 JSONArray  对象
 		if(tataljson.size()>0){
 			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
 		}
@@ -367,7 +367,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		sizesList.add(otherSize);
 		int[] sizes = sizesList.stream().mapToInt(Integer::valueOf).toArray();
 		int maxSize=StringHelper.getMaxValue(sizes);
-		reMap.put("maxSize",maxSize);
+		dataMap.put("maxSize",maxSize);
 		//填充车船费的空白list
 		addBlankMap(carSize,maxSize,carboatfeesList);
 		//填充出差补贴的空白list
@@ -376,13 +376,26 @@ public class ReimburseController extends BaseController<Reimburse>{
 		addBlankMap(otherSize,maxSize,otherFeeList);
 
 
-		/*//组装最终的list,所有的类别合成一个map
+		//组装最终的list,所有的类别合成一个map
 		List<Map<String, String>>  collectList=new ArrayList<>();
-		for(int i=0;i<=maxSize;i++){
+		for(int i=0;i<maxSize;i++){
 			Map<String, String> map=new HashMap<>();
-			map.put("")
-		}*/
-		JSONArray tataljson =  JSONArray.parseArray("["+result.getReimburseCost() +"]"); // 首先把字符串转成 JSONArray  对象
+			map.put("departureTime",carboatfeesList.get(i).get("departureTime"));
+			map.put("departurePlace",carboatfeesList.get(i).get("departurePlace"));
+			map.put("arrivalTime",carboatfeesList.get(i).get("arrivalTime"));
+			map.put("arrivalPlace",carboatfeesList.get(i).get("arrivalPlace"));
+			map.put("carboatType",carboatfeesList.get(i).get("carboatType"));
+			map.put("docNumber",carboatfeesList.get(i).get("docNumber"));
+			map.put("carboatfee",carboatfeesList.get(i).get("carboatfee"));
+			map.put("days",travelAllowanceList.get(i).get("days"));
+			map.put("travelStandard",travelAllowanceList.get(i).get("travelStandard"));
+			map.put("travelmoney",travelAllowanceList.get(i).get("travelmoney"));
+			map.put("itemname",otherFeeList.get(i).get("itemname"));
+			map.put("otherdocnumber",otherFeeList.get(i).get("otherdocnumber"));
+			map.put("otherfeemoney",otherFeeList.get(i).get("otherfeemoney"));
+			collectList.add(map);
+		}
+		JSONArray tataljson =  JSONArray.parseArray(result.getReimburseCost()); // 首先把字符串转成 JSONArray  对象
 		if(tataljson.size()>0){
 			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
 		}
@@ -390,17 +403,15 @@ public class ReimburseController extends BaseController<Reimburse>{
 		dataMap.put("reimburseMembers", result.getReimburseMembers());
 		dataMap.put("reimburseDate", result.getReimburseDate());
 		dataMap.put("reimburseReason", result.getReimburseReason());
-		dataMap.put("carboatfeesList", carboatfeesList);
-		dataMap.put("travelAllowanceList", travelAllowanceList);
-		dataMap.put("otherFeeList", otherFeeList);
+		dataMap.put("collectList", collectList);
 		dataMap.put("totalCarBoatTravel", totalFeeList.get(0).get("totalCarBoatTravel"));
 		dataMap.put("totalotherFee", totalFeeList.get(0).get("totalotherFee"));
 		Double totalCarBoatTravelDou=Double.parseDouble(totalFeeList.get(0).get("totalCarBoatTravel"));
 		Double totalotherFeeDou=Double.parseDouble(totalFeeList.get(0).get("totalotherFee"));
 		Double totalFee=totalCarBoatTravelDou+totalotherFeeDou;
-		dataMap.put("totalFee", totalFee);
 		//最终的合计，四舍五入保留两位小数
-		dataMap.put("totalFee", ChineseNumber.getChineseNumber((double)Math.round(totalFee*100)/100));
+		dataMap.put("totalFee", (ChineseNumber.getChineseNumber((double)Math.round(totalFee*100)/100)));
+		System.out.println(String.valueOf(dataMap.get("totalFee")));
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
 			fexcle.createWord(prefixPath+File.separator+"excel","core-office2007.ftl",dataMap, reMap,response);
@@ -416,7 +427,22 @@ public class ReimburseController extends BaseController<Reimburse>{
 			list.add(map);
 		}
 	}
-
+	/**
+	 * 下载报销单粘贴单
+	 * @param response 响应对象
+	 * @return 导出对象
+	 */
+	@RequestMapping("exportReimburseAttach")
+	@ResponseBody
+	public String exportReimburseAttach(HttpServletResponse response) {
+		try {
+			FremarkerExcel fexcle=new FremarkerExcel();
+			fexcle.dowloadAttachExcel(prefixPath+File.separator+"excel","日常费用报销原始单据粘贴单.xls",response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 
 }

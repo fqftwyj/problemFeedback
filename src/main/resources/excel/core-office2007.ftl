@@ -739,29 +739,22 @@
     <Cell ss:StyleID="s32"><Data ss:Type="String">单据张数</Data></Cell>
     <Cell ss:StyleID="s30"><Data ss:Type="String">金额</Data></Cell>
    </Row>
-   <#list 1..2 as i>
+   <#list collectList as obj>
    <Row>
-    <#list carboatfeesList[i] as obj>
-     <Cell ss:MergeAcross="1" ss:StyleID="m139984956"><Data ss:Type="DateTime">${obj.departurePlace}</Data></Cell>
-     <Cell ss:StyleID="s29"><Data ss:Type="String">${obj.itemname}</Data></Cell>
-     <Cell ss:MergeAcross="1" ss:StyleID="m139984976"><Data ss:Type="DateTime">${obj.arrivalTime}</Data></Cell>
-     <Cell ss:StyleID="s29"><Data ss:Type="String">${obj.arrivalPlace}</Data></Cell>
-     <Cell ss:StyleID="s40"><Data ss:Type="String">${obj.carboatType}</Data></Cell>
-     <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.docNumber}</Data></Cell>
-     <Cell ss:StyleID="s41"><Data ss:Type="Number">${obj.carboatfee}</Data></Cell>
-    </#list>
-    <#list travelAllowanceList[i] as obj>
-    <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.days}</Data></Cell>
-    <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.travelStandard}</Data></Cell>
-    <Cell ss:StyleID="s41"><Data ss:Type="Number">${obj.travelmoney}</Data></Cell>
-    </#list>
-    <#list otherFeeList[i] as obj>
-    <Cell ss:StyleID="s40"><Data ss:Type="String">${obj.itemname}</Data></Cell>
-    <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.otherdocnumber}</Data></Cell>
-    <Cell ss:StyleID="s42"><Data ss:Type="Number">${obj.otherfeemoney}</Data></Cell>
+     <Cell ss:MergeAcross="1" ss:StyleID="m139984956"><Data ss:Type="DateTime">${obj.departureTime!}</Data></Cell>
+     <Cell ss:StyleID="s29"><Data ss:Type="String">${obj.departurePlace!}</Data></Cell>
+     <Cell ss:MergeAcross="1" ss:StyleID="m139984976"><Data ss:Type="DateTime">${obj.arrivalTime!}</Data></Cell>
+     <Cell ss:StyleID="s29"><Data ss:Type="String">${obj.arrivalPlace!}</Data></Cell>
+     <Cell ss:StyleID="s40"><Data ss:Type="String">${obj.carboatType!}</Data></Cell>
+     <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.docNumber!}</Data></Cell>
+     <Cell ss:StyleID="s41"><Data ss:Type="Number">${obj.carboatfee!}</Data></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.days!}</Data></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.travelStandard!}</Data></Cell>
+    <Cell ss:StyleID="s41"><Data ss:Type="Number">${obj.travelmoney!}</Data></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="String">${obj.itemname!}</Data></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="Number">${obj.otherdocnumber!}</Data></Cell>
+    <Cell ss:StyleID="s42"><Data ss:Type="Number">${obj.otherfeemoney!}</Data></Cell>
    </Row>
-   </#list>
-
    </#list>
    <Row>
     <Cell ss:MergeAcross="5" ss:StyleID="m139984936"><Data ss:Type="String">合计（￥）</Data></Cell>

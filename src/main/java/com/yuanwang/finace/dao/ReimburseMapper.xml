@@ -51,7 +51,7 @@
         left join finace_review rw
 		on rv.id=rw.reimburse_id
 		left join sys_office so
-        on so.office_code==rv.office_code
+        on so.office_code=rv.office_code
     </sql>
     <!-- 通用条件判断 -->
     <sql id="condition">

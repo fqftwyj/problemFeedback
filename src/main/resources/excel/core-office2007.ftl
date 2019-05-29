@@ -739,7 +739,7 @@
     <Cell ss:StyleID="s32"><Data ss:Type="String">单据张数</Data></Cell>
     <Cell ss:StyleID="s30"><Data ss:Type="String">金额</Data></Cell>
    </Row>
-   <#list 0..maxSize as i>
+   <#list 1..2 as i>
    <Row>
     <#list carboatfeesList[i] as obj>
      <Cell ss:MergeAcross="1" ss:StyleID="m139984956"><Data ss:Type="DateTime">${obj.departurePlace}</Data></Cell>

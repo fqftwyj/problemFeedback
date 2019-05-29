@@ -150,6 +150,9 @@ layui.define(['table', 'form'], function(exports){
           }
         });
       });
+    }else if(obj.event==='export'){
+      window.location="/finace/reimburse/exportReimburseDetatl?id="+obj.data.id;
+
     }
   });
   var commomFun={

@@ -1,6 +1,7 @@
 package com.yuanwang.finace.controller;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -13,6 +14,9 @@ import javax.validation.constraints.NotNull;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yuanwang.common.controller.FileController;
+import com.yuanwang.common.utils.ChineseNumber;
+import com.yuanwang.common.utils.FremarkerExcel;
+import com.yuanwang.common.utils.StringHelper;
 import com.yuanwang.finace.entity.Review;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
@@ -61,7 +65,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 	/*	File path = new File(ResourceUtils.getURL("classpath:").getPath());
 		File upload = new File(path.getAbsolutePath(), "static/tmpupload/");*/
 		//指定文件上传的地址为系统安装的路径
-		File upload=new File(ResourceUtils.getURL("/upload/static").getPath());
+		File upload=new File(ResourceUtils.getURL("classpath:").getPath());
 		if(!upload.exists()){
 			upload.mkdirs();
 		}
@@ -308,6 +312,109 @@ public class ReimburseController extends BaseController<Reimburse>{
 
 		excel.exportXLS(request, response);
 		return null;
+	}
+	/**
+	 * 下载报销单
+	 * @param t 查询条件
+	 * @param session 会话对象获取当前会话信息
+	 * @param request 请求对象
+	 * @param response 响应对象
+	 * @return 导出对象
+	 */
+	@RequestMapping("exportReimburseDetatl")
+	@ResponseBody
+	public String exportReimburseDetatl(Integer id,HttpSession session,
+						 HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> reMap =new HashMap<String, Object>();
+		Map<String, Object> dataMap =new HashMap<String, Object>();
+		User user=(User)session.getAttribute("user");
+		reMap.put("userName",user.getUserName());
+
+		//获取报销详情
+		Reimburse result = reimburseService.find(id);
+		dataMap.put("result", result);
+		reMap.put("reimburseDate",result.getReimburseDate());
+		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
+		//组装车船费列表
+		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();
+		//组装出差补贴
+		List<Map<String, String>> travelAllowanceList =new ArrayList<Map<String, String>>();
+		//组装其他费用
+		List<Map<String, String>> otherFeeList =new ArrayList<Map<String, String>>();
+		//组装合计费用
+		JSONObject  totalFeeObj=new JSONObject();
+		List<Map<String, String>> totalFeeList =new ArrayList<Map<String, String>>();
+		if(json.size()>0) {
+			JSONArray carboatfeeArray = (JSONArray) json.getJSONObject(0).get("carboatfeeiItemsData");
+			JSONArray travelAllowanceArray = (JSONArray) json.getJSONObject(0).get("travelAllowanceItemsData");
+			JSONArray otherFeeArray = (JSONArray) json.getJSONObject(0).get("otherFeeItemsData");
+			//组装车船费列表
+			carboatfeesList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+			//组装出差补贴
+			travelAllowanceList = JSONArray.parseObject(travelAllowanceArray.toJSONString(), List.class);
+			//组装其他费用
+			otherFeeList = JSONArray.parseObject(otherFeeArray.toJSONString(), List.class);
+		}
+
+
+        //获取最大的size
+		Integer carSize=carboatfeesList.size();
+		Integer travelSize=travelAllowanceList.size();
+		Integer otherSize=otherFeeList.size();
+		ArrayList<Integer> sizesList=new ArrayList<Integer>();
+		sizesList.add(carSize);
+		sizesList.add(travelSize);
+		sizesList.add(otherSize);
+		int[] sizes = sizesList.stream().mapToInt(Integer::valueOf).toArray();
+		int maxSize=StringHelper.getMaxValue(sizes);
+		reMap.put("maxSize",maxSize);
+		//填充车船费的空白list
+		addBlankMap(carSize,maxSize,carboatfeesList);
+		//填充出差补贴的空白list
+		addBlankMap(travelSize,maxSize,travelAllowanceList);
+		//填充其它费用的的空白list
+		addBlankMap(otherSize,maxSize,otherFeeList);
+
+
+		/*//组装最终的list,所有的类别合成一个map
+		List<Map<String, String>>  collectList=new ArrayList<>();
+		for(int i=0;i<=maxSize;i++){
+			Map<String, String> map=new HashMap<>();
+			map.put("")
+		}*/
+		JSONArray tataljson =  JSONArray.parseArray("["+result.getReimburseCost() +"]"); // 首先把字符串转成 JSONArray  对象
+		if(tataljson.size()>0){
+			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
+		}
+		dataMap.put("officeName", result.getOfficeName());
+		dataMap.put("reimburseMembers", result.getReimburseMembers());
+		dataMap.put("reimburseDate", result.getReimburseDate());
+		dataMap.put("reimburseReason", result.getReimburseReason());
+		dataMap.put("carboatfeesList", carboatfeesList);
+		dataMap.put("travelAllowanceList", travelAllowanceList);
+		dataMap.put("otherFeeList", otherFeeList);
+		dataMap.put("totalCarBoatTravel", totalFeeList.get(0).get("totalCarBoatTravel"));
+		dataMap.put("totalotherFee", totalFeeList.get(0).get("totalotherFee"));
+		Double totalCarBoatTravelDou=Double.parseDouble(totalFeeList.get(0).get("totalCarBoatTravel"));
+		Double totalotherFeeDou=Double.parseDouble(totalFeeList.get(0).get("totalotherFee"));
+		Double totalFee=totalCarBoatTravelDou+totalotherFeeDou;
+		dataMap.put("totalFee", totalFee);
+		//最终的合计，四舍五入保留两位小数
+		dataMap.put("totalFee", ChineseNumber.getChineseNumber((double)Math.round(totalFee*100)/100));
+		try {
+			FremarkerExcel fexcle=new FremarkerExcel();
+			fexcle.createWord(prefixPath+File.separator+"excel","core-office2007.ftl",dataMap, reMap,response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	//不满的填充空白的List
+	public void addBlankMap(int size,int maxSize,List<Map<String, String>> list){
+		for(int i=size;i<=maxSize;i++){
+			Map<String, String> map=new HashMap<>();
+			list.add(map);
+		}
 	}
 
 

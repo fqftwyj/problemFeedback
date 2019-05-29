@@ -14,6 +14,7 @@
 			<id column="id" property="id" jdbcType="INTEGER" /><!--自增id-->
 			<result column="staff_code" property="staffCode" jdbcType="VARCHAR" /><!--员工编号-->
 			<result column="office_code" property="officeCode" jdbcType="VARCHAR" /><!--科室编号-->
+			<result column="office_name" property="officeName" jdbcType="VARCHAR" /><!--科室名称-->
 			<result column="reimburse_type" property="reimburseType" jdbcType="INTEGER" /><!--报销类别【enum】(1:外出培训:outtrain)-->
 			<result column="reimburse_state" property="reimburseState" jdbcType="INTEGER" /><!--报销状态【enum】(1:已上报:hasSubmit,0:未上报:notSubmit)-->
 			<result column="reimburse_date" property="reimburseDate" jdbcType="VARCHAR" /><!-- 报销日期-->
@@ -43,12 +44,14 @@
     
     <!-- 查询全部 -->
     <sql id="findAll">
-        select rv.id,rv.staff_code,rv.office_code,rv.reimburse_type,reimburse_state,ifnull(rw.review_opinion,'') as review_opinion,
+        select rv.id,rv.staff_code,rv.office_code,so.office_name,rv.reimburse_type,reimburse_state,ifnull(rw.review_opinion,'') as review_opinion,
         ifnull(rw.review_state,0) as review_state,DATE_FORMAT(rv.reimburse_date,'%Y-%m-%d') as reimburse_date,rv.reimburse_members,
 		rv.reimburse_reason,rv.reimburse_items,rv.reimburse_cost,rv.upload_path,rv.upload_name
         from <include refid="table_name" />  rv
         left join finace_review rw
-        on rv.id=rw.reimburse_id
+		on rv.id=rw.reimburse_id
+		left join sys_office so
+        on so.office_code==rv.office_code
     </sql>
     <!-- 通用条件判断 -->
     <sql id="condition">

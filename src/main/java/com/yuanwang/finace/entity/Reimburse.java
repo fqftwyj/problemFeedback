@@ -18,6 +18,7 @@ public class Reimburse extends BaseEntity{
 	private String staffCode;	
 	//科室编号
 	private String officeCode;	
+	private String officeName;
 	private ReimburseTypeEnum reimburseType;
 	private ReimburseStateEnum reimburseState;
 	// 报销日期
@@ -47,6 +48,14 @@ public class Reimburse extends BaseEntity{
 
 	public void setReview(Review review) {
 		this.review = review;
+	}
+
+	public String getOfficeName() {
+		return officeName;
+	}
+
+	public void setOfficeName(String officeName) {
+		this.officeName = officeName;
 	}
 
 	/**获取员工编号

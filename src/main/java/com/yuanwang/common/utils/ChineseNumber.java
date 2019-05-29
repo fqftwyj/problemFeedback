@@ -1,8 +1,7 @@
-/*
+package com.yuanwang.common.utils;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-
 public class ChineseNumber {
 
         private static final String[] BEFORE_SCALE = { "万", "仟", "佰", "拾", "亿", "仟", "佰", "拾", "万", "仟", "佰", "拾", "" };
@@ -185,6 +184,8 @@ public class ChineseNumber {
             System.out.println(getChineseNumber(1994));
             System.out.println(getChineseNumber(1994.1115));
             System.out.println(getChineseNumber(19941115));
+            int a[]={5,6,8};
+            System.out.println( StringHelper.getMaxValue(a));
         }
 
 
@@ -193,4 +194,3 @@ public class ChineseNumber {
         //壹仟玖佰玖拾肆圆壹角壹分整
         //壹仟玖佰玖拾肆万壹仟壹佰壹拾伍圆整
 }
-*/

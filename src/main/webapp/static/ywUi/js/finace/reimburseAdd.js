@@ -138,11 +138,15 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
                 var days=$mobj.find("input[name='days']").val();
                 var $moneyObj= $mobj.find("input[name='travelmoney']");
                 //如果不是正整数的时候结果为“”
-
                 if(days==''){
                     $moneyObj.val("");
                 }else{
-                    $moneyObj.val(data.value*days=="NaN"?"":data.value*days);
+                    var v=data.value*days;
+                    if(!v || isNaN(v)){
+                        v="";
+                    }
+                    $moneyObj.val(v);
+
                 }
             });
             //绑定天数键盘输入或的时候出差补贴自动计算金额
@@ -161,7 +165,12 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             var standard=$mobj.find("select[name='travelStandard']").val();
             var days=$obj.val();
             var $moneyObj= $mobj.find("input[name='travelmoney']");
-            $moneyObj.val(standard*days=='NAN'?"":standard*days);
+            var v=standard*days;
+            if(!v || isNaN(v)){
+                v="";
+            }
+            $moneyObj.val(v);
+            $moneyObj.val(v);
         }
     };
  

@@ -177,7 +177,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
     //合计绑定
     reimburseFuns.bindConAddDel('totalCaculate');
 
-
+    var index;//上传loading
     //上传文件
     upload.render({
         elem: '#selectFile'
@@ -196,10 +196,11 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         ,bindAction: '#startUploadFile'
         ,size: 1024*40 //限制文件大小，单位 KB
         ,before:function(){
-          layer.load();//上传loading
+          /*  index=layer.load(2,{ shade:[0.1,'#fff']});*/
+            index=layer.load();
+
         },
         done: function(result){
-            
             if(result.msg != '上传成功'){
                 layer.msg(result.msg, {icon:1});
             }else if(result.msg == '上传成功'){
@@ -207,6 +208,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
                 $("#uploadPath").val(dat[0]);
                 $("#uploadName").val(dat[1]);
                 layer.msg("上传成功!",{icon:1});
+                layer.close(index);
 
             }else{
                 layer.msg("上传失败!",{icon:1});

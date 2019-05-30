@@ -77,7 +77,7 @@
         <div style="padding-bottom: 10px;">
         <!--  <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="batchdel">删除</button>-->
           <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add">新建</button>
-          <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="exportAttach">导出报销粘贴单</button>
+          <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="exportAttach">下载报销粘贴单</button>
 
         </div>
         
@@ -97,9 +97,9 @@
 		  {{# } }}
 		  <!-- 这里同样支持 laytpl 语法，如： -->
 		  {{# if(d.review!=null && d.review.reviewState =='PASSREVIEW'){ }}
-		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-download-circle"></i>导出</a>
+		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
 		  {{# } }}
-		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-download-circle"></i>导出</a>
+		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
         </script>
 		  <script type="text/html" id="table-reimburse-reimburseType">
 			  {{# if(d.reimburseType=="OUTTRAIN"){ }}

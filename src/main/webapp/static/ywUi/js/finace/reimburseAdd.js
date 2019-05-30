@@ -196,7 +196,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         ,bindAction: '#startUploadFile'
         ,size: 1024*40 //限制文件大小，单位 KB
         ,before:function(){
-       /*   layer.load();//上传loading*/
+          layer.load();//上传loading
         },
         done: function(result){
             

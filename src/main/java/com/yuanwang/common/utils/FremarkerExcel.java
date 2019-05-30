@@ -32,6 +32,7 @@ public class FremarkerExcel {
 
     public  void createWord(String path, String templateNM, Map<String, Object> dataMap, Map<String, Object> resMap,HttpServletResponse response) throws Exception{
      /*   getData(dataMap);*/
+        // 这里赋值的时候需要注意,xml中需要的数据你必须提供给它,不然会报找不到某元素错的.
         //先生成excel到本地
         //FTL文件所存在的位置
         try {
@@ -73,8 +74,8 @@ public class FremarkerExcel {
         //设置响应头和客户端保存文件名
         response.setContentType("multipart/form-data;charset=utf-8");
         String userName=String.valueOf(resMap.get("userName"));
-        String reimburseDate=(resMap.get("reimburseDate")!=null && !"".equals(String.valueOf(resMap.get("reimburseDate"))))?"-"+resMap.get("reimburseDate"):"";
-        String downloadFileName = URLEncoder.encode("外出培训（进修）报销单-"+userName+reimburseDate+resMap.get("reimburseDate")+".xls","UTF-8");
+        String reimburseDate=(resMap.get("reimburseDate")!=null && !"".equals(String.valueOf(resMap.get("reimburseDate"))) && !"1900-01-01".equals(String.valueOf(resMap.get("reimburseDate"))))?"-"+resMap.get("reimburseDate"):"";
+        String downloadFileName = URLEncoder.encode("外出培训（进修）报销单-"+userName+reimburseDate+".xls","UTF-8");
         // 设置响应头，控制浏览器下载该文件
         response.setHeader("Content-Disposition", "attachment;filename=" + downloadFileName);
 
@@ -102,9 +103,8 @@ public class FremarkerExcel {
     }
     //下载附件粘贴单
     public  void dowloadAttachExcel(String path, String templateNM, HttpServletResponse response) throws Exception{
-        /*   getData(dataMap);*/
         //先生成excel到本地
-        String lastPath=path  +File.separator+ "other.xls";
+        String lastPath=path  +File.separator+ "other.xlsx";
         //页面上直接下载
         //设置响应头和客户端保存文件名
         response.setContentType("multipart/form-data;charset=utf-8");
@@ -131,19 +131,7 @@ public class FremarkerExcel {
         }
     }
 
-    // 这里赋值的时候需要注意,xml中需要的数据你必须提供给它,不然会报找不到某元素错的.
-   /* private  void getData(Map<String, Object> dataMap) {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < 10; i++) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("name", "张三00" + i);
-            map.put("age", "1" + i);
-            map.put("sg", "17" + i);
-            list.add(map);
-        }
-        dataMap.put("list", list);
 
 
-    }*/
 
 }

@@ -7,8 +7,8 @@ layui.define(['table', 'form'], function(exports){
     elem: '#LAY-reimburse-table'
     , url: 'list' //模拟接口
     , cols: [[
-      {type: 'checkbox', fixed: 'left'}
-      , {field: 'reimburseType', title: '报销类别', templet: '#table-reimburse-reimburseType'}
+   /*   {type: 'checkbox', fixed: 'left'} ,*/
+      {field: 'reimburseType', title: '报销类别', templet: '#table-reimburse-reimburseType'}
       , {field: 'reimburseState', title: '报销状态', templet: function(d){
          if( d.reimburseState=="HASSUBMIT"){
               return  '<span style="color: #58AB58;font-weight: bold;">  已上报</span>';
@@ -102,13 +102,14 @@ layui.define(['table', 'form'], function(exports){
               var totalCarBoatTravel=dat.totalCarBoatTravel;
               var totalotherFee=dat.totalotherFee;
               //组装合计的数量
+               var totalFeeData = [];
               var totalFeeObj=new Object();
               totalFeeObj.totalCarBoatTravel=totalCarBoatTravel;
               totalFeeObj.totalotherFee=totalotherFee;
-              var totalFeeStr=JSON.stringify(totalFeeObj);
+              totalFeeData.push(totalFeeObj);
+              var totalFeeStr=JSON.stringify(totalFeeData);
               newData.reimburseCost=totalFeeStr;
               newData.type=1;
-              debugger
               //提交 Ajax 成功后，静态更新表格中的数据
               $.ajax({
                   url:'update',

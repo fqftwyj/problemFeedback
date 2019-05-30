@@ -401,7 +401,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		}
 		dataMap.put("officeName", result.getOfficeName());
 		dataMap.put("reimburseMembers", result.getReimburseMembers());
-		dataMap.put("reimburseDate", result.getReimburseDate());
+		dataMap.put("reimburseDate", result.getReimburseDate().equals("1900-01-01")?"":result.getReimburseDate());
 		dataMap.put("reimburseReason", result.getReimburseReason());
 		dataMap.put("collectList", collectList);
 		dataMap.put("totalCarBoatTravel", totalFeeList.get(0).get("totalCarBoatTravel"));
@@ -414,7 +414,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		System.out.println(String.valueOf(dataMap.get("totalFee")));
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-			fexcle.createWord(prefixPath+File.separator+"excel","core-office2007.ftl",dataMap, reMap,response);
+			fexcle.createWord(prefixPath+File.separator+"excel","core.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -437,7 +437,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 	public String exportReimburseAttach(HttpServletResponse response) {
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-			fexcle.dowloadAttachExcel(prefixPath+File.separator+"excel","日常费用报销原始单据粘贴单.xls",response);
+			fexcle.dowloadAttachExcel(prefixPath+File.separator+"excel","日常费用报销原始单据粘贴单.xlsx",response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

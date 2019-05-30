@@ -8,10 +8,11 @@ layui.define(['table', 'form'], function(exports){
     elem: '#LAY-review-table'
     ,url: 'list' //模拟接口
     ,cols: [[
-      {field: 'reviewOpinion', title: '审查意见'}
-      ,{field: 'reviewState', title: '审查类别'}
-      ,{field: 'createTime', title: '创建时间'}
-      ,{field: 'updateTime', title: '更新时间'}
+      {field: 'staffCode', title: '工号'}
+      ,{field: 'reimburseType', title: '报销类别'}
+      ,{field: 'reimburseMembers', title: '报销成员'}
+      ,{field: 'reimburseDate', title: '报销日期'}
+       ,{title: '报销详情', width: 200, align:'center', fixed: 'right', toolbar: '#table-reimburse-detail-operation'}
       ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-review-operation'}
     ]]
     ,page: true
@@ -25,30 +26,15 @@ layui.define(['table', 'form'], function(exports){
   //监听工具条
   table.on('tool(LAY-review-table)', function(obj){
     var data = obj.data;
-    if(obj.event === 'del'){
-        layer.confirm('真的删除行么', function(index){
-          $.ajax({
-	        	url:'delete?ids='+obj.data.id,
-	        	success: function(e){
-	        		if(e.code==0){
-	        			layer.msg(e.msg);
-	        			obj.del();
-	        	        layer.close(index);
-	        		}else{
-	        			layer.msg(e.msg);
-	        		}
-	            }
-	      });
-         
-        });
-    } else if(obj.event === 'edit'){
+    if(obj.event === 'dowload'){
+        window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.id;
+    } else if(obj.event === 'detail'){
       var tr = $(obj.tr);
       layer.open({
         type: 2
-        ,title: '编辑'
-        ,content: 'edit?id='+obj.data.id
-        ,maxmin: true
-        ,area: ['420px', '240px']
+        ,title: '报销详情'
+        ,content: 'edit?id='+obj.data.reimburseId
+          , area: ['100%', '100%']
         ,btn: ['确定', '取消']
         ,yes: function(index, layero){
           var iframeWindow = window['layui-layer-iframe'+ index]

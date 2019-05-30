@@ -21,8 +21,18 @@ public class Review extends BaseEntity{
 	//创建时间
 	private Date createTime;	
 	//更新时间
-	private Date updateTime;	
-	
+	private Date updateTime;
+	//一对一报销对象实例
+	private Reimburse reimburse;
+
+	public Reimburse getReimburse() {
+		return reimburse;
+	}
+
+	public void setReimburse(Reimburse reimburse) {
+		this.reimburse = reimburse;
+	}
+
 	/**获取报销id
 	*/
 	public Integer getReimburseId(){
@@ -50,7 +60,7 @@ public class Review extends BaseEntity{
 	public ReviewStateEnum getReviewState(){
 		return this.reviewState;
 	}
-	/**设置报销类别【enum】(0:未审查:notReview,1:已审查:hasReview)
+	/**设置审查状态【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)
 	 * @param reviewState
 	 */
 	public void  setReviewState(ReviewStateEnum reviewState){

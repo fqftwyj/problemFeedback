@@ -2,80 +2,445 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>编辑</title>
+  <title>审查报销列表</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="${request.contextPath}/static/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="${request.contextPath}/static/ywUi/css/finace/finace.css" media="all">
 </head>
 <body>
+<div class="layui-fluid  reimburse-background-color" id="reimburseDivForm">
+  <div class="layui-form " lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+      <div class="layui-col-md11">
+        <div class="layui-inline">
+          <label class="layui-form-label">科室：</label>
+          <div class="layui-input-block" style="display: block;">
+            <select name='officeCode'>
+              <!--    <option value="">请输入</option>-->
+              <#list officeList as obj>
+              <option value="${obj.officeCode}" <#if obj.officeCode==result.officeCode>selected</#if>>${obj.officeName}</option>
+          </#list>
+          </select>
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">出差人：</label>
+        <div class="layui-input-block-special" >
+          <input type="text" name="reimburseMembers" placeholder="请输入" autocomplete="off"
+                 class="layui-input" value="${result.reimburseMembers}" lay-verify="required">
+        </div>
+        <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+          <i class="layui-icon layui-icon-about title-text-icon  title-text-icon-second-separator"
+             id="travelPeopleInfo"></i>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-md11">
+      <div class="layui-inline layui-col-md9">
+        <label class="layui-form-label">出差事由：</label>
+        <div class="layui-input-block">
+          <textarea placeholder="请输入内容"  name="reimburseReason" class="layui-textarea" lay-verify="required">${result.reimburseReason}</textarea>
+        </div>
 
-  <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
-    <div class="layui-form-item layui-hide">
-        <input type="button" name="id" class="layui-input" value="${result.id?c}">
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销id</label>
-      <div class="layui-input-inline">
-        <input type="number" name="reimburseId" lay-verify="required" placeholder="请输入报销id" autocomplete="off" class="layui-input" value="${(result.reimburseId?c)!}">
       </div>
     </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">审查意见</label>
-      <div class="layui-input-inline">
-        <input type="text" name="reviewOpinion" lay-verify="required" placeholder="请输入审查意见" autocomplete="off" class="layui-input" value="${result.reviewOpinion!}">
+    <input type="hidden" name="reimburseType" value="${result.reimburseType}" >
+    <input type="hidden" name="staffCode" value="${result.staffCode}" >
+  </div>
+  <div class="layui-card-body  layui-card-body-scroll">
+    <div class="reimburse-card-body-title">
+      <div class="reimburse-card-body-title-text">
+        车船费
+        <i class="layui-icon layui-icon-add-1 title-text-icon title-text-icon-first carboatfeeAdd" ></i>
+        <i class="layui-icon layui-icon-about title-text-icon title-text-icon-second" id="carboatInfo"></i>
+
+      </div>
+      <div class="separator-line-css carboatfeeMotherDiv" style="display:none"  id="carboatfeeMotherHideDiv">
+        <div class="layui-col-md11 mbottom">
+          <div class="layui-inline">
+            <label class="layui-form-label">出发时间：</label>
+            <div class="layui-input-block">
+              <input type="text" name="departureTime"  placeholder="请输入" autocomplete="off"
+                     class="layui-input datetime">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">出发地点：</label>
+            <div class="layui-input-block">
+              <input type="text" name="departurePlace" placeholder="请输入" autocomplete="off"
+                     class="layui-input">
+            </div>
+          </div>
+        </div>
+        <div class="layui-col-md11 mbottom">
+          <div class="layui-inline">
+            <label class="layui-form-label">到达时间：</label>
+            <div class="layui-input-block">
+              <input type="text" name="arrivalTime"  placeholder="请输入" autocomplete="off"
+                     class="layui-input datetime">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">到达地点：</label>
+            <div class="layui-input-block">
+              <input type="text" name="arrivalPlace" placeholder="请输入" autocomplete="off"
+                     class="layui-input">
+            </div>
+          </div>
+        </div>
+        <div class="layui-col-md11 mbottom">
+          <div class="layui-inline layui-form">
+            <label class="layui-form-label">车船类别：</label>
+            <div class="layui-input-block" style="width: 182px;">
+              <select name='carboatType' >
+                <option value="汽车">汽车</option>
+                <option value="火车">火车</option>
+                <option value="飞机">飞机</option>
+                <option value="轮船">轮船</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">单据张数：</label>
+            <div class="layui-input-block">
+              <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
+                     class="layui-input" lay-verify="int">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">车船费：</label>
+            <div class="layui-input-block">
+              <input type="text" name="carboatfee" placeholder="请输入" autocomplete="off"
+                     class="layui-input" lay-verify="money">
+            </div>
+          </div>
+
+          <div class="layui-inline layui-form">
+            <div class="reimburse-del-div" >
+              <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+                <i class="layui-icon layui-icon-close title-text-icon carboatfeeDel" ></i>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <#list carboatfeesList as obj>
+      <div class="separator-line-css carboatfeeMotherDiv"  id="carboatfeeMotherDiv">
+        <div class="layui-col-md11 mbottom">
+          <div class="layui-inline">
+            <label class="layui-form-label">出发时间：</label>
+            <div class="layui-input-block">
+              <input type="text" name="departureTime" placeholder="yyyy-MM-dd" autocomplete="off"
+                     class="layui-input datetime" value="${obj.departureTime}">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">出发地点：</label>
+            <div class="layui-input-block">
+              <input type="text" name="departurePlace"  value="${obj.departurePlace}" placeholder="请输入" autocomplete="off"
+                     class="layui-input">
+            </div>
+          </div>
+        </div>
+        <div class="layui-col-md11 mbottom">
+          <div class="layui-inline">
+            <label class="layui-form-label">到达时间：</label>
+            <div class="layui-input-block">
+              <input type="text" name="arrivalTime" value="${obj.arrivalTime}"  placeholder="yyyy-MM-dd" autocomplete="off"
+                     class="layui-input datetime">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">到达地点：</label>
+            <div class="layui-input-block">
+              <input type="text" name="arrivalPlace" value="${obj.arrivalPlace}" placeholder="请输入" autocomplete="off"
+                     class="layui-input">
+            </div>
+          </div>
+        </div>
+        <div class="layui-col-md11 mbottom">
+          <div class="layui-inline layui-form">
+            <label class="layui-form-label">车船类别：</label>
+            <div class="layui-input-block" style="width: 182px;">
+              <select name='carboatType' >
+                <option value="汽车" <#if obj.carboatType=='汽车'>selected</#if>>汽车</option>
+              <option value="火车" <#if obj.carboatType=='火车'>selected</#if>>火车</option>
+            <option value="飞机" <#if obj.carboatType=='飞机'>selected</#if>>飞机</option>
+          <option value="轮船" <#if obj.carboatType=='轮船'>selected</#if>>轮船</option>
+        </select>
       </div>
     </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">报销类别【enum】(0:未审查:notReview,1:已审查:hasReview)</label>
-      <div class="layui-input-inline">
-	  <select name='reviewState'>
-	       <option value="">请输入</option>
-	       <#list reviewStateEnum as obj>
-	       <option value="${obj}" <#if obj==result.reviewState>selected</#if> >${obj.desc}</option>
-	       </#list>
-	  </select>
+    <div class="layui-inline">
+      <label class="layui-form-label">单据张数：</label>
+      <div class="layui-input-block">
+        <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
+               class="layui-input" value="${obj.docNumber}" lay-verify="int">
       </div>
     </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">创建时间</label>
-      <div class="layui-input-inline">
-        <input type="text" name="createTime" id="createTime" lay-verify="required" placeholder="请输入创建时间" autocomplete="off" class="layui-input" value="${result.createTime?datetime}">
+    <div class="layui-inline">
+      <label class="layui-form-label">车船费：</label>
+      <div class="layui-input-block">
+        <input type="text" name="carboatfee" placeholder="请输入" autocomplete="off"
+               class="layui-input" value="${obj.carboatfee}" lay-verify="money">
       </div>
     </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">更新时间</label>
-      <div class="layui-input-inline">
-        <input type="text" name="updateTime" id="updateTime" lay-verify="required" placeholder="请输入更新时间" autocomplete="off" class="layui-input" value="${result.updateTime?datetime}">
+
+    <div class="layui-inline layui-form">
+      <div class="reimburse-del-div" >
+        <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+          <i class="layui-icon layui-icon-close title-text-icon carboatfeeDel" ></i>
+
+        </div>
       </div>
     </div>
-    <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="LAY-review-submit" id="LAY-review-submit" value="确认">
+
+  </div>
+</div>
+</#list>
+</div>
+<div class="reimburse-card-body-title">
+  <div class="reimburse-card-body-title-text">
+    出差补贴
+    <i class="layui-icon layui-icon-add-1 title-text-icon title-text-icon-first travelStandardAdd"></i>
+    <i class="layui-icon layui-icon-about title-text-icon title-text-icon-second"
+       id="travelStandardInfo"></i>
+  </div>
+  <div class="travelStandardMotherDiv" style="display: none;" id="travelStandardMotherHideDiv">
+    <div class="layui-col-md11 mbottom" >
+      <div class="layui-inline">
+        <label class="layui-form-label">天数：</label>
+        <div class="layui-input-block">
+          <input type="text" name="days" placeholder="请输入" autocomplete="off"
+                 class="layui-input days" lay-verify="int" >
+        </div>
+      </div>
+      <div class="layui-inline layui-form">
+        <label class="layui-form-label" >标准：</label>
+        <div class="layui-input-block" style="width: 182px;">
+          <select name='travelStandard'  lay-filter="travelStandard">
+            <option value="25">25</option>
+            <option value="55">55</option>
+            <option value="42.5">42.5</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">金额：</label>
+        <div class="layui-input-block">
+          <input type="text" name="travelmoney" readonly="readonly" placeholder="请输入" autocomplete="off"
+                 class="layui-input">
+        </div>
+      </div>
+      <div class="layui-inline layui-form">
+        <div class="reimburse-del-div" >
+          <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+            <i class="layui-icon layui-icon-close title-text-icon travelStandardDel"  ></i>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <#list travelAllowanceList as obj>
+  <div class="travelStandardMotherDiv"  id="travelStandardMotherDiv">
+    <div class="layui-col-md11 mbottom" >
+      <div class="layui-inline">
+        <label class="layui-form-label">天数：</label>
+        <div class="layui-input-block">
+          <input type="text" name="days" lay-filter="days" placeholder="请输入整数" autocomplete="off"
+                 class="layui-input days" value="${obj.days}" lay-verify="int" >
+        </div>
+      </div>
+      <div class="layui-inline layui-form">
+        <label class="layui-form-label">标准：</label>
+        <div class="layui-input-block" style="width: 182px;">
+          <select name='travelStandard' lay-filter="travelStandard">
+            <option value="25"  <#if obj.travelStandard=='25'>selected</#if>>25</option>
+          <option value="55"  <#if obj.travelStandard=='55'>selected</#if>>55</option>
+        <option value="42.5" <#if obj.travelStandard=='42.5'>selected</#if>>42.5</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">金额：</label>
+    <div class="layui-input-block">
+      <input type="text" name="travelmoney" readonly="readonly" placeholder="请输入" autocomplete="off"
+             class="layui-input" value="${obj.travelmoney}">
+    </div>
+  </div>
+  <div class="layui-inline layui-form">
+    <div class="reimburse-del-div" >
+      <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+        <i class="layui-icon layui-icon-close title-text-icon travelStandardDel"  ></i>
 
-  <script src="${request.contextPath}/static/layui/layui.js"></script>  
-  <script>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</#list>
+</div>
+<div class="reimburse-card-body-title">
+  <div class="reimburse-card-body-title-text">
+    其它费用
+    <i class="layui-icon layui-icon-add-1 title-text-icon title-text-icon-first otherfeeAdd" ></i>
+    <i class="layui-icon layui-icon-about title-text-icon title-text-icon-second" id='otherfeeInfo'></i>
+  </div>
+  <div class="otherfeeMotherDiv" style="display:none" id="otherfeeMotherHideDiv">
+    <div class="layui-col-md11 mbottom" >
+      <div class="layui-inline">
+        <label class="layui-form-label">项目：</label>
+        <div class="layui-input-block">
+          <input type="text" name="itemname" placeholder="请输入" autocomplete="off"
+                 class="layui-input">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">单据张数：</label>
+        <div class="layui-input-block">
+          <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
+                 class="layui-input" lay-verify="int">
+        </div>
+      </div>
+      <div class="layui-inline layui-form">
+        <label class="layui-form-label">金额：</label>
+        <div class="layui-input-block">
+          <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
+                 class="layui-input" lay-verify="money">
+        </div>
+      </div>
+      <div class="layui-inline layui-form">
+        <div class="reimburse-del-div" >
+          <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+            <i class="layui-icon layui-icon-close title-text-icon otherfeeDel" ></i>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <#list otherFeeList as obj>
+  <div class="otherfeeMotherDiv"  id="otherfeeMotherDiv">
+    <div class="layui-col-md11 mbottom" >
+      <div class="layui-inline">
+        <label class="layui-form-label">项目：</label>
+        <div class="layui-input-block">
+          <input type="text" name="itemname" placeholder="请输入" autocomplete="off"
+                 class="layui-input" value="${obj.itemname}">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">单据张数：</label>
+        <div class="layui-input-block">
+          <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
+                 class="layui-input"  value="${obj.otherdocnumber}" lay-verify="int">
+        </div>
+      </div>
+      <div class="layui-inline layui-form">
+        <label class="layui-form-label">金额：</label>
+        <div class="layui-input-block">
+          <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
+                 class="layui-input" value="${obj.otherfeemoney}" lay-verify="money">
+        </div>
+      </div>
+      <div class="layui-inline layui-form">
+        <div class="reimburse-del-div" >
+          <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+            <i class="layui-icon layui-icon-close title-text-icon otherfeeDel" ></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</#list>
+</div>
+<div class="reimburse-card-body-title">
+  <div class="reimburse-card-body-title-text">合计 <i class="layui-icon  layui-icon-rmb title-text-icon title-text-icon-first totalCaculate" ></i></div>
+
+
+  <div class="layui-col-md11 mbottom">
+    <div class="layui-inline">
+      <label class="layui-form-label layui-form-label-width">车船费+出差补贴费：</label>
+      <div class="layui-input-block layui-input-block-left">
+        <input type="text" name="totalCarBoatTravel" id="totalCarBoatTravel" placeholder="请输入"  readonly="readonly" autocomplete="off"
+               class="layui-input" value="${totalCarBoatTravel}">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">其它费用：</label>
+      <div class="layui-input-block">
+        <input type="text" name="totalotherFee" id="totalotherFee" placeholder="请输入" autocomplete="off" readonly="readonly"
+               class="layui-input" value="${totalotherFee}">
+      </div>
+    </div>
+  </div>
+</div>
+<input type="hidden" name="reimburseDate" value="${result.reimburseDate}"/>
+<div class="layui-card-body-scroll">
+  <div class="layui-col-md11 mbottom">
+    <!--    <button type="button" class="layui-btn" id="test1">
+            <i class="layui-icon">&#xe67c;</i>附件上传
+        </button>-->
+    <input type="hidden"  name="module" id="module" value="${userName}"/>
+    <input type="hidden"  name="id"  value="${result.id}"/>
+    <input type="hidden"  name="uploadPath" id="uploadPath" value="${result.uploadPath}"/>
+    <input type="hidden"  name="uploadName" id="uploadName" value="${result.uploadName}"/>
+    <div class="layui-upload">
+
+      <button type="button" class="layui-btn layui-btn-normal" id="selectFile">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
+      <span class="layui-inline layui-upload-choose" >      <a  data-name="${result.uploadName}" data-path="${result.uploadPath}"  data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
+      <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
+      <p id="allFileText"></p>
+    </div>
+  </div>
+</div>
+<div class="reimburse-attach-explation-div">
+  <div class="layui-col-md11 mbottom">
+    <span class="reimburse-attach-explation-text">注：</span>
+    <span>签字完整的外出培训审批表、培训（进修）通知单、培训费/进修费发票（报销人背面签字）、
+住宿费发票（报销人背面签字）、交通费发票（报销人背面签字）、报销人银行卡复印件。压缩包（zip或rar）格式上传</span>
+  </div>
+</div>
+</div>
+<div class="layui-form-item layui-hide">
+  <input type="button" lay-submit lay-filter="LAY-review-edit-submit" id="LAY-review-edit-submit" value="确认">
+</div>
+</div>
+</div>
+<script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
+<!--zheli-->
+<script src="${request.contextPath}/static/ywUi/js/lib/jquery-2.1.0.js"></script>
+
+<script>
+
   layui.config({
-    base: '${request.contextPath}/static/yw/' //静态资源所在路径
+    base: '${request.contextPath}/static/layuiadmin/' //静态资源所在路径
   }).extend({
-    index: 'index', //主入口模块
-    verfy:'../../ywUi/js/commons/verfy'
-  }).use(['index','form','verfy','laydate'], function(){
-    var $ = layui.$
-    ,form = layui.form 
-    ,laydate = layui.laydate;
-    
-    laydate.render({
-      elem:'#createTime',
-      type:'datetime'
-    });
-    laydate.render({
-      elem:'#updateTime',
-      type:'datetime'
-    });
-  })
-  </script>
+    index: 'lib/index', //主入口模块
+    verfy: '../../ywUi/js/commons/verfy',
+    reimburseAdd: '../../ywUi/js/finace/reimburseAdd'
+  }).use(['index', 'reimburseAdd', 'form', 'verfy'], function () {
+    var $ = layui.$,
+            form = layui.form,
+            table = layui.table;
+
+  });
+  //这里在这个页面再引入一个jquery.jsji
+  function fqdownload(url,ele){
+    var $this=$(ele);
+    var name=$this.data("name");
+    var path=$this.data("path");
+    var module=$this.data("module");
+    window.location=url+"fileName="+encodeURIComponent(name)+"&filePath="+encodeURIComponent(path)+"&module="+module;
+  }
+
+</script>
 </body>
 </html>

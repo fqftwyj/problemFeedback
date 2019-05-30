@@ -10,9 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.yuanwang.finace.entity.Reimburse;
 import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
 import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
+import com.yuanwang.finace.service.ReimburseService;
 import com.yuanwang.finace.service.ReviewService;
+import com.yuanwang.sys.entity.Office;
+import com.yuanwang.sys.entity.User;
+import com.yuanwang.sys.service.OfficeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,8 +49,11 @@ public class ReviewController extends BaseController<Review>{
 
 	@Resource
 	private ReviewService reviewService;
-	
-	
+
+	@Resource
+	private ReimburseService reimburseService;
+	@Resource
+	private OfficeService officeService;
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
@@ -108,10 +118,45 @@ public class ReviewController extends BaseController<Review>{
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_EDIT)
-	public void updateJump(Integer id, ModelMap map){
-		Review result = reviewService.find(id);
+	public void updateJump(Integer id, ModelMap map,HttpSession session){
+		User user=(User)session.getAttribute("user");
+		map.put("userName", user.getUserName());
+		//获取科室列表
+		List<Office>  officeList=officeService.findAll();
+		map.put("officeList", officeList);
+		map.put("reimburseStateEnum", ReimburseStateEnum.values());
+		Reimburse result = reimburseService.find(id);
 		map.put("result", result);
-		map.put("reviewStateEnum", ReviewStateEnum.values());
+		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
+		//组装车船费列表
+		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();
+		//组装出差补贴
+		List<Map<String, String>> travelAllowanceList =new ArrayList<Map<String, String>>();
+		//组装其他费用
+		List<Map<String, String>> otherFeeList =new ArrayList<Map<String, String>>();
+		//组装合计费用
+		JSONObject totalFeeObj=new JSONObject();
+		List<Map<String, String>> totalFeeList =new ArrayList<Map<String, String>>();
+		if(json.size()>0) {
+			JSONArray carboatfeeArray = (JSONArray) json.getJSONObject(0).get("carboatfeeiItemsData");
+			JSONArray travelAllowanceArray = (JSONArray) json.getJSONObject(0).get("travelAllowanceItemsData");
+			JSONArray otherFeeArray = (JSONArray) json.getJSONObject(0).get("otherFeeItemsData");
+			//组装车船费列表
+			carboatfeesList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+			//组装出差补贴
+			travelAllowanceList = JSONArray.parseObject(travelAllowanceArray.toJSONString(), List.class);
+			//组装其他费用
+			otherFeeList = JSONArray.parseObject(otherFeeArray.toJSONString(), List.class);
+		}
+		JSONArray tataljson =  JSONArray.parseArray(result.getReimburseCost() ); // 首先把字符串转成 JSONArray  对象
+		if(tataljson.size()>0){
+			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
+		}
+		map.put("carboatfeesList", carboatfeesList);
+		map.put("travelAllowanceList", travelAllowanceList);
+		map.put("otherFeeList", otherFeeList);
+		map.put("totalCarBoatTravel", totalFeeList.get(0).get("totalCarBoatTravel"));
+		map.put("totalotherFee", totalFeeList.get(0).get("totalotherFee"));
 	}
 	
 	/**编辑功能

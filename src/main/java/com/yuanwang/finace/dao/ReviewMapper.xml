@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!--  
+<!--
  * ReviewMapper
  * 
  * @author  crj
@@ -17,6 +17,7 @@
 			<result column="review_state" property="reviewState" jdbcType="INTEGER" /><!--报销类别【enum】(0:未审查:notReview,1:已审查:hasReview)-->
 			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
 			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->
+		    <association column="reimburse_id" property="reimburse"  select="com.yuanwang.finace.dao.ReimburseMapper.findById"/>
 	</resultMap>
 
 
@@ -34,7 +35,14 @@
     
     <!-- 查询全部 -->
     <sql id="findAll">
-        select * from <include refid="table_name" />
+		select rw.reimburse_id,rv.id,rv.staff_code,rv.office_code,so.office_name,rv.reimburse_type,reimburse_state,ifnull(rw.review_opinion,'') as review_opinion,
+		ifnull(rw.review_state,0) as review_state,DATE_FORMAT(rv.reimburse_date,'%Y-%m-%d') as reimburse_date,rv.reimburse_members,
+		rv.reimburse_reason,rv.reimburse_items,rv.reimburse_cost,rv.upload_path,rv.upload_name
+		from <include refid="table_name" />  rw
+		left join finace_reimburse rv
+		on rv.id=rw.reimburse_id
+		left join sys_office so
+		on so.office_code=rv.office_code
     </sql>
 
     <!-- 通用条件判断 -->
@@ -45,20 +53,27 @@
     	  </if>
     		<trim prefixOverrides="and|or">
 	    	<if test="reimburseId!=null">
-    		 reimburse_id = #{reimburseId}
+    		 rw.reimburse_id = #{reimburseId}
     		</if>
-	    	<if test="reviewOpinion!=null and reviewOpinion!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> review_opinion = #{reviewOpinion}
-    		</if>
-	    	<if test="reviewState!=null">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> review_state = #{reviewState}
-    		</if>
-	    	<if test="createTime!=null and createTime!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> create_time = #{createTime}
-    		</if>
-	    	<if test="updateTime!=null and updateTime!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> update_time = #{updateTime}
-    		</if>
+				<if test="staffCode!=null and staffCode!=''">
+					rv.staff_code = #{staffCode}
+				</if>
+				<if test="reimburseType!=null">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.reimburse_type = #{reimburseType}
+				</if>
+
+				<if test="reimburseStartDate!=null and reimburseStartDate!=''">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+					rv.reimburse_date <![CDATA[>=]]> #{reimburseStartDate}
+				</if>
+				<if test="reimburseEndDate!=null and reimburseEndDate!=''">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+					rv.reimburse_date <![CDATA[<=]]>  #{reimburseEndDate}
+				</if>
+				<if test="reimburseMembers!=null and reimburseMembers!=''">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+					rv.reimburse_members like concat('%',#{reimburseMembers},'%')
+				</if>
 	    	</trim>
 	    	<if test="operator=='or'">
     		)

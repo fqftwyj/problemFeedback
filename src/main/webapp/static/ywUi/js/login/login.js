@@ -61,7 +61,6 @@ function checkUser(){
 	            var errormsg = "，请及时和富阳第一人民医院信息科联系。 &nbsp;&nbsp;<a style='color:red;cursor:pointer;' onclick='licenceImport()'>授权导入<a>";
 	            cdialog.info(errormsg,null,null,true, 'center');
 	        }else if(data.code=="0"){
-	        	debugger
 				sessionStorage.removeItem("cpFlag");
 				window.location = "../indexMenu";
 			}else{

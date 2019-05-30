@@ -8,10 +8,8 @@ layui.define(['table', 'form'], function(exports){
     elem: '#LAY-review-table'
     ,url: 'list' //模拟接口
     ,cols: [[
-      {type: 'checkbox', fixed: 'left'}
-      ,{field: 'reimburseId', title: '报销id'}
-      ,{field: 'reviewOpinion', title: '审查意见'}
-      ,{field: 'reviewState', title: '报销类别【enum】(0:未审查:notReview,1:已审查:hasReview)'}
+      {field: 'reviewOpinion', title: '审查意见'}
+      ,{field: 'reviewState', title: '审查类别'}
       ,{field: 'createTime', title: '创建时间'}
       ,{field: 'updateTime', title: '更新时间'}
       ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-review-operation'}

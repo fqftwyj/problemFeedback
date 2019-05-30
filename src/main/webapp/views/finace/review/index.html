@@ -16,20 +16,43 @@
     <div class="layui-card">
       <div class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
-	<div class="layui-col-md11">
+            <div class="layui-col-md11">
+                <div class="layui-inline">
+                    <label class="layui-form-label">工号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="reimburseMembers" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">报销类别</label>
+                    <div class="layui-input-block">
+                        <select name='reimburseType'>
+                            <option value="">请输入</option>
+                            <#list reimburseTypeEnum as obj>
+                            <option value="${obj}">${obj.desc}</option>
+                        </#list>
+                        </select>
+                    </div>
+                </div>
 
-		  <div class="layui-inline">
-		    <label class="layui-form-label">报销类别</label>
-		    <div class="layui-input-block">
-			  <select name='reviewState'>
-				<option value="">请输入</option>
-				<#list reviewStateEnum as obj>
-				<option value="${obj}">${obj.desc}</option>
-				</#list>
-			  </select>
-		    </div>
-		  </div>
-	  </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">报销成员</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="reimburseMembers" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">报销日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="reimburseDate" name="reimburseDate"
+                               placeholder=" - ">
+                    </div>
+                </div>
+            </div>
+
 	  <div class="layui-col-md1">
 		  <div class="layui-inline">
 		    <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-review-search">
@@ -41,10 +64,10 @@
       </div>
       
       <div class="layui-card-body">
-        <div style="padding-bottom: 10px;">
+       <!-- <div style="padding-bottom: 10px;">
           <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="batchdel">删除</button>
           <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add">添加</button>
-        </div>
+        </div>-->
         
         <table id="LAY-review-table" lay-filter="LAY-review-table"></table>  
         <script type="text/html" id="table-review-operation">
@@ -61,12 +84,17 @@
       base: '${request.contextPath}/static/layuiadmin/' //静态资源所在路径
   }).extend({
       index: 'lib/index', //主入口模块
-      reimburse: '../../ywUi/js/finace/reimburse'
-  }).use(['index', 'reimburse', 'table'], function(){
+      review: '../../ywUi/js/finace/review'
+  }).use(['index', 'review', 'table','laydate'], function(){
     var $ = layui.$
     ,form = layui.form
-    ,table = layui.table;
-
+    ,table = layui.table,
+    laydate=layui.laydate;
+      //日期范围
+      laydate.render({
+          elem: '#reimburseDate'
+          , range: true
+      });
     //监听搜索
     form.on('submit(LAY-review-search)', function(data){
       var field = data.field;

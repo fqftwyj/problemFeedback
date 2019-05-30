@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
+
+import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
+import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
 import com.yuanwang.finace.service.ReviewService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -46,7 +49,8 @@ public class ReviewController extends BaseController<Review>{
 	 */
 	@RequestMapping(CONSTANT_INDEX)
 	public void indexJump(ModelMap map) {
-		map.put("reviewStateEnum", ReviewStateEnum.values());
+		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
+
 	}
 	
 	/**分页查询

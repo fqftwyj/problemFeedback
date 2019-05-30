@@ -135,7 +135,7 @@ public class ShiroConfiguration {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(getDefaultWebSecurityManager(myShiroRealm));
 		shiroFilterFactoryBean.setLoginUrl("/login/login");
-		shiroFilterFactoryBean.setSuccessUrl("/index");
+		shiroFilterFactoryBean.setSuccessUrl("/indexMenu");
 		shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>(); 
 		filterChainDefinitionMap.put("/static/**", "anon");

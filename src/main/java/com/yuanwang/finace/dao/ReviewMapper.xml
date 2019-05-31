@@ -17,7 +17,10 @@
 			<result column="review_state" property="reviewState" jdbcType="INTEGER" /><!--报销类别【enum】(0:未审查:notReview,1:已审查:hasReview)-->
 			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
 			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->
-		    <association column="reimburse_id" property="reimburse"  select="com.yuanwang.finace.dao.ReimburseMapper.findById"/>
+			<result column="staff_code" property="staffCode" jdbcType="VARCHAR" /><!--员工编号-->
+			<result column="reimburse_type" property="reimburseType" jdbcType="INTEGER" /><!--报销类别【enum】(1:外出培训:outtrain)-->
+			<result column="reimburse_date" property="reimburseDate" jdbcType="VARCHAR" /><!-- 报销日期-->
+			<result column="reimburse_members" property="reimburseMembers" jdbcType="VARCHAR" /><!--报销成员-->
 	</resultMap>
 
 
@@ -29,20 +32,18 @@
 	<!-- 主键条件 -->
     <sql id="primaryCondition">
     <where>
-    id = #{id}
+		rw.id = #{id}
     </where>
     </sql>
     
     <!-- 查询全部 -->
     <sql id="findAll">
-		select rw.reimburse_id,rv.id,rv.staff_code,rv.office_code,so.office_name,rv.reimburse_type,reimburse_state,ifnull(rw.review_opinion,'') as review_opinion,
-		ifnull(rw.review_state,0) as review_state,DATE_FORMAT(rv.reimburse_date,'%Y-%m-%d') as reimburse_date,rv.reimburse_members,
-		rv.reimburse_reason,rv.reimburse_items,rv.reimburse_cost,rv.upload_path,rv.upload_name
+		select rw.reimburse_id,rw.id,rv.staff_code,rv.reimburse_type,reimburse_state,ifnull(rw.review_opinion,'') as review_opinion,
+		ifnull(rw.review_state,0) as review_state,DATE_FORMAT(rv.reimburse_date,'%Y-%m-%d') as reimburse_date,rv.reimburse_members
 		from <include refid="table_name" />  rw
 		left join finace_reimburse rv
 		on rv.id=rw.reimburse_id
-		left join sys_office so
-		on so.office_code=rv.office_code
+
     </sql>
 
     <!-- 通用条件判断 -->
@@ -80,9 +81,10 @@
 	    	</if>
 	    	<if test="excludeId!=null">
     		 <![CDATA[
-    		 and id <> #{excludeId}
+    		 and rw.id <> #{excludeId}
     		 ]]>
     		</if>
+			and rv.reimburse_state=0 and rw.review_state &lt; 2
     	</where>
     </sql>
     <sql id="orderBy">
@@ -103,8 +105,8 @@
 	         #{reimburseId},
 	         #{reviewOpinion},
 	         #{reviewState},
-	         #{createTime},
-	         #{updateTime}
+			 now(),
+			 now()
 	        )
 	        
 	        <selectKey resultType="int" keyProperty="id">  
@@ -114,7 +116,7 @@
    </insert>
      <!-- 更新数据 -->
     <update id="update" parameterType="Review" flushCache="true" >
-    	update <include refid="table_name" /> 
+    	update <include refid="table_name" />
     	<set>
         	<if test="reimburseId!=null">
         	reimburse_id = #{reimburseId},
@@ -126,13 +128,13 @@
         	review_state = #{reviewState},
         	 </if>
         	<if test="createTime!=null">
-        	create_time = #{createTime},
+        	create_time = now(),
         	 </if>
         	<if test="updateTime!=null">
-        	update_time = #{updateTime},
+        	update_time =now(),
         	 </if>
         </set>
-        <include refid="primaryCondition"/> 
+		where id= #{id}
    </update>
    <!-- 删除数据 -->
    <delete id="deleteByIds" flushCache="true" >

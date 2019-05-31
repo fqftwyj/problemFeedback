@@ -98,7 +98,7 @@ public class ExcelFacts {
 			this.replaceStrategyMap = replaceStrategyMap;
 			return this;
 		}
-		
+
 		public Builder appendContent(List<String> content){
 			this.appendContent = content;
 			return this;
@@ -135,7 +135,7 @@ public class ExcelFacts {
 		if (this.splitList.isEmpty()) {
 			allList = ExcelService.splitList(this.dataList);
 		} else { // 调用了addData的时候，this.splitList有值，外部调用者已经分隔好，
-					// 不再调用splitList方法
+			// 不再调用splitList方法
 			allList = new ArrayList<List<? extends Object>>();
 			allList.add(this.dataList);
 			allList.addAll(this.splitList);
@@ -172,7 +172,7 @@ public class ExcelFacts {
 			}
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			wb.write(baos);
-			
+
 			os.write(baos.toByteArray());
 			baos.flush();
 			baos.close();
@@ -195,7 +195,7 @@ public class ExcelFacts {
 				return;
 			}
 			zout.setEncoding("GBK");
-			
+
 			try {
 				int length = splitList.size();
 				if(length == 1) {
@@ -252,12 +252,12 @@ public class ExcelFacts {
 				return;
 			}
 			ZipOutputStream outputStream=new ZipOutputStream(os,new ZipModel());
-			ZipParameters parameters = new ZipParameters();  
+			ZipParameters parameters = new ZipParameters();
 			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE); //压缩方式 
 			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL); //压缩级别
 			parameters.setSourceExternalStream(true);//支持流输入
 			if(!isEmpty(password)){
-				parameters.setEncryptFiles(true); 
+				parameters.setEncryptFiles(true);
 				parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);//加密方式
 				parameters.setPassword(password);//设置加密密码
 			}
@@ -283,7 +283,7 @@ public class ExcelFacts {
 						e.printStackTrace();
 					}
 					baos.close();
-					
+
 				} else {
 					int i = 1;
 					for (List<? extends Object> smallList : splitList) {
@@ -327,13 +327,13 @@ public class ExcelFacts {
 	}
 	private void createExcel(List<? extends Object> dataList, int splitIndex) {
 		Sheet sheet = wb.createSheet();
-		
+
 		if(splitIndex == 0) {
 			wb.setSheetName(wb.getNumberOfSheets() - 1,
-				getSafeSheetName(sheetName));
+					getSafeSheetName(sheetName));
 		} else {
 			wb.setSheetName(wb.getNumberOfSheets() - 1,
-				getSafeSheetName(sheetName, splitIndex));
+					getSafeSheetName(sheetName, splitIndex));
 		}
 
 		if ( null != columnWidths) {
@@ -346,47 +346,47 @@ public class ExcelFacts {
 		Object[] rowValues = new Object[this.orderedAttrs.length];
 		Field[] fields = null;
 		boolean isMap = false;
-        for (int i = 0, size = dataList.size(); i < size; i++) {
+		for (int i = 0, size = dataList.size(); i < size; i++) {
 			Object dataObj = dataList.get(i);
 			if (i == 0) {
-                if(dataObj instanceof Map) {
-                    isMap = true;
-                }
-                if(!isMap) {
-                    fields = dataObj.getClass().getDeclaredFields();
-                    AccessibleObject.setAccessible(fields, true);
-                }
+				if(dataObj instanceof Map) {
+					isMap = true;
+				}
+				if(!isMap) {
+					fields = dataObj.getClass().getDeclaredFields();
+					AccessibleObject.setAccessible(fields, true);
+				}
 			}
-            Map<String, Object> fieldValues;
+			Map<String, Object> fieldValues;
 			if(isMap){
-                fieldValues = ExcelService.getFieldValues((Map<String,Object>)dataObj,this.replaceStrategyMap);
-            } else {
-                fieldValues = ExcelService.getFieldValues(
-                        fields, dataObj, this.replaceStrategyMap);
+				fieldValues = ExcelService.getFieldValues((Map<String,Object>)dataObj,this.replaceStrategyMap);
+			} else {
+				fieldValues = ExcelService.getFieldValues(
+						fields, dataObj, this.replaceStrategyMap);
 
-            }
-            Row row = sheet.createRow(index++);
-            for (int j = 0; j < this.orderedAttrs.length; j++) {
-                rowValues[j] = fieldValues.get(this.orderedAttrs[j]);
-                if (rowValues[j] == null) {
-                    rowValues[j] = "";
-                }
+			}
+			Row row = sheet.createRow(index++);
+			for (int j = 0; j < this.orderedAttrs.length; j++) {
+				rowValues[j] = fieldValues.get(this.orderedAttrs[j]);
+				if (rowValues[j] == null) {
+					rowValues[j] = "";
+				}
 
-                String rowValueStr = rowValues[j].toString();
-                if(rowValueStr.matches("[1-9][0-9]*|0")){
-                    Cell cell = row.createCell(j);
-                    cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-                    cell.setCellValue(rowValueStr.toString());
-                }else{
-                	row.createCell(j).setCellValue(rowValueStr);
-                }
-            }
+				String rowValueStr = rowValues[j].toString();
+				if(rowValueStr.matches("[1-9][0-9]*|0")){
+					Cell cell = row.createCell(j);
+					cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+					cell.setCellValue(rowValueStr.toString());
+				}else{
+					row.createCell(j).setCellValue(rowValueStr);
+				}
+			}
 
 		}
 		if(null == this.appendContent || this.appendContent.isEmpty()) {
 			return;
 		}
-		
+
 		int LastRow = sheet.getLastRowNum()+1;
 		for(int i=0; i<this.appendContent.size(); i++){
 			Row row = sheet.createRow(LastRow+i);
@@ -396,7 +396,7 @@ public class ExcelFacts {
 
 	/**
 	 * 获取安全的工作表名
-	 * 
+	 *
 	 * @param sheetName
 	 *            工作表名
 	 * @param part
@@ -413,7 +413,7 @@ public class ExcelFacts {
 
 	/**
 	 * 设置工作表第一行标题内容与样式
-	 * 
+	 *
 	 * @param cellNames
 	 *            标题列表
 	 * @param sheet
@@ -473,7 +473,7 @@ public class ExcelFacts {
 
 	/**
 	 * 设置边框类型
-	 * 
+	 *
 	 * @param cellStyle
 	 *            单元格样式
 	 * @param type
@@ -488,7 +488,7 @@ public class ExcelFacts {
 
 	/**
 	 * 设置边框颜色
-	 * 
+	 *
 	 * @param cellStyle
 	 *            单元格样式
 	 * @param color
@@ -503,7 +503,7 @@ public class ExcelFacts {
 
 	/**
 	 * 获取居中样式
-	 * 
+	 *
 	 * @return
 	 */
 	private CellStyle getAlignCenterStyle() {
@@ -515,7 +515,7 @@ public class ExcelFacts {
 
 	/**
 	 * 加粗样式
-	 * 
+	 *
 	 * @return
 	 */
 	private CellStyle getBoldWeight() {
@@ -545,10 +545,10 @@ public class ExcelFacts {
 		cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
 
 		Font font = wb.createFont();
-		font.setFontHeightInPoints((short)16);  
-		cellStyle.setFont(font);  
+		font.setFontHeightInPoints((short)16);
+		cellStyle.setFont(font);
 		keyCell.setCellStyle(cellStyle);
-		
+
 		keyCell.setCellValue(header);
 
 		sheet.addMergedRegion(new CellRangeAddress(0, // first row(0-based)
@@ -594,18 +594,18 @@ public class ExcelFacts {
 		));
 		return ++index;
 	}
-	
+
 	/**
 	 * 判断字符串是否为空
 	 * @param str  NULL null 空串
 	 * @return true：空  false：不为空
 	 */
 	private boolean isEmpty(String str){
-		
+
 		if(str==null || str.equals("") || str.equals("null")){
 			return true;
 		}
-		
+
 		return false;
 	}
 }

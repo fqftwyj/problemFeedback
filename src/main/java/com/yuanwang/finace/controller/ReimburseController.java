@@ -20,6 +20,7 @@ import com.yuanwang.common.utils.StringHelper;
 import com.yuanwang.finace.entity.Review;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
+import com.yuanwang.finace.service.ReviewService;
 import com.yuanwang.sys.entity.Office;
 import com.yuanwang.sys.entity.User;
 import com.yuanwang.sys.service.OfficeService;
@@ -56,6 +57,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 
 	@Resource
 	private ReimburseService reimburseService;
+	@Resource
+	private ReviewService reviewService;
 	@Resource
 	private OfficeService officeService;
 	private static String prefixPath;
@@ -229,6 +232,21 @@ public class ReimburseController extends BaseController<Reimburse>{
 				Date d=new Date();
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 				reimburse.setReimburseDate(sdf.format(d));
+
+				Review review=new Review();
+				Map<String,Object> reviewmap=new HashMap<String,Object>();
+				reviewmap.put("reimburseId",reimburse.getId());
+				List<Review> reviewList= reviewService.findList(reviewmap);
+				if(!reviewList.isEmpty()){
+					review=reviewList.get(0);
+					review.setReviewState(ReviewStateEnum.NOTREVIEW);
+					reviewService.update(review,reviewmap,OperatorEnum.AND);
+				}else{
+					review.setReimburseId(reimburse.getId());
+					review.setReviewState(ReviewStateEnum.NOTREVIEW);
+					review.setReviewOpinion("");
+					reviewService.save(review,reviewmap,OperatorEnum.AND);
+				}
 			}
 			Integer flag = reimburseService.update(reimburse,map,OperatorEnum.AND);
 			if(flag==2) {

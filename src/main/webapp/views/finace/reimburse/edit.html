@@ -366,7 +366,7 @@
 
 
         <div class="layui-col-md11 mbottom">
-          <div class="layui-inline">
+          <div class="layui-inline layui-inline-total">
             <label class="layui-form-label layui-form-label-width">车船费+出差补贴费：</label>
             <div class="layui-input-block layui-input-block-left">
               <input type="text" name="totalCarBoatTravel" id="totalCarBoatTravel" placeholder="请输入"  readonly="readonly" autocomplete="off"
@@ -395,7 +395,7 @@
     <div class="layui-upload">
 
       <button type="button" class="layui-btn layui-btn-normal" id="selectFile">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
-      <span class="layui-inline layui-upload-choose" >      <a  data-name="${result.uploadName}" data-path="${result.uploadPath}"  data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
+      <span class="layui-inline layui-upload-choose" >  <a  data-name="${result.uploadName}" data-path="${result.uploadPath}" class="downloadA" data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
       <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
       <p id="allFileText"></p>
     </div>
@@ -410,7 +410,7 @@
       </div>
     </div>
     <div class="layui-form-item layui-hide">
-      <input type="button" lay-submit lay-filter="LAY-review-edit-submit" id="LAY-review-edit-submit" value="确认">
+      <input type="button" lay-submit lay-filter="LAY-reimburse-edit-submit" id="LAY-reimburse-edit-submit" value="确认">
     </div>
 </div>
 </div>

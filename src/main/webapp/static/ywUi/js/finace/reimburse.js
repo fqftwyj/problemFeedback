@@ -11,6 +11,7 @@ layui.define(['table', 'form'], function (exports) {
             {field: 'reimburseType', title: '报销类别', templet: '#table-reimburse-reimburseType'}
             , {
                 field: 'reimburseState', title: '报销状态', templet: function (d) {
+                    debugger
                     if (d.reimburseState == "HASSUBMIT") {
                         return '<span style="color: #58AB58;font-weight: bold;">  已上报</span>';
                     } else if (d.reimburseState == "NOTSUBMIT") {
@@ -75,7 +76,7 @@ layui.define(['table', 'form'], function (exports) {
                 , btn: ['确定', '取消']
                 , yes: function (index, layero) {
                     var iframeWindow = window['layui-layer-iframe' + index]
-                        , submitID = 'LAY-review-edit-submit'
+                        , submitID = 'LAY-reimburse-edit-submit'
                         , contentId = layero.find('iframe').contents()
                         , submit = layero.find('iframe').contents().find('#' + submitID);
                     //计算车船和出差补贴的总和和其它费用的总和

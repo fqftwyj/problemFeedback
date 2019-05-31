@@ -2,6 +2,8 @@ package com.yuanwang.finace.entity;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yuanwang.common.core.BaseEntity;
+import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
+import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 /**
  * 
@@ -22,15 +24,44 @@ public class Review extends BaseEntity{
 	private Date createTime;	
 	//更新时间
 	private Date updateTime;
-	//一对一报销对象实例
-	private Reimburse reimburse;
+	//员工编号
+	private String staffCode;
+	private ReimburseTypeEnum reimburseType;
+	// 报销日期
+	private String reimburseDate;
+	//报销成员
+	private String reimburseMembers;
 
-	public Reimburse getReimburse() {
-		return reimburse;
+	public String getStaffCode() {
+		return staffCode;
 	}
 
-	public void setReimburse(Reimburse reimburse) {
-		this.reimburse = reimburse;
+	public void setStaffCode(String staffCode) {
+		this.staffCode = staffCode;
+	}
+
+	public ReimburseTypeEnum getReimburseType() {
+		return reimburseType;
+	}
+
+	public void setReimburseType(ReimburseTypeEnum reimburseType) {
+		this.reimburseType = reimburseType;
+	}
+
+	public String getReimburseDate() {
+		return reimburseDate;
+	}
+
+	public void setReimburseDate(String reimburseDate) {
+		this.reimburseDate = reimburseDate;
+	}
+
+	public String getReimburseMembers() {
+		return reimburseMembers;
+	}
+
+	public void setReimburseMembers(String reimburseMembers) {
+		this.reimburseMembers = reimburseMembers;
 	}
 
 	/**获取报销id

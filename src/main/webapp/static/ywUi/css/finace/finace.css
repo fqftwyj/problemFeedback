@@ -79,4 +79,12 @@
     border-bottom: 1px solid #eee;
 }
 
+.layui-col-md11 .layui-inline-total{
+    margin-left: 40px;
+}
+.layui-upload a.downloadA{
+    cursor: pointer;
+    color:#FF5722;
+}
+
 

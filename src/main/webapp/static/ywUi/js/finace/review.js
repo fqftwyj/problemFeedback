@@ -9,7 +9,7 @@ layui.define(['table', 'form'], function(exports){
     ,url: 'list' //模拟接口
     ,cols: [[
       {field: 'staffCode', title: '工号'}
-      ,{field: 'reimburseType', title: '报销类别'}
+      ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
       ,{field: 'reimburseMembers', title: '报销成员'}
       ,{field: 'reimburseDate', title: '报销日期'}
        ,{title: '报销详情', width: 200, align:'center', fixed: 'right', toolbar: '#table-reimburse-detail-operation'}
@@ -33,17 +33,17 @@ layui.define(['table', 'form'], function(exports){
       layer.open({
         type: 2
         ,title: '报销详情'
-        ,content: 'edit?id='+obj.data.reimburseId
+        ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id
           , area: ['100%', '100%']
         ,btn: ['确定', '取消']
         ,yes: function(index, layero){
           var iframeWindow = window['layui-layer-iframe'+ index]
-          ,submitID = 'LAY-review-submit'
+          ,submitID = 'LAY-review-edit-submit'
           ,submit = layero.find('iframe').contents().find('#'+ submitID);
-
           //监听提交
           iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
             var field = data.field; //获取提交的字段
+              debugger
             //提交 Ajax 成功后，静态更新表格中的数据
             $.ajax({
 	        	url:'update',

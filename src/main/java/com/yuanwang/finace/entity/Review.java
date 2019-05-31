@@ -14,7 +14,6 @@ import com.yuanwang.finace.entity.enums.ReviewStateEnum;
  */
 public class Review extends BaseEntity{
 	private static final long serialVersionUID = 1L;
-
 	//报销id
 	private Integer reimburseId;	
 	//审查意见
@@ -35,6 +34,8 @@ public class Review extends BaseEntity{
 	public String getStaffCode() {
 		return staffCode;
 	}
+
+
 
 	public void setStaffCode(String staffCode) {
 		this.staffCode = staffCode;

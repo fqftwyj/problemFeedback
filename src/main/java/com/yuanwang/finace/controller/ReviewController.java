@@ -58,8 +58,9 @@ public class ReviewController extends BaseController<Review>{
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_INDEX)
-	public void indexJump(ModelMap map) {
+	public void indexJump(ModelMap map,int type) {
 		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
+		map.put("type", type);
 
 	}
 	
@@ -73,9 +74,10 @@ public class ReviewController extends BaseController<Review>{
 	 */
 	@RequestMapping(CONSTANT_LIST)
 	@ResponseBody
-	public Result index(Review review, ModelMap map,HttpSession session,Integer page,Integer limit){
+	public Result index(Review review,int type, ModelMap map,HttpSession session,Integer page,Integer limit){
 		Map<String,Object> search=new HashMap<String,Object>();
 		search.put("reviewState", review.getReviewState());
+		search.put("type", type);
 		PageInfo<Review> pageinfo = reviewService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
 		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}
@@ -118,7 +120,7 @@ public class ReviewController extends BaseController<Review>{
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_EDIT)
-	public void updateJump(Integer id,Integer reimburseId, ModelMap map,HttpSession session){
+	public void updateJump(Integer id,Integer reimburseId,Integer type, ModelMap map,HttpSession session){
 		User user=(User)session.getAttribute("user");
 		map.put("userName", user.getUserName());
 		//获取科室列表
@@ -128,6 +130,7 @@ public class ReviewController extends BaseController<Review>{
 		Reimburse result = reimburseService.find(reimburseId);
 		map.put("result", result);
 		map.put("id",id);
+		map.put("type",type);
 		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
 		//组装车船费列表
 		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();

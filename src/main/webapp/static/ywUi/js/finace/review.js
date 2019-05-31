@@ -4,9 +4,10 @@ layui.define(['table', 'form'], function(exports){
   ,form = layui.form;
   
   //
+    var type=$("#type").val();
   table.render({
     elem: '#LAY-review-table'
-    ,url: 'list' //模拟接口
+    ,url: 'list?type='+type //模拟接口
     ,cols: [[
       {field: 'staffCode', title: '工号'}
       ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
@@ -33,7 +34,7 @@ layui.define(['table', 'form'], function(exports){
       layer.open({
         type: 2
         ,title: '报销详情'
-        ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id
+        ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type
           , area: ['100%', '100%']
         ,btn: ['确定', '取消']
         ,yes: function(index, layero){

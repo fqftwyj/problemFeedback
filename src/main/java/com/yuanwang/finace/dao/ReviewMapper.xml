@@ -84,7 +84,12 @@
     		 and rw.id <> #{excludeId}
     		 ]]>
     		</if>
-			and rv.reimburse_state=0 and rw.review_state &lt; 2
+			<if test="type!=null and type=1">
+			   and rv.reimburse_state=0 and rw.review_state &lt; 2
+			</if>
+			<if test="type!=null and type=2">
+				and rv.reimburse_state=0 and rw.review_state &gt; 1
+			</if>
     	</where>
     </sql>
     <sql id="orderBy">

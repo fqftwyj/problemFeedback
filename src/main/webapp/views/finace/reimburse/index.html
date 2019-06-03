@@ -100,10 +100,18 @@
                         class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
                         class="layui-icon layui-icon-delete"></i>删除</a>
+                {{# }else {}}
+                <a class="layui-btn layui-btn-disabled layui-btn-xs" ><i
+                        class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-disabled layui-btn-xs" ><i
+                        class="layui-icon layui-icon-delete"></i>删除</a>
                 {{# } }}
                 <!-- 这里同样支持 laytpl 语法，如： -->
                 {{# if(d.review!=null && d.review.reviewState =='PASSREVIEW'){ }}
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i
+                        class="layui-icon layui-icon-download-circle"></i>下载</a>
+                {{# }else {}}
+                <a class="layui-btn layui-btn-disabled layui-btn-xs" ><i
                         class="layui-icon layui-icon-download-circle"></i>下载</a>
                 {{# } }}
               <!--  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i
@@ -115,14 +123,16 @@
                 {{# }}}
             </script>
             <script type="text/html" id="table-reimburse-reviewState">
-                {{# if(d.review.reviewState=="NOTREVIEW"){ }}
+                {{# if(d.review && d.review.reviewState && d.review.reviewState=="NOTREVIEW"){ }}
                 未审查
-                {{# }else if(d.review.reviewState=="ISREVIEW"){ }}
+                {{# }else if( d.review && d.review.reviewState && d.review.reviewState=="ISREVIEW"){ }}
                 审查中
-                {{# }else if(d.review.reviewState=="PASSREVIEW"){ }}
+                {{# }else if( d.review && d.review.reviewState && d.review.reviewState=="PASSREVIEW"){ }}
                 审查通过
-                {{# }else{}}
-                审查不通过
+                {{# }else if( d.review && d.review.reviewState && d.review.reviewState=="NOTPASSREVIEW"){ }}
+                审查通过
+                {{# }else {}}
+                未审查
                 {{# }}}
             </script>
 

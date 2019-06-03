@@ -22,7 +22,11 @@ layui.define(['table', 'form'], function (exports) {
             , {field: 'reimburseMembers', title: '报销成员'}
             , { title: '审查状态', templet: '#table-reimburse-reviewState'}
             , { title: '审查意见', templet: function (d) {
+                if(d.review && d.review.reviewOpinion){
                     return d.review.reviewOpinion;
+                }else{
+                    return "";
+                }
 
                 }}
             , {
@@ -142,21 +146,28 @@ layui.define(['table', 'form'], function (exports) {
 
             });
         } else if (obj.event === 'submit') {
-            layer.confirm('确定要上报吗', function (index) {
-                $.ajax({
-                    url: 'update?id=' + obj.data.id + '&type=2',
-                    type: 'POST',
-                    success: function (e) {
-                        if (e.code == 0) {
-                            table.reload('LAY-reimburse-table');
-                            layer.msg(e.msg);
-                            layer.close(index);  //关闭弹层
-                        } else {
-                            layer.msg(e.msg);
+            debugger
+            var uploadPath=$("#uploadPath").val();
+            if(uploadPath==''){
+                layer.info("请先上传附件");
+            }else{
+                layer.confirm('确定要上报吗', function (index) {
+                    $.ajax({
+                        url: 'update?id=' + obj.data.id + '&type=2',
+                        type: 'POST',
+                        success: function (e) {
+                            if (e.code == 0) {
+                                table.reload('LAY-reimburse-table');
+                                layer.msg(e.msg);
+                                layer.close(index);  //关闭弹层
+                            } else {
+                                layer.msg(e.msg);
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            }
+
         } else if (obj.event === 'export') {
             window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.id;
 

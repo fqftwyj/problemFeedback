@@ -86,5 +86,8 @@
     cursor: pointer;
     color:#FF5722;
 }
-
+.layui-col-md11 .layui-input-block-text{
+    height: 36px;
+    line-height: 36px;
+}
 

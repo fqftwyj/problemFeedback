@@ -39,7 +39,8 @@
     <!-- 查询全部 -->
     <sql id="findAll">
 		select rw.reimburse_id,rw.id,rv.staff_code,rv.reimburse_type,reimburse_state,ifnull(rw.review_opinion,'') as review_opinion,
-		ifnull(rw.review_state,0) as review_state,DATE_FORMAT(rv.reimburse_date,'%Y-%m-%d') as reimburse_date,rv.reimburse_members
+		ifnull(rw.review_state,0) as review_state,DATE_FORMAT(rv.reimburse_date,'%Y-%m-%d') as reimburse_date,rv.reimburse_members,
+		DATE_FORMAT(rw.update_time,'%Y-%m-%d') as update_time ,DATE_FORMAT(rw.create_time ,'%Y-%m-%d') as create_time
 		from <include refid="table_name" />  rw
 		left join finace_reimburse rv
 		on rv.id=rw.reimburse_id
@@ -84,10 +85,10 @@
     		 and rw.id <> #{excludeId}
     		 ]]>
     		</if>
-			<if test="type!=null and type=1">
-			   and rv.reimburse_state=0 and rw.review_state &lt; 2
+			<if test="type!=null and type==1">
+			   and rv.reimburse_state=0 and rw.review_state  &lt; 2
 			</if>
-			<if test="type!=null and type=2">
+			<if test="type!=null and type==2">
 				and rv.reimburse_state=0 and rw.review_state &gt; 1
 			</if>
     	</where>

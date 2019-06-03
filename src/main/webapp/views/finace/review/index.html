@@ -43,7 +43,7 @@
                             <option value="">请输入</option>
                             <#list reviewStateEnum as obj>
                             <option value="${obj}">${obj.desc}</option>
-                        </#list>
+                            </#list>
                         </select>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
 	  </div>
         </div>
       </div>
-      <input id="type" value="${type}">
+      <input id="type" value="${type}" type="hidden">
       <div class="layui-card-body">
        <!-- <div style="padding-bottom: 10px;">
           <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="batchdel">删除</button>

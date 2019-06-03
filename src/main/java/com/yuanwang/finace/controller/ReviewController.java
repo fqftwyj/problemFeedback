@@ -61,7 +61,9 @@ public class ReviewController extends BaseController<Review>{
 	public void indexJump(ModelMap map,int type) {
 		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
 		map.put("type", type);
-
+        if(type==2){
+            map.put("reviewStateEnum", ReviewStateEnum.values());
+        }
 	}
 	
 	/**分页查询
@@ -78,6 +80,7 @@ public class ReviewController extends BaseController<Review>{
 		Map<String,Object> search=new HashMap<String,Object>();
 		search.put("reviewState", review.getReviewState());
 		search.put("type", type);
+        map.put("type",type);
 		PageInfo<Review> pageinfo = reviewService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
 		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}

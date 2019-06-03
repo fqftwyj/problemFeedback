@@ -139,11 +139,11 @@
       <div class="layui-inline layui-form">
           <label class="layui-form-label">标准：</label>
           <div class="layui-input-block" style="width: 182px;">
-          <!--  <select  lay-filter="travelStandard" disabled="disabled">
+            <select  lay-filter="travelStandard" disabled="disabled">
               <option value="25"  <#if obj.travelStandard=='25'>selected</#if>>25</option>
               <option value="55"  <#if obj.travelStandard=='55'>selected</#if>>55</option>
               <option value="42.5" <#if obj.travelStandard=='42.5'>selected</#if>>42.5</option>
-            </select>-->
+            </select>
          </div>
        </div>
   <div class="layui-inline">
@@ -229,9 +229,9 @@
   <#if type==2>
   <div class="layui-col-md11">
     <div class="layui-inline layui-col-md11 layui-inline-total">
-      <label class="layui-form-label">审查时间：</label>
-      <div class="layui-input-block">
-        ${result.updateTime!}
+      <label class="layui-form-label" >审查时间：</label>
+      <div class="layui-input-block layui-input-block-text">
+        ${result.review.updateTime}
       </div>
     </div>
   </div>
@@ -240,7 +240,7 @@
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label">审查意见：</label>
       <div class="layui-input-block">
-        <textarea placeholder="请输入内容"   name="reviewOpinion" class="layui-textarea" lay-verify="required">${result.reviewOpinion!}</textarea>
+        <textarea placeholder="请输入内容"   name="reviewOpinion" class="layui-textarea" lay-verify="required">${result.review.reviewOpinion!}</textarea>
       </div>
     </div>
   </div>
@@ -248,10 +248,10 @@
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label">审查结果：</label>
       <div class="layui-input-block">
-        <input type="radio" name="reviewState" value="PASSREVIEW" title="通过"   <#if result.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-        <input type="radio" name="reviewState" value="NOTPASSREVIEW" title="不通过"  <#if result.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+        <input type="radio" name="reviewState" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
+        <input type="radio" name="reviewState" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
       </div>
-      <input type="text"  name="id"  value="${id}"/>
+      <input type="hidden"  name="id"  value="${id}"/>
     </div>
   </div>
 

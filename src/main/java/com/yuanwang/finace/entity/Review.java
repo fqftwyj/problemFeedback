@@ -20,9 +20,9 @@ public class Review extends BaseEntity{
 	private String reviewOpinion;	
 	private ReviewStateEnum reviewState;
 	//创建时间
-	private Date createTime;	
+	private String createTime;
 	//更新时间
-	private Date updateTime;
+	private String updateTime;
 	//员工编号
 	private String staffCode;
 	private ReimburseTypeEnum reimburseType;
@@ -98,27 +98,20 @@ public class Review extends BaseEntity{
 	public void  setReviewState(ReviewStateEnum reviewState){
 		this.reviewState = reviewState;
 	}
-	/**获取创建时间
-	*/
-	public Date getCreateTime(){
-		return this.createTime;
+
+	public String getCreateTime() {
+		return createTime;
 	}
-	/**设置创建时间
-	 * @param createTime
-	 */
-	public void  setCreateTime(Date createTime){
+
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
-	/**获取更新时间
-	*/
-	public Date getUpdateTime(){
-		return this.updateTime;
+
+	public String getUpdateTime() {
+		return updateTime;
 	}
-	/**设置更新时间
-	 * @param updateTime
-	 */
-	public void  setUpdateTime(Date updateTime){
+
+	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
-	
 }

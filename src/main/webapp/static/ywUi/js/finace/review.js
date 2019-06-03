@@ -31,43 +31,56 @@ layui.define(['table', 'form'], function(exports){
         window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.id;
     } else if(obj.event === 'detail'){
       var tr = $(obj.tr);
-      layer.open({
-        type: 2
-        ,title: '报销详情'
-        ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type
-          , area: ['100%', '100%']
-        ,btn: ['确定', '取消']
-        ,yes: function(index, layero){
-          var iframeWindow = window['layui-layer-iframe'+ index]
-          ,submitID = 'LAY-review-edit-submit'
-          ,submit = layero.find('iframe').contents().find('#'+ submitID);
-          //监听提交
-          iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-            var field = data.field; //获取提交的字段
-              debugger
-            //提交 Ajax 成功后，静态更新表格中的数据
-            $.ajax({
-	        	url:'update',
-	        	data:field,
-	        	type: "post",
-	        	success: function(e){
-	        		if(e.code==0){
-		        		table.reload('LAY-review-table');
-		        		layer.msg(e.msg);
-		        		layer.close(index); //关闭弹层
-	        		}else{
-	        			layer.msg(e.msg);
-	        		}
-	            }
-	        });
-          });  
-          
-          submit.trigger('click');
-        }
-        ,success: function(layero, index){
-          
-        }
-      });
+      if(type==1){
+          layer.open({
+              type: 2
+              ,title: '报销详情'
+              ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type
+              , area: ['100%', '100%']
+              ,btn: ['确定', '取消']
+              ,yes: function(index, layero){
+                  var iframeWindow = window['layui-layer-iframe'+ index]
+                      ,submitID = 'LAY-review-edit-submit'
+                      ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                  //监听提交
+                  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                      var field = data.field; //获取提交的字段
+                      debugger
+                      //提交 Ajax 成功后，静态更新表格中的数据
+                      $.ajax({
+                          url:'update',
+                          data:field,
+                          type: "post",
+                          success: function(e){
+                              if(e.code==0){
+                                  table.reload('LAY-review-table');
+                                  layer.msg(e.msg);
+                                  layer.close(index); //关闭弹层
+                              }else{
+                                  layer.msg(e.msg);
+                              }
+                          }
+                      });
+                  });
+
+                  submit.trigger('click');
+              }
+              ,success: function(layero, index){
+
+              }
+          });
+      }else{
+          layer.open({
+              type: 2
+              ,title: '报销详情'
+              ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type
+              , area: ['100%', '100%']
+              ,success: function(layero, index){
+
+              }
+          });
+      }
+
     }
   });
 

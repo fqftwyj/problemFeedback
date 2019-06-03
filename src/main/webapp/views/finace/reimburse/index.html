@@ -114,7 +114,17 @@
                 外出培训
                 {{# }}}
             </script>
-
+            <script type="text/html" id="table-reimburse-reviewState">
+                {{# if(d.review.reviewState=="NOTREVIEW"){ }}
+                未审查
+                {{# }else if(d.review.reviewState=="ISREVIEW"){ }}
+                审查中
+                {{# }else if(d.review.reviewState=="PASSREVIEW"){ }}
+                审查通过
+                {{# }else{}}
+                审查不通过
+                {{# }}}
+            </script>
 
         </div>
     </div>

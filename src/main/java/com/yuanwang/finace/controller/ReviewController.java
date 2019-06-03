@@ -76,9 +76,20 @@ public class ReviewController extends BaseController<Review>{
 	 */
 	@RequestMapping(CONSTANT_LIST)
 	@ResponseBody
-	public Result index(Review review,int type, ModelMap map,HttpSession session,Integer page,Integer limit){
+	public Result index(Review review,Reimburse reimburse,int type, ModelMap map,HttpSession session,Integer page,Integer limit){
 		Map<String,Object> search=new HashMap<String,Object>();
+		search.put("reimburseType", reimburse.getReimburseType());
+		search.put("staffCode", reimburse.getStaffCode());
 		search.put("reviewState", review.getReviewState());
+		search.put("reimburseMembers", reimburse.getReimburseMembers());
+		if(reimburse.getReimburseDate()!=null){
+			String reimburseDate=reimburse.getReimburseDate();
+			if( reimburseDate.indexOf(" - ")!=-1){
+				String[] reimburseDateArr=reimburseDate.split( " - ");
+				search.put("reimburseStartDate", reimburseDateArr[0]);
+				search.put("reimburseEndDate", reimburseDateArr[1]);
+			}
+		}
 		search.put("type", type);
         map.put("type",type);
 		PageInfo<Review> pageinfo = reviewService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));

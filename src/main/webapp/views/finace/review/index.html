@@ -20,7 +20,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">工号</label>
                     <div class="layui-input-block">
-                        <input type="text" name="reimburseMembers" placeholder="请输入" autocomplete="off"
+                        <input type="text" name="staffCode" placeholder="请输入" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -91,6 +91,17 @@
           <script type="text/html" id="table-review-reimburseType">
               {{# if(d.reimburseType=="OUTTRAIN"){ }}
               外出培训
+              {{# }}}
+          </script>
+          <script type="text/html" id="table-review-reviewState">
+              {{# if(d.reviewState=="NOTREVIEW"){ }}
+              未审查
+              {{# }else if(d.reviewState=="ISREVIEW"){ }}
+              审查中
+              {{# }else if(d.reviewState=="PASSREVIEW"){ }}
+              审查通过
+              {{# }else{}}
+              审查不通过
               {{# }}}
           </script>
       </div>

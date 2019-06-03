@@ -11,7 +11,6 @@ layui.define(['table', 'form'], function (exports) {
             {field: 'reimburseType', title: '报销类别', templet: '#table-reimburse-reimburseType'}
             , {
                 field: 'reimburseState', title: '报销状态', templet: function (d) {
-                    debugger
                     if (d.reimburseState == "HASSUBMIT") {
                         return '<span style="color: #58AB58;font-weight: bold;">  已上报</span>';
                     } else if (d.reimburseState == "NOTSUBMIT") {
@@ -21,8 +20,11 @@ layui.define(['table', 'form'], function (exports) {
                 }
             }
             , {field: 'reimburseMembers', title: '报销成员'}
-            , {field: 'reviewState', title: '审查状态'}
-            , {field: 'reviewOpinion', title: '审查意见'}
+            , { title: '审查状态', templet: '#table-reimburse-reviewState'}
+            , { title: '审查意见', templet: function (d) {
+                    return d.review.reviewOpinion;
+
+                }}
             , {
                 field: 'reimburseDate', title: ' 报销日期', templet: function (d) {
                     if (d.reimburseDate == "1900-01-01") {

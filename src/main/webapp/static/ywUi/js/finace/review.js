@@ -5,17 +5,31 @@ layui.define(['table', 'form'], function(exports){
   
   //
     var type=$("#type").val();
+    var colsArr;
+    if(type==1){
+        colsArr= [[
+            {field: 'staffCode', title: '工号'}
+            ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
+            ,{field: 'reimburseMembers', title: '报销成员'}
+            ,{field: 'reimburseDate', title: '报销日期'}
+            ,{title: '报销详情', width: 200, align:'center', fixed: 'right', toolbar: '#table-reimburse-detail-operation'}
+            ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-review-operation'}
+        ]]
+    }else{
+        colsArr= [[
+            {field: 'staffCode', title: '工号'}
+            ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
+            ,{field: 'reviewState', title: '审查状态', templet: '#table-review-reviewState'}
+            ,{field: 'reimburseMembers', title: '报销成员'}
+            ,{field: 'reimburseDate', title: '报销日期'}
+            ,{title: '报销详情', width: 200, align:'center', fixed: 'right', toolbar: '#table-reimburse-detail-operation'}
+            ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-review-operation'}
+        ]]
+    }
   table.render({
     elem: '#LAY-review-table'
     ,url: 'list?type='+type //模拟接口
-    ,cols: [[
-      {field: 'staffCode', title: '工号'}
-      ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
-      ,{field: 'reimburseMembers', title: '报销成员'}
-      ,{field: 'reimburseDate', title: '报销日期'}
-       ,{title: '报销详情', width: 200, align:'center', fixed: 'right', toolbar: '#table-reimburse-detail-operation'}
-      ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-review-operation'}
-    ]]
+    ,cols:colsArr
     ,page: true
     ,limit: 30
     ,height: 'full-220'
@@ -28,7 +42,7 @@ layui.define(['table', 'form'], function(exports){
   table.on('tool(LAY-review-table)', function(obj){
     var data = obj.data;
     if(obj.event === 'dowload'){
-        window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.id;
+        window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.reimburseId;
     } else if(obj.event === 'detail'){
       var tr = $(obj.tr);
       if(type==1){

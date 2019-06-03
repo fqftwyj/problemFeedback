@@ -55,15 +55,31 @@
     	  </if>
     		<trim prefixOverrides="and|or">
 	    	<if test="reimburseId!=null">
-    		 rw.reimburse_id = #{reimburseId}
+				<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+    		     rw.reimburse_id = #{reimburseId}
     		</if>
+				<if test="type!=null and type==1">
+					and rv.reimburse_state=0 and rw.review_state <![CDATA[<]]> 2
+				</if>
+				<if test="type!=null and type==2">
+					and rv.reimburse_state=0 and rw.review_state <![CDATA[>]]> 1
+				</if>
 				<if test="staffCode!=null and staffCode!=''">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
 					rv.staff_code = #{staffCode}
 				</if>
 				<if test="reimburseType!=null">
-					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> rv.reimburse_type = #{reimburseType}
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+					rv.reimburse_type = #{reimburseType}
 				</if>
-
+				<if test="reviewState!=null">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+					rw.review_state = #{reviewState}
+				</if>
+				<if test="reimburseMembers!=null and reimburseMembers!=''">
+					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
+					rv.reimburse_members like concat('%',#{reimburseMembers},'%')
+				</if>
 				<if test="reimburseStartDate!=null and reimburseStartDate!=''">
 					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
 					rv.reimburse_date <![CDATA[>=]]> #{reimburseStartDate}
@@ -71,10 +87,6 @@
 				<if test="reimburseEndDate!=null and reimburseEndDate!=''">
 					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
 					rv.reimburse_date <![CDATA[<=]]>  #{reimburseEndDate}
-				</if>
-				<if test="reimburseMembers!=null and reimburseMembers!=''">
-					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
-					rv.reimburse_members like concat('%',#{reimburseMembers},'%')
 				</if>
 	    	</trim>
 	    	<if test="operator=='or'">
@@ -85,12 +97,7 @@
     		 and rw.id <> #{excludeId}
     		 ]]>
     		</if>
-			<if test="type!=null and type==1">
-			   and rv.reimburse_state=0 and rw.review_state  &lt; 2
-			</if>
-			<if test="type!=null and type==2">
-				and rv.reimburse_state=0 and rw.review_state &gt; 1
-			</if>
+
     	</where>
     </sql>
     <sql id="orderBy">

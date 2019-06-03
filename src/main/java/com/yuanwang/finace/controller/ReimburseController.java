@@ -101,7 +101,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		search.put("reimburseType", reimburse.getReimburseType());
 		search.put("reimburseState", reimburse.getReimburseState());
 		search.put("reimburseMembers", reimburse.getReimburseMembers());
-	/*	search.put("reviewState", review.getReviewState());*/
+		search.put("reviewState", review.getReviewState());
 		if(reimburse.getReimburseDate()!=null){
 			String reimburseDate=reimburse.getReimburseDate();
 			if( reimburseDate.indexOf(" - ")!=-1){

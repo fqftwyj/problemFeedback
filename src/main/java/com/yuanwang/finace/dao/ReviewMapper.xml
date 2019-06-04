@@ -62,7 +62,7 @@
 					and rv.reimburse_state=0 and rw.review_state <![CDATA[<]]> 2
 				</if>
 				<if test="type!=null and type==2">
-					and rv.reimburse_state=0 and rw.review_state <![CDATA[>]]> 1
+					and rv.reimburse_state<![CDATA[!= ]]> 1 and rw.review_state <![CDATA[>]]> 1
 				</if>
 				<if test="staffCode!=null and staffCode!=''">
 					<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
@@ -168,28 +168,28 @@
     
 	
 	<!--根据主键查询-->
-	<select id="findById" parameterType="Integer" resultMap="resultReviewMap" useCache="true" flushCache="false">
+	<select id="findById" parameterType="Integer" resultMap="resultReviewMap" useCache="false" flushCache="false">
 	    <include refid="findAll"/>
 	    <include refid="primaryCondition"/> 
 	</select>
 	<!--根据主键查询-->
-	<select id="findByReimburseId" parameterType="Integer" resultMap="resultReviewMap" useCache="true" flushCache="false">
+	<select id="findByReimburseId" parameterType="Integer" resultMap="resultReviewMap" useCache="false" flushCache="false">
 		<include refid="findAll"/>
 		where reimburse_id= #{id}
 	</select>
 	<!--根据实体属性查询-->
-	<select id="findByMap" parameterType="Map" resultMap="resultReviewMap" useCache="true" flushCache="false">
+	<select id="findByMap" parameterType="Map" resultMap="resultReviewMap" useCache="false" flushCache="false">
 	    <include refid="findAll"/>
 	    <include refid="condition"/>
 	</select>
 	
 	<!--查询全部记录-->
-    <select id="findAll" resultMap="resultReviewMap" useCache="true" flushCache="false">
+    <select id="findAll" resultMap="resultReviewMap" useCache="false" flushCache="false">
         <include refid="findAll"/> 
     </select>   
     
     <!--excel导出记录-->
-    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="true" flushCache="false">
+    <select id="excelExportListByMap" parameterType="Map" resultType="Map" useCache="false" flushCache="false">
         <include refid="findAll"/> 
         <include refid="condition"/>
     </select> 

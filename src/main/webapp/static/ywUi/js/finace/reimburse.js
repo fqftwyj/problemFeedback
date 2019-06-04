@@ -7,32 +7,45 @@ layui.define(['table', 'form'], function (exports) {
         elem: '#LAY-reimburse-table'
         , url: 'list' //模拟接口
         , cols: [[
-            /*   {type: 'checkbox', fixed: 'left'} ,*/
+            {title: '序号', width: 80,templet: '#indexTpl'},
             {field: 'reimburseType', title: '报销类别', templet: '#table-reimburse-reimburseType'}
             , {
                 field: 'reimburseState', title: '报销状态', templet: function (d) {
                     if (d.reimburseState == "HASSUBMIT") {
                         return '<span style="color: #58AB58;font-weight: bold;">  已上报</span>';
                     } else if (d.reimburseState == "NOTSUBMIT") {
-                        return '<span style="color: #C14E4E;font-weight: bold;">  未上报</span>';
+                        return '<span style="color: #777;font-weight: bold;">  未上报</span>';
+                    } else if (d.reimburseState == "RESUBMIT") {
+                        return '<span style="color: #C14E4E;font-weight: bold;">  重新上报</span>';
                     }
 
                 }
             }
             , {field: 'reimburseMembers', title: '报销成员'}
-            , { title: '审查状态', templet: '#table-reimburse-reviewState'}
-            , { title: '审查意见', templet: function (d) {
-                if(d.review && d.review.reviewOpinion){
-                    return d.review.reviewOpinion;
-                }else{
-                    return "";
-                }
+            , { title: '审查状态', templet: function (d) {
+                   if(d.review && d.review.reviewState){
+                       if ( d.review.reviewState=="NOTREVIEW") {
+                           return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                       } else if ( d.review.reviewState=="ISREVIEW") {
+                           return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                       } else if (d.review.reviewState=="PASSREVIEW") {
+                           return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                       } else if ( d.review.reviewState=="NOTPASSREVIEW") {
+                           return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                       }
+                   }else{
+                       return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                   }
+
 
                 }}
             , {
+                title: '审查意见', templet: '#titleTipl'
+             }
+            , {
                 field: 'reimburseDate', title: ' 报销日期', templet: function (d) {
                     if (d.reimburseDate == "1900-01-01") {
-                        return "";
+                        return "--";
                     } else {
                         return d.reimburseDate;
                     }
@@ -56,10 +69,16 @@ layui.define(['table', 'form'], function (exports) {
     //监听工具条
     table.on('tool(LAY-reimburse-table)', function (obj) {
         var data = obj.data;
+        var bol=data.reimburseState == "RESUBMIT";
+        if(bol){
+            posturl='update?id='+data.id+"&type=3";
+        }else{
+            posturl= 'delete?ids=' + data.id
+        }
         if (obj.event === 'del') {
-            layer.confirm('真的删除行么', function (index) {
+            layer.confirm('确定要删除此报销申请吗', function (index) {
                 $.ajax({
-                    url: 'delete?ids=' + obj.data.id,
+                    url: posturl,
                     success: function (e) {
                         if (e.code == 0) {
                             layer.msg(e.msg);
@@ -146,11 +165,6 @@ layui.define(['table', 'form'], function (exports) {
 
             });
         } else if (obj.event === 'submit') {
-            debugger
-            var uploadPath=$("#uploadPath").val();
-            if(uploadPath==''){
-                layer.info("请先上传附件");
-            }else{
                 layer.confirm('确定要上报吗', function (index) {
                     $.ajax({
                         url: 'update?id=' + obj.data.id + '&type=2',
@@ -166,7 +180,7 @@ layui.define(['table', 'form'], function (exports) {
                         }
                     });
                 });
-            }
+
 
         } else if (obj.event === 'export') {
             window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.id;

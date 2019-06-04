@@ -39,6 +39,15 @@ public class Reimburse extends BaseEntity{
 	private Date createTime;
 	//更新时间
 	private Date updateTime;
+	private int delFlag=0;//伪删除标记
+
+	public int getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(int delFlag) {
+		this.delFlag = delFlag;
+	}
 
 	private Review review;
 

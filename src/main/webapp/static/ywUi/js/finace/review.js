@@ -8,6 +8,7 @@ layui.define(['table', 'form'], function(exports){
     var colsArr;
     if(type==1){
         colsArr= [[
+            {title: '序号', width: 80,templet: '#indexTpl'},
             {field: 'staffCode', title: '工号'}
             ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
             ,{field: 'reimburseMembers', title: '报销成员'}
@@ -17,9 +18,17 @@ layui.define(['table', 'form'], function(exports){
         ]]
     }else{
         colsArr= [[
+            {title: '序号', width: 80,templet: '#indexTpl'},
             {field: 'staffCode', title: '工号'}
             ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
-            ,{field: 'reviewState', title: '审查状态', templet: '#table-review-reviewState'}
+            ,{ title: '审查状态', templet: function (d) {
+                        if (d.reviewState=="PASSREVIEW") {
+                            return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                        } else if ( d.reviewState=="NOTPASSREVIEW") {
+                            return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                        }
+
+                }}
             ,{field: 'reimburseMembers', title: '报销成员'}
             ,{field: 'reimburseDate', title: '报销日期'}
             ,{title: '报销详情', width: 200, align:'center', fixed: 'right', toolbar: '#table-reimburse-detail-operation'}
@@ -59,7 +68,6 @@ layui.define(['table', 'form'], function(exports){
                   //监听提交
                   iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                       var field = data.field; //获取提交的字段
-                      debugger
                       //提交 Ajax 成功后，静态更新表格中的数据
                       $.ajax({
                           url:'update',

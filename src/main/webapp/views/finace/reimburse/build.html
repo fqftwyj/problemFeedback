@@ -388,7 +388,7 @@
                     <input type="hidden"  name="uploadPath" id="uploadPath"  />
                     <input type="hidden"  name="uploadName" id="uploadName" />
                     <div class="layui-upload">
-                        <button type="button" class="layui-btn layui-btn-normal" id="selectFile">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
+                        <button type="button" class="layui-btn layui-btn-normal" id="selectFile" lay-verify="validateAttach">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
                         <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
                         <p id="allFileText"></p>
                     </div>
@@ -424,6 +424,15 @@
             form = layui.form,
            upload = layui.upload,
             table = layui.table;
+        //自定义验证规则-附件不能为空
+        form.verify({
+            validateAttach: function (value) {
+                var result = $("#uploadPath");
+                if (result =='') {
+                    return "请先上传附件";
+                }
+            }
+        });
 
     })
 

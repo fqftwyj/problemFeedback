@@ -223,6 +223,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 			/**
 			 * 放入查重字段 map.put("name","测试");
 			 */
+			Integer flag =-1;
 			if(type==2){
 				//修改上报状态
 				reimburse = reimburseService.find(reimburse.getId());
@@ -246,11 +247,18 @@ public class ReimburseController extends BaseController<Reimburse>{
 					review.setReviewOpinion("");
 					reviewService.save(review,reviewmap,OperatorEnum.AND);
 				}
+			}else  if(type==3){
+				//重新上报的时候的伪删除
+				reimburse = reimburseService.find(reimburse.getId());
+				reimburse.setDelFlag(1);
 			}
-			Integer flag = reimburseService.update(reimburse,map,OperatorEnum.AND);
+			flag = reimburseService.update(reimburse,map,OperatorEnum.AND);
 			if(flag==2) {
 				return ResultUtil.error("已存在");
 			}else if(flag==1) {
+				if(type==3){
+					return ResultUtil.success("删除成功");
+				}
 				return ResultUtil.success("更新成功");
 			}else {
 				return ResultUtil.error("更新失败");

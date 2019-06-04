@@ -76,11 +76,6 @@
       </div>
       <input id="type" value="${type}" type="hidden">
       <div class="layui-card-body">
-       <!-- <div style="padding-bottom: 10px;">
-          <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="batchdel">删除</button>
-          <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add">添加</button>
-        </div>-->
-        
         <table id="LAY-review-table" lay-filter="LAY-review-table"></table>  
         <script type="text/html" id="table-review-operation">
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dowload"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
@@ -93,16 +88,8 @@
               外出培训
               {{# }}}
           </script>
-          <script type="text/html" id="table-review-reviewState">
-              {{# if(d.reviewState=="NOTREVIEW"){ }}
-              未审查
-              {{# }else if(d.reviewState=="ISREVIEW"){ }}
-              审查中
-              {{# }else if(d.reviewState=="PASSREVIEW"){ }}
-              审查通过
-              {{# }else{}}
-              审查不通过
-              {{# }}}
+          <script type="text/html" id="indexTpl">
+              {{d.LAY_TABLE_INDEX+1}}
           </script>
       </div>
 

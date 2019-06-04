@@ -86,7 +86,7 @@
 
             <table id="LAY-reimburse-table" lay-filter="LAY-reimburse-table"></table>
             <script type="text/html" id="table-reimburse-submit">
-                {{# if( d.reimburseState=="NOTSUBMIT"){ }}
+                {{# if( d.reimburseState=="NOTSUBMIT" || d.reimburseState=="RESUBMIT"){ }}
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="submit"><i
                         class="layui-icon layui-icon-upload-drag"></i>上报</a>
                 {{# } else {}}
@@ -95,7 +95,7 @@
             </script>
             <script type="text/html" id="table-reimburse-operation">
 
-                {{# if( d.reimburseState=="NOTSUBMIT"){ }}
+                {{# if( d.reimburseState=="NOTSUBMIT" || d.reimburseState=="RESUBMIT"){ }}
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
                         class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
@@ -114,26 +114,22 @@
                 <a class="layui-btn layui-btn-disabled layui-btn-xs" ><i
                         class="layui-icon layui-icon-download-circle"></i>下载</a>
                 {{# } }}
-              <!--  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i
-                        class="layui-icon layui-icon-download-circle"></i>下载</a>-->
             </script>
             <script type="text/html" id="table-reimburse-reimburseType">
                 {{# if(d.reimburseType=="OUTTRAIN"){ }}
                 外出培训
                 {{# }}}
             </script>
-            <script type="text/html" id="table-reimburse-reviewState">
-                {{# if(d.review && d.review.reviewState && d.review.reviewState=="NOTREVIEW"){ }}
-                未审查
-                {{# }else if( d.review && d.review.reviewState && d.review.reviewState=="ISREVIEW"){ }}
-                审查中
-                {{# }else if( d.review && d.review.reviewState && d.review.reviewState=="PASSREVIEW"){ }}
-                审查通过
-                {{# }else if( d.review && d.review.reviewState && d.review.reviewState=="NOTPASSREVIEW"){ }}
-                审查通过
+            <script type="text/html" id="titleTipl">
+                {{# if(d.review && d.review.reviewOpinion){ }}
+                <a href="javascript:;" data-d="{{d.review.reviewOpinion}}" onmouseover="show_shopm(this)" onmouseout="close_shopm(this)">{{d.review.reviewOpinion}}</a>
                 {{# }else {}}
-                未审查
-                {{# }}}
+                --
+                {{# } }}
+            </script>
+
+            <script type="text/html" id="indexTpl">
+                {{d.LAY_TABLE_INDEX+1}}
             </script>
 
         </div>
@@ -141,9 +137,26 @@
 </div>
 
 <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
-
+<!--引入jquery,在layui外部调用jquery-->
+<script src="${request.contextPath}/static/ywUi/js/lib/jquery-2.1.0.js"></script>
 
 <script>
+    var index;
+    //显示详情
+    function show_shopm(t){
+        var row=$(t).attr('data-d'); //获取显示内容
+        //小tips
+       index= layer.tips(row,t,{
+            tips:[1,'#4192C1'],
+            time:4000
+        });
+    }
+    //关闭详情
+    function close_shopm(t){
+        var row=$(t).attr('data-d'); //获取显示内容
+        //小tips
+        layer.close(index);
+    }
     layui.config({
         base: '${request.contextPath}/static/layuiadmin/' //静态资源所在路径
     }).extend({

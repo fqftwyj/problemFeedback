@@ -389,7 +389,6 @@
                     <input type="hidden"  name="uploadName" id="uploadName" />
                     <div class="layui-upload">
                         <button type="button" class="layui-btn layui-btn-normal" id="selectFile" lay-verify="validateAttach">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
-                        <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
                         <p id="allFileText"></p>
                     </div>
                 </div>
@@ -411,6 +410,9 @@
     </div>
 </div>
 <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
+
+<!--引入jquery,在layui外部调用jquery-->
+<script src="${request.contextPath}/static/ywUi/js/lib/jquery-2.1.0.js"></script>
 <script>
 
     layui.config({
@@ -427,15 +429,22 @@
         //自定义验证规则-附件不能为空
         form.verify({
             validateAttach: function (value) {
-                var result = $("#uploadPath");
+                debugger
+                var result = $("#uploadPath").val();
                 if (result =='') {
                     return "请先上传附件";
                 }
             }
         });
 
-    })
-
+    });
+    function fqdownload(url,ele){
+        var $this=$(ele);
+        var name=$this.data("name");
+        var path=$this.data("path");
+        var module=$this.data("module");
+        window.location=url+"fileName="+encodeURIComponent(name)+"&filePath="+encodeURIComponent(path)+"&module="+module;
+    }
 
 
 

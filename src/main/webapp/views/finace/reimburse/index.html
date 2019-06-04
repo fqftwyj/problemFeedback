@@ -127,7 +127,9 @@
                 --
                 {{# } }}
             </script>
-
+            <script type="text/html" id="memberTipl">
+                <a href="javascript:;" data-d="{{d.reimburseMembers}}" onmouseover="show_shopm(this)" onmouseout="close_shopm(this)">{{d.reimburseMembers}}</a>
+            </script>
             <script type="text/html" id="indexTpl">
                 {{d.LAY_TABLE_INDEX+1}}
             </script>

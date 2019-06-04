@@ -51,6 +51,7 @@ public class FileController {
 		String filePath = "";
 		String fileName=null;
 		String fileNames="";
+		String orignFileName="";
 		BufferedOutputStream buffStream=null;
 		if(StringUtils.isBlank(module)){
 			return ResultUtil.error("参数缺失图片所属模块参数");
@@ -67,6 +68,7 @@ public class FileController {
 				for(int i=0;i<files.length;i++){
 					fileName=files[i].getOriginalFilename();
 					fileNames=","+files[i].getOriginalFilename();
+					orignFileName=","+files[i].getOriginalFilename();
 					byte[] bytes=files[i].getBytes();
 					buffStream =new BufferedOutputStream(new FileOutputStream(new File(path+File.separator+startTime+fileName)));
 					buffStream.write(bytes);
@@ -78,7 +80,7 @@ public class FileController {
 			} finally{
 					buffStream.close();
 			}
-			return ResultUtil.success("上传成功",filePath.substring(1)+";"+fileNames.substring(1));
+			return ResultUtil.success("上传成功",filePath.substring(1)+";"+fileNames.substring(1)+";"+orignFileName.substring(1));
 		}else{
 			return ResultUtil.error("上传文件为空");
 		}

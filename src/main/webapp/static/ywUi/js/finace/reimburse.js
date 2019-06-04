@@ -7,10 +7,10 @@ layui.define(['table', 'form'], function (exports) {
         elem: '#LAY-reimburse-table'
         , url: 'list' //模拟接口
         , cols: [[
-            {title: '序号', width: 80,templet: '#indexTpl'},
-            {field: 'reimburseType', title: '报销类别', templet: '#table-reimburse-reimburseType'}
+            {title: '序号', width: '5%', templet: '#indexTpl'},
+            {field: 'reimburseType', width: '10%', title: '报销类别', templet: '#table-reimburse-reimburseType'}
             , {
-                field: 'reimburseState', title: '报销状态', templet: function (d) {
+                field: 'reimburseState', width:  '10%', title: '报销状态', templet: function (d) {
                     if (d.reimburseState == "HASSUBMIT") {
                         return '<span style="color: #58AB58;font-weight: bold;">  已上报</span>';
                     } else if (d.reimburseState == "NOTSUBMIT") {
@@ -21,27 +21,29 @@ layui.define(['table', 'form'], function (exports) {
 
                 }
             }
-            , {field: 'reimburseMembers', title: '报销成员'}
-            , { title: '审查状态', templet: function (d) {
-                   if(d.review && d.review.reviewState){
-                       if ( d.review.reviewState=="NOTREVIEW") {
-                           return '<span style="color: #777;font-weight: bold;">  未审查</span>';
-                       } else if ( d.review.reviewState=="ISREVIEW") {
-                           return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
-                       } else if (d.review.reviewState=="PASSREVIEW") {
-                           return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
-                       } else if ( d.review.reviewState=="NOTPASSREVIEW") {
-                           return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
-                       }
-                   }else{
-                       return '<span style="color: #777;font-weight: bold;">  未审查</span>';
-                   }
+            , { title: '报销成员', templet: '#memberTipl'}
+            , {
+                title: '审查状态', templet: function (d) {
+                    if (d.review && d.review.reviewState) {
+                        if (d.review.reviewState == "NOTREVIEW") {
+                            return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                        } else if (d.review.reviewState == "ISREVIEW") {
+                            return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                        } else if (d.review.reviewState == "PASSREVIEW") {
+                            return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                        } else if (d.review.reviewState == "NOTPASSREVIEW") {
+                            return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                        }
+                    } else {
+                        return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                    }
 
 
-                }}
+                }
+            }
             , {
                 title: '审查意见', templet: '#titleTipl'
-             }
+            }
             , {
                 field: 'reimburseDate', title: ' 报销日期', templet: function (d) {
                     if (d.reimburseDate == "1900-01-01") {
@@ -52,8 +54,8 @@ layui.define(['table', 'form'], function (exports) {
 
                 }
             }
-            , {title: '提交上报', width: 100, align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
-            , {title: '操作', width: 250, align: 'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
+            , {title: '提交上报', width: '8%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
+            , {title: '操作', width: '20%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
         ]]
         , page: true
         , limit: 30
@@ -69,11 +71,11 @@ layui.define(['table', 'form'], function (exports) {
     //监听工具条
     table.on('tool(LAY-reimburse-table)', function (obj) {
         var data = obj.data;
-        var bol=data.reimburseState == "RESUBMIT";
-        if(bol){
-            posturl='update?id='+data.id+"&type=3";
-        }else{
-            posturl= 'delete?ids=' + data.id
+        var bol = data.reimburseState == "RESUBMIT";
+        if (bol) {
+            posturl = 'update?id=' + data.id + "&type=3";
+        } else {
+            posturl = 'delete?ids=' + data.id
         }
         if (obj.event === 'del') {
             layer.confirm('确定要删除此报销申请吗', function (index) {
@@ -165,21 +167,21 @@ layui.define(['table', 'form'], function (exports) {
 
             });
         } else if (obj.event === 'submit') {
-                layer.confirm('确定要上报吗', function (index) {
-                    $.ajax({
-                        url: 'update?id=' + obj.data.id + '&type=2',
-                        type: 'POST',
-                        success: function (e) {
-                            if (e.code == 0) {
-                                table.reload('LAY-reimburse-table');
-                                layer.msg(e.msg);
-                                layer.close(index);  //关闭弹层
-                            } else {
-                                layer.msg(e.msg);
-                            }
+            layer.confirm('确定要上报吗', function (index) {
+                $.ajax({
+                    url: 'update?id=' + obj.data.id + '&type=2',
+                    type: 'POST',
+                    success: function (e) {
+                        if (e.code == 0) {
+                            table.reload('LAY-reimburse-table');
+                            layer.msg(e.msg);
+                            layer.close(index);  //关闭弹层
+                        } else {
+                            layer.msg(e.msg);
                         }
-                    });
+                    }
                 });
+            });
 
 
         } else if (obj.event === 'export') {

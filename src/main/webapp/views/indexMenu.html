@@ -29,7 +29,12 @@
               <#list firstPer as obj>
               <li class="layui-nav-item JS-nav-item <#if id=obj.id>layui-this</#if>" <#if obj.permissionType.value==1>data-id="0" iframeSrc="${obj.permissionUrl}"<#elseif obj.permissionType.value==0>data-id="1"</#if>>
                 <a <#if obj.permissionType.value==1>href="index?id=${obj.id}"<#elseif obj.permissionType.value==0>href="indexMenu?id=${obj.id}"</#if> lay-text="${obj.permissionName}">
-                  <i class="iconfont icon-configuration layui-show"></i>
+		        <#if obj.id==102>  <i class="iconfont icon-configuration layui-show"></i>
+			   <#elseif obj.id==103><i class="iconfont icon-upload01 layui-show"></i>
+			  <#elseif obj.id==104><i class="iconfont icon-file-view layui-show"></i>
+		     <#else>
+			  </#if>
+		        <!--<i class="iconfont icon-configuration layui-show"></i>-->
                   	${obj.permissionName}
                 </a>
               </li>

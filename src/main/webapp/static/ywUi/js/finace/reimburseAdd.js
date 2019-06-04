@@ -194,28 +194,29 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         ,accept: 'file'
         ,acceptMime:'zip|rar|7z'
         ,exts:'zip|rar|7z',
-        auto:false,
         multiple:false
         ,data: {
             module: function(){
                 return $('#module').val();
             }
         }
-        ,auto: false
-        ,bindAction: '#startUploadFile'
+        ,auto: true
+       /* ,bindAction: '#startUploadFile'*/
         ,size: 1024*40 //限制文件大小，单位 KB
         ,before:function(){
-          /*  index=layer.load(2,{ shade:[0.1,'#fff']});*/
             index=layer.load();
-
         },
         done: function(result){
             if(result.msg != '上传成功'){
                 layer.msg(result.msg, {icon:1});
             }else if(result.msg == '上传成功'){
+
                 var dat=result.data.split(";");
                 $("#uploadPath").val(dat[0]);
                 $("#uploadName").val(dat[1]);
+                var module=$("#module").val();
+                var html= "<span class=\"layui-inline layui-upload-choose\" >  <a  data-name=\""+dat[1]+"\" data-path="+dat[0]+" class=\"downloadA\" data-module="+module+" onclick=\"fqdownload('/upload/fileDownload?',this)\">"+dat[2]+"</a></span>";
+                $("#selectFile").after(html);
                 layer.msg("上传成功!",{icon:1});
                 layer.close(index);
 
@@ -224,6 +225,13 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             }
         }
     });
+    function fqdownload(url,ele){
+        var $this=$(ele);
+        var name=$this.data("name");
+        var path=$this.data("path");
+        var module=$this.data("module");
+        window.location=url+"fileName="+encodeURIComponent(name)+"&filePath="+encodeURIComponent(path)+"&module="+module;
+    }
   exports('reimburseAdd', {})
 });
 

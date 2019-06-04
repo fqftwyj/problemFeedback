@@ -396,7 +396,6 @@
 
       <button type="button" class="layui-btn layui-btn-normal" id="selectFile" lay-verify="validateAttach">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
       <span class="layui-inline layui-upload-choose" >  <a  data-name="${result.uploadName}" data-path="${result.uploadPath}" class="downloadA" data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
-      <button type="button" class="layui-btn" id="startUploadFile">开始上传</button>
       <p id="allFileText"></p>
     </div>
   </div>
@@ -434,7 +433,7 @@
     //自定义验证规则-附件不能为空
     form.verify({
       validateAttach: function (value) {
-        var result = $("#uploadPath");
+        var result = $("#uploadPath").val();
         if (result =='') {
           return "请先上传附件";
         }

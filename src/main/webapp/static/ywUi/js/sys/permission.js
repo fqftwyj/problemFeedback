@@ -9,6 +9,7 @@ layui.define(['table', 'form'], function(exports){
     ,url: 'list' //模拟接口
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
+      ,{title: '序号', width: '8%', templet: '#indexTpl'}
       ,{field: 'permissionName', title: '权限名'}
       ,{field: 'permissionCode', title: '编号'}
       ,{field: 'permissionType', title: '权限类型',templet: '#table-permission-permissionType'}

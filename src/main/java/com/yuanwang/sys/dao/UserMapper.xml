@@ -16,6 +16,9 @@
 			<result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" /><!--更新时间-->
 			<result column="user_name" property="userName" jdbcType="VARCHAR" /><!--用户名-->
 			<result column="password" property="password" jdbcType="VARCHAR" /><!--密码-->
+			<result column="real_name" property="realName" jdbcType="VARCHAR" /><!--真实姓名-->
+			<result column="office_name" property="officeName" jdbcType="VARCHAR" /><!--所在科室名称-->
+			<result column="phone" property="phone" jdbcType="VARCHAR" /><!--联系方式-->
 			<result column="status" property="status" jdbcType="INTEGER" /><!--账户状态【enum】(0:禁用:enabled,1:启用:disabled)-->
 			<result column="error_num" property="errorNum" jdbcType="INTEGER" /><!--错误次数-->
 			<result column="built_in" property="builtIn" jdbcType="INTEGER" /><!--是否内置【enum】(0:FALSE:,1:是:TRUE)-->
@@ -27,6 +30,9 @@
 			<result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" /><!---->
 			<result column="user_name" property="userName" jdbcType="VARCHAR" /><!--用户名-->
 			<result column="password" property="password" jdbcType="VARCHAR" /><!--密码-->
+			<result column="real_name" property="realName" jdbcType="VARCHAR" /><!--真实姓名-->
+			<result column="office_name" property="officeName" jdbcType="VARCHAR" /><!--所在科室名称-->
+			<result column="phone" property="phone" jdbcType="VARCHAR" /><!--联系方式-->
 			<result column="status" property="status" jdbcType="INTEGER" /><!--账户状态【enum】(0:禁用:enabled,1:启用:disabled)-->
 			<result column="error_num" property="errorNum" jdbcType="INTEGER" /><!--错误次数-->
 			<result column="built_in" property="builtIn" jdbcType="INTEGER" /><!--是否内置【enum】(0:FALSE:,1:是:TRUE)-->
@@ -64,11 +70,20 @@
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> updated_time = #{updatedTime}
     		</if>
 	    	<if test="userName!=null and userName!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> user_name = #{userName}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>  user_name like concat('%',#{userName},'%')
     		</if>
 	    	<if test="password!=null and password!=''">
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> password = #{password}
     		</if>
+			<if test="realName!=null and realName!=''">
+				<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> real_name like concat('%',#{realName},'%')
+			</if>
+			<if test="officeName!=null and officeName!=''">
+				<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> office_name like concat('%',#{officeName},'%')
+			</if>
+			<if test="phone!=null and phone!=''">
+				<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> phone like concat('%',#{phone},'%')
+			</if>
 	    	<if test="status!=null">
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> status = #{status}
     		</if>
@@ -103,6 +118,9 @@
 	        updated_time,
 	        user_name,
 	        password,
+	        real_name,
+	        office_name,
+	        phone,
 	        status,
 	        error_num,
 	        built_in) values(
@@ -110,6 +128,9 @@
 	         #{updatedTime},
 	         #{userName},
 	         #{password},
+			 #{realName},
+			 #{officeName},
+			 #{phone},
 	         #{status},
 	         #{errorNum},
 	         #{builtIn}
@@ -135,6 +156,16 @@
         	<if test="password!=null">
         	password = #{password},
         	 </if>
+
+			<if test="realName!=null">
+				real_name = #{realName},
+			</if>
+			<if test="officeName!=null">
+				office_name = #{officeName},
+			</if>
+			<if test="phone!=null">
+				phone = #{phone},
+			</if>
         	<if test="status!=null">
         	status = #{status},
         	 </if>

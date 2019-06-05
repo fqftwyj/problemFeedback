@@ -102,6 +102,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 		search.put("reimburseState", reimburse.getReimburseState());
 		search.put("reimburseMembers", reimburse.getReimburseMembers());
 		search.put("reviewState", review.getReviewState());
+		User user=(User)session.getAttribute("user");
+		search.put("staffCode", user.getUserName());
 		if(reimburse.getReimburseDate()!=null){
 			String reimburseDate=reimburse.getReimburseDate();
 			if( reimburseDate.indexOf(" - ")!=-1){
@@ -439,7 +441,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		System.out.println(String.valueOf(dataMap.get("totalFee")));
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-			fexcle.createWord(prefixPath+File.separator+"excel","core.ftl",dataMap, reMap,response);
+			fexcle.createWord(prefixPath+File.separator+"excel","core-office.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -456,7 +458,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 * 下载报销单粘贴单
 	 * @param response 响应对象
 	 * @return 导出对象
-	 */
+	 *//*
 	@RequestMapping("exportReimburseAttach")
 	@ResponseBody
 	public String exportReimburseAttach(HttpServletResponse response) {
@@ -467,7 +469,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 			e.printStackTrace();
 		}
 		return null;
-	}
+	}*/
 
 
 }

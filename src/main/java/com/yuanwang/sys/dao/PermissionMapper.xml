@@ -56,16 +56,16 @@
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> updated_time = #{updatedTime}
     		</if>
 	    	<if test="permissionName!=null and permissionName!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_name = #{permissionName}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_name like concat('%',#{permissionName},'%')
     		</if>
 	    	<if test="permissionCode!=null and permissionCode!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_code = #{permissionCode}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_code like concat('%',#{permissionCode},'%')
     		</if>
 	    	<if test="permissionType!=null">
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_type = #{permissionType}
     		</if>
 	    	<if test="permissionUrl!=null and permissionUrl!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_url = #{permissionUrl}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_url like concat('%',#{permissionUrl},'%')
     		</if>
 	    	<if test="permissionIcon!=null and permissionIcon!=''">
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> permission_icon = #{permissionIcon}

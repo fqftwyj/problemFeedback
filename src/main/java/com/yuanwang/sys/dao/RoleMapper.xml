@@ -49,10 +49,10 @@
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> updated_time = #{updatedTime}
     		</if>
 	    	<if test="name!=null and name!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> name = #{name}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> name like concat('%',#{name},'%')
     		</if>
 	    	<if test="description!=null and description!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> description = #{description}
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> description like concat('%',#{description},'%')
     		</if>
 	    	</trim>
 	    	<if test="operator=='or'">

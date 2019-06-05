@@ -15,7 +15,7 @@ public class Reimburse extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 
 	//员工编号
-	private String staffCode;	
+	private String staffCode;
 	//科室编号
 	private String officeCode;	
 	private String officeName;

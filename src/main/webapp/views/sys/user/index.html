@@ -24,6 +24,24 @@
               <input type="text" name="userName" placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
           </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+              <input type="text" name="realName" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">所在科室</label>
+            <div class="layui-input-block">
+              <input type="text" name="officeName" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-block">
+              <input type="text" name="phone" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
           <!--<div class="layui-inline">
             <label class="layui-form-label">密码</label>
             <div class="layui-input-block">
@@ -121,7 +139,7 @@
           type: 2
           ,title: '添加管理员'
           ,content: 'build'
-          ,area: ['420px', '340px']
+          ,area: ['420px', '500px']
           ,btn: ['确定', '取消']
           ,yes: function(index, layero){
             var iframeWindow = window['layui-layer-iframe'+ index]

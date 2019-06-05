@@ -11,6 +11,9 @@ layui.define(['table', 'form'], function (exports) {
             {type: 'checkbox', fixed: 'left'}
             ,{title: '序号', width: '5%', templet: '#indexTpl'}
             , {field: 'userName', title: '用户名'}
+            , {field: 'realName', title: '姓名'}
+            , {field: 'officeName', title: '所在科室'}
+            , {field: 'phone', title: '联系电话'}
             , {field: 'status', title: '用户状态', templet: "#table-user-status"}
             , {title: '操作', width: 300, align: 'center', fixed: 'right', toolbar: '#table-user-operation'}
 /*            , {field: 'createdTime', title: '创建时间'}
@@ -51,7 +54,7 @@ layui.define(['table', 'form'], function (exports) {
                 , title: '编辑'
                 , content: 'edit?id=' + obj.data.id
                 , maxmin: true
-                , area: ['420px', '240px']
+                , area: ['420px', '500px']
                 , btn: ['确定', '取消']
                 , yes: function (index, layero) {
                     var iframeWindow = window['layui-layer-iframe' + index]

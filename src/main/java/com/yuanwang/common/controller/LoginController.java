@@ -36,11 +36,9 @@ public class LoginController {
 		try {
 			UsernamePasswordToken token = new UsernamePasswordToken(name, password.toUpperCase(),true); 
 			Subject currentUser = SecurityUtils.getSubject();
-
 			try{
 				currentUser.login(token);
 			}catch(AuthenticationException a){
-
 			}
 		/*	currentUser.login(token);//验证角色和权限   */
 			User user=(User) currentUser.getPrincipal();

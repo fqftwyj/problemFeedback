@@ -48,7 +48,7 @@ public class FremarkerExcel {
         }
         //替换斜杆为反斜杠
         path=path.replaceAll("\\\\","/");
-        String lastPath=path + Math.random() * 10000 + ".xls";
+        String lastPath=path + Math.random() * 10000 + ".xlsx";
         File outFile = new File(lastPath); // 生成文件的路径
         Writer out = null;
         try {
@@ -75,7 +75,7 @@ public class FremarkerExcel {
         response.setContentType("multipart/form-data;charset=utf-8");
         String userName=String.valueOf(resMap.get("userName"));
         String reimburseDate=(resMap.get("reimburseDate")!=null && !"".equals(String.valueOf(resMap.get("reimburseDate"))) && !"1900-01-01".equals(String.valueOf(resMap.get("reimburseDate"))))?"-"+resMap.get("reimburseDate"):"";
-        String downloadFileName = URLEncoder.encode("外出培训（进修）报销单-"+userName+reimburseDate+".xls","UTF-8");
+        String downloadFileName = URLEncoder.encode("外出培训（进修）报销单-"+userName+reimburseDate+".xlsx","UTF-8");
         // 设置响应头，控制浏览器下载该文件
         response.setHeader("Content-Disposition", "attachment;filename=" + downloadFileName);
 

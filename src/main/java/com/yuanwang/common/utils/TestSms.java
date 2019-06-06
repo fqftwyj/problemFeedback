@@ -1,4 +1,3 @@
-/*
 package com.yuanwang.common.utils;
 
 import com.huawei.api.SMEntry;
@@ -56,4 +55,3 @@ public class TestSms {
     }
 
 }
-*/

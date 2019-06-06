@@ -7,7 +7,7 @@ spring:
     datasource:
         name: finacemanage
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/${spring.datasource.name}?useSSL=false
+        url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useSSL=false
         username: root
         password: 123456
         type: com.alibaba.druid.pool.DruidDataSource
@@ -60,6 +60,8 @@ spring:
       
 # 配置请求头传输大小
 server:
+ # servlet:
+   # context-path:/finacemanage
   max-http-header-size: 10000000
 
   

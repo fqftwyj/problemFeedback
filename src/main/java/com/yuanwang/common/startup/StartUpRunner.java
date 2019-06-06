@@ -52,23 +52,27 @@ public class StartUpRunner implements ApplicationRunner{
 		// TODO Auto-generated method stub
 		Connection connection=null;
 		try{
+			LOGGER.info("升级");
+			LOGGER.info(url+"=="+username+"=="+password);
 			connection=DriverManager.getConnection(url, username,password);
 			String fixPath=ResourceUtils.getURL("classpath:").getPath();
 			FileSystemResource rc = new FileSystemResource(fixPath+"db/update/update.sql");
 			EncodedResource er = new EncodedResource(rc,"utf-8");
 			ScriptUtils.executeSqlScript(connection, er);
 		}catch(MySQLSyntaxErrorException e){
+			LOGGER.info("初始化数据库");
 			connection=DriverManager.getConnection(url.replace(schema, "mysql"), username,password);
 			String sql="create database "+schema+" character set utf8 collate utf8_general_ci";
+			LOGGER.info(sql);
 			PreparedStatement p=connection.prepareStatement(sql);
 			p.execute(sql);
 			runsqlBySpringUtils("db/init/init.sql");
 		}catch(UncategorizedScriptException e){
-			//LOGGER.info("",e);
+			LOGGER.info("",e);
 		}catch(CannotReadScriptException e){
-			//LOGGER.info("",e);
+			LOGGER.info("",e);
 		}catch(Exception e){
-			//LOGGER.info("",e);
+			LOGGER.info("",e);
 		}finally {
 			connection.close();
 		}
@@ -80,6 +84,7 @@ public class StartUpRunner implements ApplicationRunner{
 		try {
 			String fixPath=ResourceUtils.getURL("classpath:").getPath();
 			connection=dataSource.getConnection();
+			LOGGER.info(connection.getSchema());
 			FileSystemResource rc = new FileSystemResource(fixPath+sqlPath);
 			EncodedResource er = new EncodedResource(rc,"utf-8");
 			ScriptUtils.executeSqlScript(connection, er);

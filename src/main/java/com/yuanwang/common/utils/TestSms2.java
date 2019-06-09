@@ -1,18 +1,16 @@
 package com.yuanwang.common.utils;
 
-import com.huawei.api.SMEntry;
 import com.huawei.api.SMException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 
 
-public class TestSms {
+public class TestSms2 {
 
-    public static int testSendSms(Connection dbConn,String info,String phone){
+    public static int testSendSms(Connection dbConn){
         try {
             Statement stmt = dbConn.createStatement();
             String sql = "INSERT INTO tbl_SMSendTask " +
@@ -28,31 +26,8 @@ public class TestSms {
         }
 
     }
-   public static void sendphoneMain(String info,String phone){
-       String driverName="com.microsoft.jdbc.sqlserver.SQLServerDriver";
-       String dbURL="jdbc:sqlserver://172.17.0.234:1433;DatabaseName=DB_CustomSMS";
-       String userName="CustomSMS";
-       String userPwd="SqlMsde@InfoxEie2000";
-       try
-       {
-           Class.forName(driverName);
-           System.out.println("加载驱动成功！");
-       }catch(Exception e){
-           e.printStackTrace();
-           System.out.println("加载驱动失败！");
-       }
 
-       try{
-           Connection dbConn=DriverManager.getConnection(dbURL,userName,userPwd);
-           System.out.println("连接数据库成功！");
-           testSendSms(dbConn,phone,info);
-       }catch(Exception e)
-       {
-           e.printStackTrace();
-           System.out.print("SQL Server连接失败！");
-       }
-   }
-   /* public static void main(String[] args) throws SMException {
+    public static void main(String[] args) throws SMException {
 
         String driverName="com.microsoft.jdbc.sqlserver.SQLServerDriver";
         String dbURL="jdbc:sqlserver://172.17.0.234:1433;DatabaseName=DB_CustomSMS";
@@ -76,6 +51,6 @@ public class TestSms {
             e.printStackTrace();
             System.out.print("SQL Server连接失败！");
         }
-    }*/
+    }
 
 }

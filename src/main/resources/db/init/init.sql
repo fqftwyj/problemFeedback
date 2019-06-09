@@ -110,7 +110,7 @@ CREATE TABLE `sys_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_time` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `user_name` int(11) DEFAULT NULL COMMENT '用户名',
+  `user_name` varchar(255) DEFAULT NULL COMMENT '用户名',
   `password` varchar(255) DEFAULT NULL COMMENT '密码',
   `status` int(2) DEFAULT NULL COMMENT '账户状态【enum】(0:禁用:disabled,1:启用:enabled)',
   `error_num` int(2) DEFAULT NULL COMMENT '错误次数',

@@ -69,6 +69,9 @@ public class UserController extends BaseController<User>{
 	public Result index(User user, ModelMap map,HttpSession session,Integer page,Integer limit){
 		Map<String,Object> search=new HashMap<String,Object>();
 		search.put("userName",user.getUserName());
+		search.put("realName",user.getRealName());
+		search.put("officeName",user.getOfficeName());
+		search.put("phone",user.getPhone());
 		PageInfo<User> pageinfo = userService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
 		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}

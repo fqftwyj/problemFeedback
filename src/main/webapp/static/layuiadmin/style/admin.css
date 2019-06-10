@@ -525,5 +525,8 @@ html{background-color: #fff;color: #505050;}
   .layui-layout-admin .layui-body .layadmin-tabsbody-item{-webkit-overflow-scrolling: touch; overflow: auto;}
 }
 
+span.layui-form-label-span-must{
+  color:#f22d3e;
+}
 
 

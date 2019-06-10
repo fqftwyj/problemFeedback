@@ -185,7 +185,7 @@ layui.define(['table', 'form'], function (exports) {
 
 
         } else if (obj.event === 'export') {
-            window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.id;
+            window.location = "/finace/reimburse/exportReimburseDetail?id=" + obj.data.id;
 
         }
     });

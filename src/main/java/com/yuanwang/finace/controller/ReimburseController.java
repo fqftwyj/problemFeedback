@@ -103,6 +103,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 		search.put("reimburseState", reimburse.getReimburseState());
 		search.put("reimburseMembers", reimburse.getReimburseMembers());
 		search.put("reviewState", review.getReviewState());
+		search.put("sql_keyword_orderBy","updateTime");
+		search.put("sql_keyword_sort","desc");
 		User user=(User)session.getAttribute("user");
 		search.put("staffCode", user.getUserName());
 		if(reimburse.getReimburseDate()!=null){
@@ -355,17 +357,15 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 * @param response 响应对象
 	 * @return 导出对象
 	 */
-	@RequestMapping("exportReimburseDetatl")
+	@RequestMapping("exportReimburseDetail")
 	@ResponseBody
-	public String exportReimburseDetatl(Integer id,HttpSession session,
+	public String exportReimburseDetail(Integer id,HttpSession session,
 						 HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> reMap =new HashMap<String, Object>();
 		Map<String, Object> dataMap =new HashMap<String, Object>();
-		User user=(User)session.getAttribute("user");
-		reMap.put("userName",user.getUserName());
-
 		//获取报销详情
 		Reimburse result = reimburseService.find(id);
+		reMap.put("userName",result.getStaffCode());
 		dataMap.put("result", result);
 		reMap.put("reimburseDate",result.getReimburseDate());
 		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象

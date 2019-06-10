@@ -15,13 +15,13 @@
         <input type="button" name="id" class="layui-input" value="${result.id?c}">
     </div>
     <div class="layui-form-item">
-      <label class="layui-form-label">用户id</label>
+      <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>用户id</label>
       <div class="layui-input-inline">
         <input type="number" name="userId" lay-verify="required" placeholder="请输入用户id" autocomplete="off" class="layui-input" value="${(result.userId?c)!}">
       </div>
     </div>
     <div class="layui-form-item">
-      <label class="layui-form-label">角色id</label>
+      <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>角色id</label>
       <div class="layui-input-inline">
         <input type="number" name="roleId" lay-verify="required" placeholder="请输入角色id" autocomplete="off" class="layui-input" value="${(result.roleId?c)!}">
       </div>

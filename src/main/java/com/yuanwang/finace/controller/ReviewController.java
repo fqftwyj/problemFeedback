@@ -86,6 +86,8 @@ public class ReviewController extends BaseController<Review>{
 		search.put("staffCode", reimburse.getStaffCode());
 		search.put("reviewState", review.getReviewState());
 		search.put("reimburseMembers", reimburse.getReimburseMembers());
+		search.put("sql_keyword_orderBy","updateTime");
+		search.put("sql_keyword_sort","desc");
 		if(reimburse.getReimburseDate()!=null){
 			String reimburseDate=reimburse.getReimburseDate();
 			if( reimburseDate.indexOf(" - ")!=-1){
@@ -222,7 +224,7 @@ public class ReviewController extends BaseController<Review>{
 				flag0=reimburseService.update(result,map,OperatorEnum.AND);
 				//重新打回后，发送重新上报的短信提醒报销的账户
 
-				TestSms.sendphoneMain("你有报销流程审核未通过被打回，请确认（财务报销系统）",phone);
+				TestSms.sendphoneMain("你有报销流程审查未通过被打回，请确认（财务报销系统）",phone);
 			}
 			Integer flag = reviewService.update(review,map,OperatorEnum.AND);
 			if(flag==2) {
@@ -231,7 +233,7 @@ public class ReviewController extends BaseController<Review>{
 			}else if(flag==1 && (flag0==1|| flag0==0)) {
 				//你的报销流程审核已通过，通知报销人员
 				if(flag==1 && flag0==0){
-					TestSms.sendphoneMain("你的报销流程审核已通过，请确认（财务报销系统）",phone);
+					TestSms.sendphoneMain("你的报销流程审查已通过，请确认（财务报销系统）",phone);
 				}
 				return ResultUtil.success("更新成功");
 			}else {

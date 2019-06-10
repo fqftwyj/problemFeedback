@@ -240,7 +240,7 @@
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label">审查意见：</label>
       <div class="layui-input-block">
-        <textarea placeholder="请输入内容"   name="reviewOpinion" class="layui-textarea" lay-verify="required">${result.review.reviewOpinion!}</textarea>
+        <textarea placeholder="请输入内容"   name="reviewOpinion" class="layui-textarea" >${result.review.reviewOpinion!}</textarea>
       </div>
     </div>
   </div>
@@ -248,8 +248,8 @@
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label">审查结果：</label>
       <div class="layui-input-block">
-        <input type="radio" name="reviewState" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-        <input type="radio" name="reviewState" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+        <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
+        <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
       </div>
       <input type="hidden"  name="id"  value="${id}"/>
       <input type="hidden"  name="reimburseId"  value="${result.id}"/>
@@ -283,8 +283,20 @@
     var $ = layui.$,
             form = layui.form,
             table = layui.table;
+    //自定义验证规则-附件不能为空
+    form.verify({
+      validateRadioOne: function (value) {
+        debugger
+        var objs = $('input:radio[name="reviewState"]:checked');
+        if (objs.length==0) {
+          return "请选择审查结果";
+        }
+      }
+    });
 
   });
+
+
   //下载文件
   function fqdownload(url,ele){
     var $this=$(ele);

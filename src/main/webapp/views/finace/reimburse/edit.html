@@ -17,7 +17,7 @@
     <div class="layui-form-item">
       <div class="layui-col-md11">
         <div class="layui-inline">
-          <label class="layui-form-label">科室：</label>
+          <label class="layui-form-label">  <span class="layui-form-label-span-must" >*</span>科室：</label>
           <div class="layui-input-block" style="display: block;">
             <select name='officeCode'>
           <!--    <option value="">请输入</option>-->
@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="layui-inline">
-          <label class="layui-form-label">出差人：</label>
+          <label class="layui-form-label">  <span class="layui-form-label-span-must" >*</span>出差人：</label>
           <div class="layui-input-block-special" >
             <input type="text" name="reimburseMembers" placeholder="请输入" autocomplete="off"
                    class="layui-input" value="${result.reimburseMembers}" lay-verify="required">
@@ -41,7 +41,7 @@
       </div>
       <div class="layui-col-md11">
         <div class="layui-inline layui-col-md9">
-          <label class="layui-form-label">出差事由：</label>
+          <label class="layui-form-label">  <span class="layui-form-label-span-must" >*</span>出差事由：</label>
           <div class="layui-input-block">
             <textarea placeholder="请输入内容"  name="reimburseReason" class="layui-textarea" lay-verify="required">${result.reimburseReason}</textarea>
           </div>
@@ -393,7 +393,7 @@
     <input type="hidden"  name="uploadPath" id="uploadPath" value="${result.uploadPath}"/>
     <input type="hidden"  name="uploadName" id="uploadName" value="${result.uploadName}"/>
     <div class="layui-upload">
-
+      <span class="layui-form-label-span-must" >*</span>
       <button type="button" class="layui-btn layui-btn-normal" id="selectFile" lay-verify="validateAttach">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
       <span class="layui-inline layui-upload-choose" >  <a  data-name="${result.uploadName}" data-path="${result.uploadPath}" class="downloadA" data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
       <p id="allFileText"></p>

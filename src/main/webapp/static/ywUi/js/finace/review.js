@@ -51,7 +51,7 @@ layui.define(['table', 'form'], function(exports){
   table.on('tool(LAY-review-table)', function(obj){
     var data = obj.data;
     if(obj.event === 'dowload'){
-        window.location = "/finace/reimburse/exportReimburseDetatl?id=" + obj.data.reimburseId;
+        window.location = "/finace/reimburse/exportReimburseDetail?id=" + obj.data.reimburseId;
     } else if(obj.event === 'detail'){
       var tr = $(obj.tr);
       if(type==1){

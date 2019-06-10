@@ -2700,7 +2700,7 @@ INSERT INTO `sys_user_role` VALUES ('1279', '1279', '3');
 
 
 -- ----------------------------
---科室字典表
+-- 科室字典表
 -- Table structure for sys_office
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_office`;

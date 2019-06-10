@@ -45,7 +45,12 @@
     <div class="layui-form-item">
       <label class="layui-form-label">所在科室</label>
       <div class="layui-input-inline">
-        <input type="text" name="officeName" lay-verify="required" placeholder="请输入所在科室" autocomplete="off" class="layui-input" value="${result.officeName!}">
+        <select name='officeName'>
+          <!--    <option value="">请输入</option>-->
+          <#list officeList as obj>
+              <option value="${obj.officeName}" <#if obj.officeName==result.officeName>selected</#if>>${obj.officeName}</option>
+          </#list>
+      </select>
       </div>
     </div>
     <div class="layui-form-item">

@@ -118,7 +118,7 @@
 	    	</if>
 	    	<if test="excludeId!=null">
     		 <![CDATA[
-    		 and id <> #{excludeId}
+    		 and rv.id <> #{excludeId}
     		 ]]>
     		</if>
     	</where>

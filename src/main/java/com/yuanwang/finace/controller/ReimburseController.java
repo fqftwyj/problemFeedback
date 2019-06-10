@@ -17,6 +17,7 @@ import com.yuanwang.common.controller.FileController;
 import com.yuanwang.common.utils.ChineseNumber;
 import com.yuanwang.common.utils.FremarkerExcel;
 import com.yuanwang.common.utils.StringHelper;
+import com.yuanwang.common.utils.TestSms;
 import com.yuanwang.finace.entity.Review;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
@@ -226,6 +227,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 			 * 放入查重字段 map.put("name","测试");
 			 */
 			Integer flag =-1;
+			//type 2:修改上报状态  3：伪删除
 			if(type==2){
 				//修改上报状态
 				reimburse = reimburseService.find(reimburse.getId());
@@ -260,6 +262,9 @@ public class ReimburseController extends BaseController<Reimburse>{
 			}else if(flag==1) {
 				if(type==3){
 					return ResultUtil.success("删除成功");
+				}else if(type==2){
+					//提交上报后，发送待审查短信提醒财务
+					TestSms.sendphoneMain("你有待审查的报销流程，请确认（财务报销系统）","15988864336");
 				}
 				return ResultUtil.success("更新成功");
 			}else {
@@ -447,8 +452,16 @@ public class ReimburseController extends BaseController<Reimburse>{
 		}
 		return null;
 	}
-	//不满的填充空白的List
+	/**
+	 *@author： Fangqun
+	 *@description:  不满的填充空白的List
+	 *@param:  [size, maxSize, list]
+	 *@return: void
+	 *@exception:
+	 *@date:  上午 9:43 2019/6/10 0010
+	 **/
 	public void addBlankMap(int size,int maxSize,List<Map<String, String>> list){
+
 		for(int i=size;i<=maxSize;i++){
 			Map<String, String> map=new HashMap<>();
 			list.add(map);

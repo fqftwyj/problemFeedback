@@ -49,7 +49,7 @@ public class StartUpRunner implements ApplicationRunner{
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		// TODO Auto-generated method stub
+	/*	// TODO Auto-generated method stub
 		Connection connection=null;
 		try{
 			LOGGER.info("升级");
@@ -75,7 +75,7 @@ public class StartUpRunner implements ApplicationRunner{
 			LOGGER.info("",e);
 		}finally {
 			connection.close();
-		}
+		}*/
 	}
 
 	

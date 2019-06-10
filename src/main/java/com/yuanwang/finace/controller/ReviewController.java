@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.yuanwang.common.utils.TestSms;
 import com.yuanwang.finace.entity.Reimburse;
 import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
 import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
@@ -20,6 +21,7 @@ import com.yuanwang.finace.service.ReviewService;
 import com.yuanwang.sys.entity.Office;
 import com.yuanwang.sys.entity.User;
 import com.yuanwang.sys.service.OfficeService;
+import com.yuanwang.sys.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +56,8 @@ public class ReviewController extends BaseController<Review>{
 	private ReimburseService reimburseService;
 	@Resource
 	private OfficeService officeService;
+	@Resource
+	private UserService userService;
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
@@ -206,17 +210,30 @@ public class ReviewController extends BaseController<Review>{
 			 */
 			//如果审查不通过要修改报销状态为重新上传
 			Integer flag0 =0;
+			int id=review.getReimburseId();
+			Reimburse result = reimburseService.find(id);
+			String staffCode=result.getStaffCode();
+			Map<String,Object> mapPhone=new HashMap<String,Object>();
+			//根据工号获取电话号码
+			mapPhone.put("userName",staffCode);
+			User user=userService.find(mapPhone);
+			String phone=user.getPhone();
 			if(review.getReviewState().equals(ReviewStateEnum.NOTPASSREVIEW)){
-				int id=review.getReimburseId();
-				Reimburse result = reimburseService.find(id);
 				result.setReimburseState(ReimburseStateEnum.RESUBMIT);
 				flag0=reimburseService.update(result,map,OperatorEnum.AND);
+				//重新打回后，发送重新上报的短信提醒报销的账户
+
+				TestSms.sendphoneMain("你有报销流程审核未通过被打回，请确认（财务报销系统）",phone);
 			}
 			Integer flag = reviewService.update(review,map,OperatorEnum.AND);
 			if(flag==2) {
 				return ResultUtil.error("已存在");
 				//通过或不通过都更新成功
 			}else if(flag==1 && (flag0==1|| flag0==0)) {
+				//你的报销流程审核已通过，通知报销人员
+				if(flag==1 && flag0==0){
+					TestSms.sendphoneMain("你的报销流程审核已通过，请确认（财务报销系统）",phone);
+				}
 				return ResultUtil.success("更新成功");
 			}else {
 				return ResultUtil.error("更新失败");

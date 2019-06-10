@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @ServletComponentScan
 @SpringBootApplication
+
 public class WebFrameApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(WebFrameApplication.class, args);

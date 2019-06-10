@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
 import com.yuanwang.common.utils.MD5Util;
+import com.yuanwang.sys.entity.Office;
+import com.yuanwang.sys.service.OfficeService;
 import com.yuanwang.sys.service.RoleService;
 import com.yuanwang.sys.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +49,8 @@ public class UserController extends BaseController<User>{
 	private UserService userService;
 	@Resource
 	private RoleService roleService;
+	@Resource
+	private OfficeService officeService;
 	
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
@@ -83,6 +87,10 @@ public class UserController extends BaseController<User>{
 	public void createJump(ModelMap map){
 		List<Role> roles=roleService.findAll();
 		map.put("roles",roles);
+		//获取科室列表
+		List<Office>  officeList=officeService.findAll();
+		map.put("officeList", officeList);
+
 	}
 	
 	/**新增功能
@@ -125,6 +133,9 @@ public class UserController extends BaseController<User>{
 		map.put("result", result);
 		List<Role> roles=roleService.findAll();
 		map.put("roles",roles);
+		//获取科室列表
+		List<Office>  officeList=officeService.findAll();
+		map.put("officeList", officeList);
 	}
 	
 	/**编辑功能

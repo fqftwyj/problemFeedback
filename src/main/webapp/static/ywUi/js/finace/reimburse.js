@@ -234,7 +234,10 @@ layui.define(['table', 'form'], function (exports) {
                 carboatfeeitem.carboatType = $(this).find("select[name='carboatType']").val();
                 carboatfeeitem.docNumber = $(this).find("input[name='docNumber']").val().trim();
                 carboatfeeitem.carboatfee = $(this).find("input[name='carboatfee']").val().trim();
-                carboatfeeiItemsData.push(carboatfeeitem);
+                if(carboatfeeitem.carboatfee!=''){
+                    carboatfeeiItemsData.push(carboatfeeitem);
+                }
+
             });
 
             //出差补贴费
@@ -246,6 +249,9 @@ layui.define(['table', 'form'], function (exports) {
                 travelAllowanceItem.travelStandard = $(this).find("select[name='travelStandard']").val();
                 travelAllowanceItem.travelmoney = $(this).find("input[name='travelmoney']").val().trim();
                 travelAllowanceItemsData.push(travelAllowanceItem);
+                if(travelAllowanceItem.travelmoney!=''){
+                    carboatfeeiItemsData.push(carboatfeeitem);
+                }
             });
 
             //其它费用
@@ -256,7 +262,9 @@ layui.define(['table', 'form'], function (exports) {
                 otherFeeItem.itemname = $(this).find("input[name='itemname']").val().trim();
                 otherFeeItem.otherdocnumber = $(this).find("input[name='otherdocnumber']").val().trim();
                 otherFeeItem.otherfeemoney = $(this).find("input[name='otherfeemoney']").val().trim();
-                otherFeeItemsData.push(otherFeeItem);
+                if(carboatfeeitem.otherfeemoney!='') {
+                    otherFeeItemsData.push(otherFeeItem);
+                }
             });
 
             itemDataObj.carboatfeeiItemsData = carboatfeeiItemsData;

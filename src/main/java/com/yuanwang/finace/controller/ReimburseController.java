@@ -264,6 +264,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 					return ResultUtil.success("删除成功");
 				}else if(type==2){
 					//提交上报后，发送待审查短信提醒财务
+
+					//TestSms.sendphoneMain("你有待审查的报销流程，请确认（财务报销系统）","15925638980");
 					TestSms.sendphoneMain("你有待审查的报销流程，请确认（财务报销系统）","15988864336");
 				}
 				return ResultUtil.success("更新成功");

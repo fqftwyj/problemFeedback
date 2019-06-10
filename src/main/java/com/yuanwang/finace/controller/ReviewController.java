@@ -139,14 +139,13 @@ public class ReviewController extends BaseController<Review>{
 	 */
 	@RequestMapping(CONSTANT_EDIT)
 	public void updateJump(Integer id,Integer reimburseId,Integer type, ModelMap map,HttpSession session){
-		User user=(User)session.getAttribute("user");
-		map.put("userName", user.getUserName());
 		//获取科室列表
 		List<Office>  officeList=officeService.findAll();
 		map.put("officeList", officeList);
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		Reimburse result = reimburseService.find(reimburseId);
 		map.put("result", result);
+		map.put("userName", result.getStaffCode());
 		map.put("id",id);
 		map.put("type",type);
 		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象

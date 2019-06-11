@@ -207,6 +207,9 @@ public class ReimburseController extends BaseController<Reimburse>{
 		if(tataljson.size()>0){
 			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
 		}
+		System.out.println("carboatfeesList-"+carboatfeesList.size());
+		System.out.println("travelAllowanceList-"+travelAllowanceList.size());
+		System.out.println("otherFeeList-"+otherFeeList.size());
 		map.put("carboatfeesList", carboatfeesList);
 		map.put("travelAllowanceList", travelAllowanceList);
 		map.put("otherFeeList", otherFeeList);

@@ -203,6 +203,13 @@
             <artifactId>SMSendAPI</artifactId>
             <version>1.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.jacob/jacob -->
+      <!--  <dependency>
+            <groupId>com.hynnet</groupId>
+            <artifactId>jacob</artifactId>
+            <version>1.18</version>
+        </dependency>-->
+
     </dependencies>
 
     <build>

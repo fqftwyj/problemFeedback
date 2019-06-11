@@ -286,7 +286,6 @@
     //自定义验证规则-附件不能为空
     form.verify({
       validateRadioOne: function (value) {
-        debugger
         var objs = $('input:radio[name="reviewState"]:checked');
         if (objs.length==0) {
           return "请选择审查结果";

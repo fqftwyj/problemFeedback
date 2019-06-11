@@ -19,8 +19,9 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>科室：</label>
                     <div class="layui-input-block" style="display: block;">
-                        <select name='officeCode'>
+                        <select name='officeCode'  lay-verify="selectcheck" >
                           <!--  <option value="">请输入</option>-->
+                            <option value="--请选择--">--请选择--</option>
                             <#list officeList as obj>
                             <option value="${obj.officeCode}">${obj.officeName}</option>
                         </#list>
@@ -67,41 +68,42 @@
             <div class="separator-line-css carboatfeeMotherDiv" style="display:none"  id="carboatfeeMotherHideDiv">
                 <div class="layui-col-md11 mbottom">
                     <div class="layui-inline">
-                        <label class="layui-form-label">出发时间：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>出发时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="departureTime"  placeholder="请输入" autocomplete="off"
+                            <input type="text" name="departureTime"   placeholder="请输入" autocomplete="off"
                                    class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">出发地点：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>出发地点：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="departurePlace" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="departurePlace"  placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
                 </div>
                 <div class="layui-col-md11 mbottom">
                     <div class="layui-inline">
-                        <label class="layui-form-label">到达时间：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>到达时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="arrivalTime"  placeholder="请输入" autocomplete="off"
+                            <input type="text" name="arrivalTime"   placeholder="请输入" autocomplete="off"
                                    class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">到达地点：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>到达地点：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="arrivalPlace" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="arrivalPlace"  placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
                 </div>
                 <div class="layui-col-md11 mbottom">
                     <div class="layui-inline layui-form">
-                        <label class="layui-form-label">车船类别：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>车船类别：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='carboatType' >
+                                <option value="--请选择--" >--请选择--</option>
                                 <option value="汽车">汽车</option>
                                 <option value="火车">火车</option>
                                 <option value="飞机">飞机</option>
@@ -110,14 +112,14 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">单据张数：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>单据张数：</label>
                         <div class="layui-input-block">
                             <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
                                    class="layui-input"  lay-verify="int">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">车船费：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>车船费：</label>
                         <div class="layui-input-block">
                             <input type="text" name="carboatfee" placeholder="请输入" autocomplete="off"
                                    class="layui-input" lay-verify="money">
@@ -173,6 +175,7 @@
                         <label class="layui-form-label">车船类别：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='carboatType' >
+                                <option value="--请选择--">--请选择--</option>
                                 <option value="汽车">汽车</option>
                                 <option value="火车">火车</option>
                                 <option value="飞机">飞机</option>
@@ -217,16 +220,17 @@
             <div class="travelStandardMotherDiv" style="display: none;" id="travelStandardMotherHideDiv">
                 <div class="layui-col-md11 mbottom" >
                     <div class="layui-inline">
-                        <label class="layui-form-label">天数：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>天数：</label>
                         <div class="layui-input-block">
                             <input type="text" name="days" placeholder="请输入" autocomplete="off"
                                    class="layui-input days" lay-verify="int" >
                         </div>
                     </div>
                     <div class="layui-inline layui-form">
-                        <label class="layui-form-label" >标准：</label>
+                        <label class="layui-form-label" ><span class="layui-form-label-span-must" >*</span>标准：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='travelStandard'  lay-filter="travelStandard">
+                                <option value="--请选择--">--请选择--</option>
                                 <option value="25">25</option>
                                 <option value="55">55</option>
                                 <option value="42.5">42.5</option>
@@ -235,9 +239,9 @@
 
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">金额：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>金额：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="travelmoney" readonly="readonly" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="travelmoney"  readonly="readonly" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
                         </div>
                     </div>
@@ -264,6 +268,7 @@
                     <label class="layui-form-label">标准：</label>
                     <div class="layui-input-block" style="width: 182px;">
                         <select name='travelStandard' lay-filter="travelStandard">
+                            <option value="--请选择--">--请选择--</option>
                             <option value="25">25</option>
                             <option value="55">55</option>
                             <option value="42.5">42.5</option>
@@ -297,21 +302,21 @@
             <div class="otherfeeMotherDiv" style="display:none" id="otherfeeMotherHideDiv">
                 <div class="layui-col-md11 mbottom" >
                     <div class="layui-inline">
-                        <label class="layui-form-label">项目：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>项目：</label>
                         <div class="layui-input-block">
                             <input type="text" name="itemname" placeholder="请输入" autocomplete="off"
-                                   class="layui-input">
+                                   class="layui-input"  >
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">单据张数：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>单据张数：</label>
                         <div class="layui-input-block">
                             <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
                                    class="layui-input" lay-verify="int">
                         </div>
                     </div>
                     <div class="layui-inline layui-form">
-                        <label class="layui-form-label">金额：</label>
+                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>金额：</label>
                         <div class="layui-input-block">
                             <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
                                    class="layui-input" lay-verify="money">
@@ -431,7 +436,6 @@
         //自定义验证规则-附件不能为空
         form.verify({
             validateAttach: function (value) {
-                debugger
                 var result = $("#uploadPath").val();
                 if (result =='') {
                     return "请先上传附件";

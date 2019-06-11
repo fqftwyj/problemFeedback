@@ -20,8 +20,7 @@
                     <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>科室：</label>
                     <div class="layui-input-block" style="display: block;">
                         <select name='officeCode'  lay-verify="selectcheck" >
-                          <!--  <option value="">请输入</option>-->
-                            <option value="--请选择--">--请选择--</option>
+                            <option value="">请输入</option>
                             <#list officeList as obj>
                             <option value="${obj.officeCode}">${obj.officeName}</option>
                         </#list>
@@ -103,7 +102,7 @@
                         <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>车船类别：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='carboatType' >
-                                <option value="--请选择--" >--请选择--</option>
+                                <option value="">请输入</option>
                                 <option value="汽车">汽车</option>
                                 <option value="火车">火车</option>
                                 <option value="飞机">飞机</option>
@@ -175,7 +174,7 @@
                         <label class="layui-form-label">车船类别：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='carboatType' >
-                                <option value="--请选择--">--请选择--</option>
+                                <option value="">请输入</option>
                                 <option value="汽车">汽车</option>
                                 <option value="火车">火车</option>
                                 <option value="飞机">飞机</option>
@@ -230,7 +229,7 @@
                         <label class="layui-form-label" ><span class="layui-form-label-span-must" >*</span>标准：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='travelStandard'  lay-filter="travelStandard">
-                                <option value="--请选择--">--请选择--</option>
+                                <option value="">请输入</option>
                                 <option value="25">25</option>
                                 <option value="55">55</option>
                                 <option value="42.5">42.5</option>
@@ -268,7 +267,7 @@
                     <label class="layui-form-label">标准：</label>
                     <div class="layui-input-block" style="width: 182px;">
                         <select name='travelStandard' lay-filter="travelStandard">
-                            <option value="--请选择--">--请选择--</option>
+                            <option value="">请输入</option>
                             <option value="25">25</option>
                             <option value="55">55</option>
                             <option value="42.5">42.5</option>

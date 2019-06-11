@@ -225,6 +225,7 @@ layui.define(['table', 'form'], function (exports) {
             //车船费
             var carboatfeeiItemsData = [];
             var carboatfeeMotherDivs = contentId.find(".carboatfeeMotherDiv:visible");
+            debugger
             carboatfeeMotherDivs.each(function () {
                 var carboatfeeitem = new Object();
                 carboatfeeitem.departureTime = $(this).find("input[name='departureTime']").val().trim();

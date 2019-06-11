@@ -27,8 +27,8 @@ layui.define('form', function (exports) {
 
 
     },selectcheck : function(value, item) {
-        if (value == '--请选择--') {
-          return '请选择';
+        if (value == '') {
+          return '请输入';
         }
       }
     });

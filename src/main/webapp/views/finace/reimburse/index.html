@@ -225,6 +225,7 @@
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             reimburseType = data.field.reimburseType;
                         });
+
                         submit.trigger('click');
                         layer.close(index);  //关闭弹层
                         layer.open({
@@ -290,9 +291,9 @@
                                 submit.trigger('click');
                             }
                         });
-
                     }
                 });
+
             }, exportAttach: function () {
                 window.location = "/finace/reimburse/exportReimburseAttach";
 

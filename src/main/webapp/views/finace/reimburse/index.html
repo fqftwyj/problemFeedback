@@ -80,7 +80,7 @@
             <div style="padding-bottom: 10px;">
                 <!--  <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="batchdel">删除</button>-->
                 <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add">新建</button>
-              <!--  <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="exportAttach">下载报销粘贴单</button>-->
+                <!--  <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="exportAttach">下载报销粘贴单</button>-->
 
             </div>
 
@@ -148,7 +148,7 @@
     function show_shopm(t){
         var row=$(t).attr('data-d'); //获取显示内容
         //小tips
-       index= layer.tips(row,t,{
+        index= layer.tips(row,t,{
             tips:[1,'#4192C1'],
             time:4000
         });
@@ -225,6 +225,7 @@
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             reimburseType = data.field.reimburseType;
                         });
+
                         submit.trigger('click');
                         layer.close(index);  //关闭弹层
                         layer.open({
@@ -290,9 +291,9 @@
                                 submit.trigger('click');
                             }
                         });
-
                     }
                 });
+
             }, exportAttach: function () {
                 window.location = "/finace/reimburse/exportReimburseAttach";
 
@@ -356,6 +357,7 @@
                     travelAllowanceItem.travelStandard = $(this).find("select[name='travelStandard']").val();
                     travelAllowanceItem.travelmoney = $(this).find("input[name='travelmoney']").val().trim();
                     travelAllowanceItemsData.push(travelAllowanceItem);
+
                 });
 
                 //其它费用
@@ -367,6 +369,7 @@
                     otherFeeItem.otherdocnumber = $(this).find("input[name='otherdocnumber']").val().trim();
                     otherFeeItem.otherfeemoney = $(this).find("input[name='otherfeemoney']").val().trim();
                     otherFeeItemsData.push(otherFeeItem);
+
                 });
 
                 itemDataObj.carboatfeeiItemsData = carboatfeeiItemsData;

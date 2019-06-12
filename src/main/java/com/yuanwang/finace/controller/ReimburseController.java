@@ -207,6 +207,9 @@ public class ReimburseController extends BaseController<Reimburse>{
 		if(tataljson.size()>0){
 			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
 		}
+		System.out.println("carboatfeesList-"+carboatfeesList.size());
+		System.out.println("travelAllowanceList-"+travelAllowanceList.size());
+		System.out.println("otherFeeList-"+otherFeeList.size());
 		map.put("carboatfeesList", carboatfeesList);
 		map.put("travelAllowanceList", travelAllowanceList);
 		map.put("otherFeeList", otherFeeList);
@@ -448,7 +451,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		System.out.println(String.valueOf(dataMap.get("totalFee")));
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-			fexcle.createWord(prefixPath+File.separator+"excel","core-office-new.ftl",dataMap, reMap,response);
+			fexcle.createWord(prefixPath+File.separator+"excel","core-office.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

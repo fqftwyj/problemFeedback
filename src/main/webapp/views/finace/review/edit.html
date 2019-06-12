@@ -20,8 +20,9 @@
           <label class="layui-form-label">科室：</label>
           <div class="layui-input-block" style="display: block;">
             <select  disabled="disabled">
+              <option value="" <#if result.officeCode=="">selected</#if>>请输入</option>
               <#list officeList as obj>
-              <option value="${obj.officeCode}" <#if obj.officeCode==result.officeCode>selected</#if>>${obj.officeName}</option>
+              <option value="${obj.officeCode}" <#if obj.officeCode==result.officeCode>selected</#if>>${obj.officeName!}</option>
               </#list>
           </select>
         </div>
@@ -42,7 +43,7 @@
       <div class="layui-inline layui-col-md9">
         <label class="layui-form-label">出差事由：</label>
         <div class="layui-input-block">
-          <textarea placeholder="请输入内容"   class="layui-textarea" lay-verify="required" readonly="readonly">${result.reimburseReason}</textarea>
+          <textarea placeholder="请输入内容"   class="layui-textarea" lay-verify="required" readonly="readonly">${result.reimburseReason!}</textarea>
         </div>
 
       </div>
@@ -63,13 +64,13 @@
             <label class="layui-form-label">出发时间：</label>
             <div class="layui-input-block">
               <input type="text"  placeholder="yyyy-MM-dd" autocomplete="off"
-                     class="layui-input datetime" readonly="readonly" value="${obj.departureTime}">
+                     class="layui-input datetime" readonly="readonly" value="${obj.departureTime!}">
             </div>
           </div>
           <div class="layui-inline">
             <label class="layui-form-label">出发地点：</label>
             <div class="layui-input-block">
-              <input type="text" readonly="readonly"  value="${obj.departurePlace}" placeholder="请输入" autocomplete="off"
+              <input type="text" readonly="readonly"  value="${obj.departurePlace!}" placeholder="请输入" autocomplete="off"
                      class="layui-input">
             </div>
           </div>
@@ -78,14 +79,14 @@
           <div class="layui-inline">
             <label class="layui-form-label">到达时间：</label>
             <div class="layui-input-block">
-              <input type="text" readonly="readonly" value="${obj.arrivalTime}"  placeholder="yyyy-MM-dd" autocomplete="off"
+              <input type="text" readonly="readonly" value="${obj.arrivalTime!}"  placeholder="yyyy-MM-dd" autocomplete="off"
                      class="layui-input datetime">
             </div>
           </div>
           <div class="layui-inline">
             <label class="layui-form-label">到达地点：</label>
             <div class="layui-input-block">
-              <input type="text" readonly="readonly" value="${obj.arrivalPlace}" placeholder="请输入" autocomplete="off"
+              <input type="text" readonly="readonly" value="${obj.arrivalPlace!}" placeholder="请输入" autocomplete="off"
                      class="layui-input">
             </div>
           </div>
@@ -95,10 +96,11 @@
             <label class="layui-form-label">车船类别：</label>
             <div class="layui-input-block" style="width: 182px;">
               <select  disabled="disabled">
-                 <option value="汽车" <#if obj.carboatType=='汽车'>selected</#if>>汽车</option>
-                 <option value="火车" <#if obj.carboatType=='火车'>selected</#if>>火车</option>
-                 <option value="飞机" <#if obj.carboatType=='飞机'>selected</#if>>飞机</option>
-                 <option value="轮船" <#if obj.carboatType=='轮船'>selected</#if>>轮船</option>
+                <option value=""    <#if !obj.carboatType??||(obj.carboatType?? && obj.carboatType=='')>selected</#if>>请输入</option>
+                <option value="汽车" <#if obj.carboatType?? && obj.carboatType=='汽车'>selected</#if>>汽车</option>
+                <option value="火车" <#if obj.carboatType?? && obj.carboatType=='火车'>selected</#if>>火车</option>
+                <option value="飞机" <#if obj.carboatType?? && obj.carboatType=='飞机'>selected</#if>>飞机</option>
+                <option value="轮船" <#if obj.carboatType?? && obj.carboatType=='轮船'>selected</#if>>轮船</option>
              </select>
       </div>
     </div>
@@ -106,14 +108,14 @@
       <label class="layui-form-label">单据张数：</label>
       <div class="layui-input-block">
         <input type="text"  placeholder="请输入" autocomplete="off"
-               class="layui-input" readonly="readonly" value="${obj.docNumber}" lay-verify="int">
+               class="layui-input" readonly="readonly" value="${obj.docNumber!}" lay-verify="int">
       </div>
     </div>
     <div class="layui-inline">
       <label class="layui-form-label">车船费：</label>
       <div class="layui-input-block">
         <input type="text"  placeholder="请输入" autocomplete="off"
-               class="layui-input" readonly="readonly" value="${obj.carboatfee}" lay-verify="money">
+               class="layui-input" readonly="readonly" value="${obj.carboatfee!}" lay-verify="money">
       </div>
     </div>
   </div>
@@ -133,16 +135,17 @@
         <label class="layui-form-label">天数：</label>
         <div class="layui-input-block">
           <input type="text"  lay-filter="days" readonly="readonly"  placeholder="请输入整数" autocomplete="off"
-                 class="layui-input days" value="${obj.days}" lay-verify="int" >
+                 class="layui-input days" value="${obj.days!}" lay-verify="int" >
         </div>
       </div>
       <div class="layui-inline layui-form">
           <label class="layui-form-label">标准：</label>
           <div class="layui-input-block" style="width: 182px;">
             <select  lay-filter="travelStandard" disabled="disabled">
-              <option value="25"  <#if obj.travelStandard=='25'>selected</#if>>25</option>
-              <option value="55"  <#if obj.travelStandard=='55'>selected</#if>>55</option>
-              <option value="42.5" <#if obj.travelStandard=='42.5'>selected</#if>>42.5</option>
+              <option value=""     <#if !obj.travelStandard??||(obj.travelStandard?? && obj.travelStandard=='')>selected</#if>>请输入</option>
+              <option value="25"  <#if obj.travelStandard?? && obj.travelStandard=='25'>selected</#if>>25</option>
+              <option value="55"  <#if obj.travelStandard?? && obj.travelStandard=='55'>selected</#if>>55</option>
+              <option value="42.5" <#if obj.travelStandard?? && obj.travelStandard=='42.5'>selected</#if>>42.5</option>
             </select>
          </div>
        </div>
@@ -150,7 +153,7 @@
     <label class="layui-form-label">金额：</label>
     <div class="layui-input-block">
       <input type="text"  readonly="readonly" readonly="readonly" placeholder="请输入" autocomplete="off"
-             class="layui-input" value="${obj.travelmoney}">
+             class="layui-input" value="${obj.travelmoney!}">
     </div>
   </div>
 
@@ -171,21 +174,21 @@
         <label class="layui-form-label">项目：</label>
         <div class="layui-input-block">
           <input type="text" placeholder="请输入" autocomplete="off"
-                 class="layui-input" readonly="readonly" value="${obj.itemname}">
+                 class="layui-input" readonly="readonly" value="${obj.itemname!}">
         </div>
       </div>
       <div class="layui-inline">
         <label class="layui-form-label">单据张数：</label>
         <div class="layui-input-block">
           <input type="text"  placeholder="请输入" autocomplete="off"
-                 class="layui-input"  readonly="readonly" value="${obj.otherdocnumber}" lay-verify="int">
+                 class="layui-input"  readonly="readonly" value="${obj.otherdocnumber!}" lay-verify="int">
         </div>
       </div>
       <div class="layui-inline layui-form">
         <label class="layui-form-label">金额：</label>
         <div class="layui-input-block">
           <input type="text"  placeholder="请输入" autocomplete="off"
-                 class="layui-input" readonly="readonly" value="${obj.otherfeemoney}" lay-verify="money">
+                 class="layui-input" readonly="readonly" value="${obj.otherfeemoney!}" lay-verify="money">
         </div>
       </div>
 
@@ -286,7 +289,6 @@
     //自定义验证规则-附件不能为空
     form.verify({
       validateRadioOne: function (value) {
-        debugger
         var objs = $('input:radio[name="reviewState"]:checked');
         if (objs.length==0) {
           return "请选择审查结果";

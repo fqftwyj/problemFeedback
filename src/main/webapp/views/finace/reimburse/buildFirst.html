@@ -16,7 +16,7 @@
     <div class="layui-form-item">
       <label class="layui-form-label">  <span class="layui-form-label-span-must" >*</span>报销类型</label>
       <div class="layui-input-inline">
-        <select name="reimburseType">
+        <select name="reimburseType" >
 	    	<#list reimburseTypeEnums as obj>
 	    	<option value="${obj}">${obj.desc}</option>
 	    	</#list>
@@ -39,6 +39,7 @@
   }).use(['index','form','verfy'], function(){
     var $ = layui.$
     ,form = layui.form;
+
 
   })
   </script>

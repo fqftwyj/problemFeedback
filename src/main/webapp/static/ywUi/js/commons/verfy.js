@@ -25,8 +25,13 @@ layui.define('form', function (exports) {
         return '请输入正确的金额，最多保留两位小数';
       }
 
-    }
-  });
+
+    },selectcheck : function(value, item) {
+        if (value == '') {
+          return '请输入';
+        }
+      }
+    });
 
   //对外暴露的接口
   exports('verfy', {});

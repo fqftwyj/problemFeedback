@@ -204,11 +204,11 @@
             <version>1.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.jacob/jacob -->
-      <!--  <dependency>
+        <dependency>
             <groupId>com.hynnet</groupId>
             <artifactId>jacob</artifactId>
             <version>1.18</version>
-        </dependency>-->
+        </dependency>
 
     </dependencies>
 
@@ -227,35 +227,35 @@
                 </includes>
             </resource>
         </resources>
-        	<plugins>
-                <plugin>
+        <plugins>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.5.1</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-       <!-- <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
                 <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>WebContent</directory>
-                        </resource>
-                    </webResources>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
-        </plugins>-->
+        </plugins>
+        <!-- <plugins>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-war-plugin</artifactId>
+                 <version>3.0.0</version>
+                 <configuration>
+                     <webResources>
+                         <resource>
+                             <directory>WebContent</directory>
+                         </resource>
+                     </webResources>
+                 </configuration>
+             </plugin>
+         </plugins>-->
     </build>
 
 

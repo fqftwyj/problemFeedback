@@ -52,6 +52,7 @@ public class IndexMenuController extends BaseController<Integer>{
 		map.addAttribute("firstPer",firstPer);
 		map.addAttribute("secondPer",secondPer);
 		map.addAttribute("id",id);
+		map.addAttribute("realName",user.getRealName());
 	}
 	
 }

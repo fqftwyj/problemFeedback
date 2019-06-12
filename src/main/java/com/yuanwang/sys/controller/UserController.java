@@ -281,4 +281,26 @@ public class UserController extends BaseController<User>{
 			return ResultUtil.error();
 		}
 	}
+	/*// 修改密码
+	@RequestMapping("/updatePassWord")
+	@ResponseBody
+	public RetKit updatePassWord(HttpServletRequest request) {
+		AccountAuthentic account = (AccountAuthentic) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Integer accountId = account.getAccountId();
+		String oldpwd = request.getParameter("sysOldPWInp");
+		String newPWInp = request.getParameter("sysNewPWInp");
+		String conPW = request.getParameter("sysConPW");
+		RetKit retKit = accountService.updataPwd(accountId, oldpwd, newPWInp,conPW
+		if(retKit.success()) {
+			// 清除session
+			Enumeration<String> em = request.getSession().getAttributeNames();
+			while (em.hasMoreElements()) {
+				request.getSession().removeAttribute(em.nextElement().toString());
+			}
+			request.getSession().invalidate();
+		}
+		return retKit;
+	}*/
+
+
 }

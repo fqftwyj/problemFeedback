@@ -42,12 +42,6 @@ spring:
     # 选择加载不同环境的配置文件 
     profiles: 
       active: dev
-    http:
-      multipart:
-        #设置单个文件的大小限制
-        max-file-size: 1000MB
-        #设置单次请求的总大小限制
-        max-request-size: 1000MB
     resources:
       static-locations: file:${web.upload-path},/static/
     # 发生404错误的时候，抛出异常
@@ -57,7 +51,12 @@ spring:
       throw-exception-if-no-handler-found: true
     jmx:
       default-domain: WebFrame
-      
+      servlet:
+        multipart:
+          #设置单个文件的大小限制
+          max-file-size: -1
+          #设置单次请求的总大小限制
+          max-request-size: -1
 # 配置请求头传输大小
 server:
  # servlet:

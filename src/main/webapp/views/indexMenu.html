@@ -49,7 +49,8 @@
 	                </a>
 	                <dl class="layui-nav-child layui-anim layui-anim-upbit">
 						<dd><a>${realName}</a></dd>
-	                    <dd><a  lay-href="/sys/user/toEditPassWord">修改密码</a></dd>
+						<dd id="tab1"><a>修改密码</a></dd>
+						<!--<dd><a  lay-href="/sys/user/toEditPassWord">修改密码</a></dd>-->
 	                    <dd><a href="login/logOut">退出登录</a></dd>
 	                </dl>
 	              </li>
@@ -182,6 +183,66 @@
 	$('.js-menu-first').click();
 	var menu = layui.menu;
 	menu.init();
+	  $('#tab1').click(function(){
+		  layer.open({
+			  type: 2
+			  ,title: '修改密码'
+			  ,content: '/sys/user/toEditPassWord'
+			  ,maxmin: true
+			  ,area: ['420px', '300px']
+			  ,btn: ['确定', '取消']
+			  ,yes: function(index, layero){
+				  var iframeWindow = window['layui-layer-iframe'+ index]
+						  ,submitID = 'LAY-password-submit'
+						  ,submit = layero.find('iframe').contents().find('#'+ submitID);
+				  //监听提交
+				  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+					  var field = data.field; //获取提交的字段
+					  //提交 Ajax 成功后，静态更新表格中的数据
+					  //新密码验证
+					  var reg = new RegExp(/^(?![^a-zA-Z]+$)(?!\D+$)/);
+					  if (!reg.test(field.newPassword) | field.newPassword.length <= field.passwordLength) {
+						  layer.msg("请输入格式正确的新密码");
+						  return false;
+					  }
+					  if (field.newPassword == field.oldPassword) {
+						  layer.msg("新密码与旧密码一致，不必修改");
+						  return false;
+					  }
+					  if (field.newPassword != field.checkNewPassword) {
+						  layer.msg("两次输入新密码不相同");
+						  return false;
+					  }
+					  $.ajax({
+						  url:'/sys/user/editPassWord',
+						  data:field,
+						  type: "post",
+						  success: function(e){
+							  if(e.code==0){
+							      layer.close();
+								  parent.layer.open({
+									  type:1,
+									  close:false,
+									  btnAlign:'c',
+									  content:'<div style="padding:20px 100px">修改密码成功</div>',
+									  btn:'确定',
+									  yes:function(index, layero){
+										  window.top.location = "/login/logOut";
+									  }
+								  });
+							  }else{
+								  layer.msg(e.msg);
+							  }
+						  }
+					  });
+				  });
+				  submit.trigger('click');
+			  }
+			  ,success: function(layero, index){
+
+			  }
+		  });
+	  });
 
 	  });
 

@@ -202,8 +202,9 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         }
         ,auto: true
        /* ,bindAction: '#startUploadFile'*/
-        ,size: 1024*10 //限制文件大小，单位 KB
-        ,before:function(inputObj){
+        ,size: 1024*100 //限制文件大小，单位 KB
+        ,before:function(){
+           /* debugger
             var size=inputObj.files[0].size;
             console.log(size);
             if(size>(100*1024*1024)){
@@ -213,7 +214,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             if(size==0){
                 layer.msg('文件大小不得为空',{icon:2});
                 return ;
-            }
+            }*/
             index=layer.load();
         },
         done: function(result){

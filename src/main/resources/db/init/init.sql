@@ -1401,8 +1401,7 @@ INSERT INTO `sys_user` VALUES ('1274', '2019-06-04 08:53:01', '2019-06-04 08:53:
 INSERT INTO `sys_user` VALUES ('1275', '2019-06-04 08:53:01', '2019-06-04 08:53:01', '281', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '人力资源部', '徐一钧', '13989883800', '0');
 INSERT INTO `sys_user` VALUES ('1276', '2019-06-04 08:53:01', '2019-06-04 08:53:01', '1637', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '人力资源部', '章舒莎', '18072899928', '0');
 INSERT INTO `sys_user` VALUES ('1277', '2019-06-04 08:53:01', '2019-06-04 08:53:01', '813', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '人力资源部', '叶萍', '13968191313', '0');
-INSERT INTO `sys_user` VALUES ('1278', '2019-06-05 14:45:58', '2019-06-05 14:45:58', '10000', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '信息中心本部', '后台管理员', '15988864336', '0');
-INSERT INTO `sys_user` VALUES ('1279', '2019-06-05 14:48:03', '2019-06-05 14:48:03', '10001', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '信息中心本部', '后台管理员', '15988864336', '0');
+INSERT INTO `sys_user` VALUES ('1278', '2019-06-05 14:45:58', '2019-06-05 14:45:58', '10000', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '', '后台管理员', '15988864336', '1');
 -- ----------------------------
 -- Table structure for sys_user_role
 -- ----------------------------
@@ -2900,3 +2899,31 @@ CREATE TABLE `finace_review` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- 系统配置表Table structure for sys_config
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_config`;
+CREATE TABLE `sys_config`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `config_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置名',
+  `config_value` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置值',
+  `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置描述',
+  `built_in` int(2) NULL DEFAULT NULL COMMENT '是否内置【enum】(0:否:FALSE,1:是:TRUE)',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of sys_config
+-- ----------------------------
+INSERT INTO `sys_config` VALUES (1, 'MAX_ERRORPASS_NUM', '5', '用户密码输入错误次数', 1);
+INSERT INTO `sys_config` VALUES (2, 'MIN_PASSWORD_LENGTH', '6', '用户密码输入最少长度', 1);
+INSERT INTO `sys_config` VALUES (3, 'SYSTEM_NAME', '财务报销系统', '系统名称', 1);
+INSERT INTO `sys_config` VALUES (4, 'DEFAULT_PASSWORD', '123456', '默认重置密码', 1);
+INSERT INTO `sys_config` VALUES (5, 'PASSWORD_COMPLEXITY', '1', '密码复杂度（0关闭，1开启）', 1);
+INSERT INTO `sys_config` VALUES (6, 'AUTO_UNLOCK', '60', '账号自动解锁时间（单位秒）', 1);
+INSERT INTO `sys_config` VALUES (7, 'REVIEW_STAFFCODE', '1722', '审查人员工号', 1);
+
+SET FOREIGN_KEY_CHECKS = 1;

@@ -9,15 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
-
-import com.yuanwang.common.utils.MD5Util;
-import com.yuanwang.sys.entity.Office;
-import com.yuanwang.sys.service.OfficeService;
-import com.yuanwang.sys.service.RoleService;
-import com.yuanwang.sys.service.UserService;
+import com.yuanwang.sys.service.ConfigService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.ModelMap;
@@ -29,35 +23,30 @@ import com.yuanwang.common.result.Result;
 import com.yuanwang.common.result.ResultUtil;
 import com.yuanwang.common.utils.excelexport.IChange;
 import com.yuanwang.common.utils.excelexport.ExcelFacts;
-import com.yuanwang.sys.entity.Role;
-import com.yuanwang.sys.entity.User;
+import com.yuanwang.sys.entity.Config;
 import com.yuanwang.sys.entity.enums.BuiltInEnum;
-import com.yuanwang.sys.entity.enums.StatusEnum;
 /**
- * UserController
- * 用户表
+ * ConfigController
+ * 系统配置表
  * @author  crj
  * @version v1.0.0
  * 描述：自动生成的代码
- * 时间：2018-09-04 15:12:54
+ * 时间：2019-06-13 08:12:16
  */
 @Controller
-@RequestMapping("/sys/user/")
-public class UserController extends BaseController<User>{
+@RequestMapping("/sys/config/")
+public class ConfigController extends BaseController<Config>{
 
 	@Resource
-	private UserService userService;
-	@Resource
-	private RoleService roleService;
-	@Resource
-	private OfficeService officeService;
+	private ConfigService configService;
+	
 	
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_INDEX)
 	public void indexJump(ModelMap map) {
-		
+		map.put("builtInEnum", BuiltInEnum.values());
 	}
 	
 	/**分页查询
@@ -70,13 +59,14 @@ public class UserController extends BaseController<User>{
 	 */
 	@RequestMapping(CONSTANT_LIST)
 	@ResponseBody
-	public Result index(User user, ModelMap map,HttpSession session,Integer page,Integer limit){
+	public Result index(Config config, ModelMap map,HttpSession session,Integer page,Integer limit){
 		Map<String,Object> search=new HashMap<String,Object>();
-		search.put("userName",user.getUserName());
-		search.put("realName",user.getRealName());
-		search.put("officeName",user.getOfficeName());
-		search.put("phone",user.getPhone());
-		PageInfo<User> pageinfo = userService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
+		search.put("builtIn", config.getBuiltIn());
+		search.put("configName", config.getConfigName());
+		search.put("configValue", config.getConfigValue());
+		search.put("description", config.getDescription());
+		search.put("builtIn", config.getBuiltIn());
+		PageInfo<Config> pageinfo = configService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
 		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}
 	
@@ -85,33 +75,23 @@ public class UserController extends BaseController<User>{
 	 */
 	@RequestMapping(CONSTANT_BUILD)
 	public void createJump(ModelMap map){
-		List<Role> roles=roleService.findAll();
-		map.put("roles",roles);
-		//获取科室列表
-		List<Office>  officeList=officeService.findAll();
-		map.put("officeList", officeList);
-
+		map.put("builtInEnum", BuiltInEnum.values());
 	}
 	
 	/**新增功能
-	 * @param user 新增对象
+	 * @param t 新增对象
 	 * @return 新增结果
 	 * @throws Exception 抛出异常
 	 */
 	@RequestMapping(CONSTANT_CREATE)
 	@ResponseBody
-	public Result create(User user,String roleIdsStr) {
-		if(user != null){
+	public Result create(Config config){
+		if(config != null){
 			Map<String,Object> map=new HashMap<String,Object>();
-			try {
-				user.setPassword(MD5Util.md5(MD5Util.md5(user.getPassword())));
-			}catch (Exception e){
-				e.printStackTrace();
-			}
-			user.setErrorNum(0);
-			user.setStatus(StatusEnum.ENABLED);
-			user.setBuiltIn(BuiltInEnum.FALSE);
-			Integer flag=userService.save(roleIdsStr,user,map,OperatorEnum.AND);
+			/**
+			 * 放入查重字段 map.put("name","测试");
+			 */
+			Integer flag=configService.save(config,map,OperatorEnum.AND);
 			if(flag==2) {
 				return ResultUtil.error("已存在");
 			}else if(flag==1) {
@@ -129,31 +109,25 @@ public class UserController extends BaseController<User>{
 	 */
 	@RequestMapping(CONSTANT_EDIT)
 	public void updateJump(Integer id, ModelMap map){
-		User result = userService.find(id);
+		Config result = configService.find(id);
 		map.put("result", result);
-		List<Role> roles=roleService.findAll();
-		map.put("roles",roles);
-		//获取科室列表
-		List<Office>  officeList=officeService.findAll();
-		map.put("officeList", officeList);
+		map.put("builtInEnum", BuiltInEnum.values());
 	}
 	
 	/**编辑功能
-	 * @param user 编辑对象
+	 * @param t 编辑对象
 	 * @return 编辑结果
 	 * @throws Exception 抛出异常
 	 */
 	@RequestMapping(CONSTANT_UPDATE)
 	@ResponseBody
-	public Result update(User user,String roleIdsStr){
-		if(user != null&&user.getId()!=null){
+	public Result update(Config config){ 
+		if(config != null&&config.getId()!=null){
 			Map<String,Object> map=new HashMap<String,Object>();
-			try {
-				user.setPassword(MD5Util.md5(MD5Util.md5(user.getPassword())));
-			}catch (Exception e){
-				e.printStackTrace();
-			}
-			Integer flag = userService.update(roleIdsStr,user,map,OperatorEnum.AND);
+			/**
+			 * 放入查重字段 map.put("name","测试");
+			 */
+			Integer flag = configService.update(config,map,OperatorEnum.AND);
 			if(flag==2) {
 				return ResultUtil.error("已存在");
 			}else if(flag==1) {
@@ -176,7 +150,7 @@ public class UserController extends BaseController<User>{
 		if(id==null){
 			return ResultUtil.error("id不能为空");
 		}
-		User result = userService.find(id);
+		Config result = configService.find(id);
 		if(result!=null) {
 			return ResultUtil.success("查询成功",result);
 		}else {
@@ -202,8 +176,8 @@ public class UserController extends BaseController<User>{
 				idsall.add(Integer.parseInt(id));
 			}
 		}
-		Integer flag=userService.delete(idsall);
-		if(flag>0) {
+		Integer flag=configService.delete(idsall);
+		if(flag==idsall.size()) {
 			return ResultUtil.success("删除成功");
 		}else {
 			return ResultUtil.error("删除失败");
@@ -211,7 +185,7 @@ public class UserController extends BaseController<User>{
 	}
 	
 	/**导出功能
-	 * @param user 查询条件
+	 * @param t 查询条件
 	 * @param session 会话对象获取当前会话信息
 	 * @param request 请求对象
 	 * @param response 响应对象
@@ -220,10 +194,10 @@ public class UserController extends BaseController<User>{
 	 */
 	@RequestMapping(CONSTANT_EXPORT)
 	@ResponseBody
-	public String export(User user,HttpSession session,
+	public String export(Config config,HttpSession session,
 			HttpServletRequest request, HttpServletResponse response,@NotNull Integer page) {
 		Map<String,Object> search=new HashMap<String,Object>();
-		List<Map<String, Object>> list = userService.excelExportList(search,ProjectDefined.DEFAULT_ORDER_BY,page,9999);
+		List<Map<String, Object>> list = configService.excelExportList(search,ProjectDefined.DEFAULT_ORDER_BY,page,9999);
 
 		Map<String, IChange> replaceIoChange = new HashMap<String, IChange>();
 		ExcelFacts excel = null;
@@ -236,86 +210,13 @@ public class UserController extends BaseController<User>{
 		excel.exportXLS(request, response);
 		return null;
 	}
-
-	/**重置密码功能
-	 * @param id 主键id
-	 */
-	@RequestMapping("resetPassword")
-	@ResponseBody
-	public Result resetPassword(Integer id){
-		Map<String,Object> map = new HashMap<String,Object>();
-		Integer flag = 0;
-		try{
-			User user=new User();
-			user.setId(id);
-			user.setPassword(MD5Util.md5(MD5Util.md5("123456")));
-			flag=userService.update(user);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		if(flag>0) {
-			return ResultUtil.success("重置成功");
-		}else {
-			return ResultUtil.error("重置失败");
-		}
-	}
-
-	/**跳转角色分配页面
-	 * @param id 编辑对象id
-	 */
-	@RequestMapping("distribute")
-	public void distribute(Integer id,ModelMap map){
-		map.put("userId",id);
-	}
 	
-	@RequestMapping("updateStatus")
+	/*
+	@RequestMapping("callPro")
 	@ResponseBody
-	public Result updateStatus(Integer userId,String status){
-		User user=new User();
-		user.setId(userId);
-		user.setStatus(StatusEnum.valueOf(status));
-		Integer flag=userService.update(user);
-		if(flag==1){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.error();
-		}
+	public Result callPro() {
+		PageInfo<Config> pageinfo = configService.findListByProceAndPage("pro", 1);
+		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}
-	/**
-	 * 去修改密码页面
-	 * @param
-	 */
-	@RequestMapping("toEditPassWord")
-	public void toEditPassWord() {
-
-	}
-
-	/**
-	 *修改密码
-	 * @param  session
-	 */
-	@RequestMapping("editPassWord")
-	@ResponseBody
-	public Result editPassWord(String oldPassword,String newPassword,HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		Integer flag = 0;
-		try {
-			oldPassword = MD5Util.md5(MD5Util.md5(oldPassword));
-			if (user.getPassword().equals(oldPassword)) {
-				user.setPassword(MD5Util.md5(MD5Util.md5(newPassword)));
-				flag = userService.update(user);
-			} else {
-				return ResultUtil.error("旧密码输入有误");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (flag == 1) {
-			return ResultUtil.success();
-		} else {
-			return ResultUtil.error();
-		}
-	}
-
-
+	*/
 }

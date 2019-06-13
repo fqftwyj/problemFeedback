@@ -22,9 +22,12 @@ import com.yuanwang.finace.entity.Review;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
 import com.yuanwang.finace.service.ReimburseService;
 import com.yuanwang.finace.service.ReviewService;
+import com.yuanwang.sys.entity.Config;
 import com.yuanwang.sys.entity.Office;
 import com.yuanwang.sys.entity.User;
+import com.yuanwang.sys.service.ConfigService;
 import com.yuanwang.sys.service.OfficeService;
+import com.yuanwang.sys.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -63,7 +66,10 @@ public class ReimburseController extends BaseController<Reimburse>{
 	@Resource
 	private OfficeService officeService;
 	private static String prefixPath;
-
+	@Resource
+	ConfigService configService;
+	@Resource
+	UserService userService;
 	@PostConstruct //指定该方法在对象被创建后马上调用 相当于配置文件中的init-method属性
 	public void setPrefixPath() throws FileNotFoundException {
 	/*	File path = new File(ResourceUtils.getURL("classpath:").getPath());
@@ -224,7 +230,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_UPDATE)
 	@ResponseBody
-	public Result update(Reimburse reimburse,int type){
+	public Result update(Reimburse reimburse,int type,HttpSession session){
 		//id为null 看到了
 		if(reimburse != null && reimburse.getId()!=null){
 			Map<String,Object> map=new HashMap<String,Object>();
@@ -269,9 +275,11 @@ public class ReimburseController extends BaseController<Reimburse>{
 					return ResultUtil.success("删除成功");
 				}else if(type==2){
 					//提交上报后，发送待审查短信提醒财务
-
-					//TestSms.sendphoneMain("你有待审查的报销流程，请确认（财务报销系统）","15925638980");
-					TestSms.sendphoneMain("你有待审查的报销流程，请确认（财务报销系统）","15988864336");
+					//根据工号获取电话号码
+					Map<String,Object> mapPhone=new HashMap<String,Object>();
+					mapPhone.put("userName",session.getAttribute("REVIEW_STAFFCODE"));
+					User user=userService.find(mapPhone);
+					TestSms.sendphoneMain("你有待审查的报销流程，请确认（财务报销系统）",user.getPhone());
 				}
 				return ResultUtil.success("更新成功");
 			}else {

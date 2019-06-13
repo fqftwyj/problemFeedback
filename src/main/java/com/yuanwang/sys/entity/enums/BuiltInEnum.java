@@ -9,7 +9,7 @@ package com.yuanwang.sys.entity.enums;
  */
 public enum BuiltInEnum{
 
-	FALSE(0,"FALSE"),
+	FALSE(0,"否"),
     TRUE(1,"是");
 	
 	private int value;

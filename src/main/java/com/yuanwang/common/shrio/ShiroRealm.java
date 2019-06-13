@@ -9,6 +9,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import com.yuanwang.sys.entity.Config;
+import com.yuanwang.sys.service.ConfigService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -41,7 +43,8 @@ public class ShiroRealm extends AuthorizingRealm{
 	private UserService userService;
 	@Resource
 	private RoleService roleService;
-	
+	@Resource
+	private ConfigService configService;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		User user=(User)SecurityUtils.getSubject().getPrincipal();
@@ -91,6 +94,13 @@ public class ShiroRealm extends AuthorizingRealm{
 		    try {
 				if(!user.getPassword().equals(MD5Util.md5(password))){
 					user.setErrorNum(user.getErrorNum()+1);
+					map.put("configName","MAX_ERRORPASS_NUM");
+					Config config=configService.find(map);
+					Integer errorPassNum=Integer.parseInt(config.getConfigValue());
+					if(user.getErrorNum()>=errorPassNum){
+						user.setStatus(StatusEnum.DISABLED);
+					}
+					//错误次数超过最大值，禁用账户
 					userService.update(user);
 				}
 			} catch (NoSuchAlgorithmException e) {

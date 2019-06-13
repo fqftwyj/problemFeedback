@@ -1,7 +1,10 @@
 package com.yuanwang.common.controller;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import com.yuanwang.sys.entity.Config;
+import com.yuanwang.sys.service.ConfigService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -15,6 +18,8 @@ import com.yuanwang.common.result.Result;
 import com.yuanwang.common.result.ResultUtil;
 import com.yuanwang.sys.entity.User;
 
+import java.util.List;
+
 /**登录登出
  * @author ywpc41
  *
@@ -23,10 +28,14 @@ import com.yuanwang.sys.entity.User;
 @RequestMapping("login")
 public class LoginController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
-	
+	@Resource
+	ConfigService configService;
 	@RequestMapping("login")
-	public void login() {
-		
+	public void login(HttpSession session) {
+		List<Config> configList=configService.findAll();
+		for(Config cf:configList){
+			session.setAttribute(cf.getConfigName(), cf.getConfigValue());
+		}
 	}
 	
 	
@@ -43,6 +52,7 @@ public class LoginController {
 		/*	currentUser.login(token);//验证角色和权限   */
 			User user=(User) currentUser.getPrincipal();
 			session.setAttribute("user", user);
+
 			return ResultUtil.success("登录成功");
 		}catch(UnknownAccountException e){
 			return ResultUtil.error("没有该用户");
@@ -59,8 +69,9 @@ public class LoginController {
 	
 	@RequestMapping("logOut")
 	public String logOut(HttpSession session) {
-	    Subject subject = SecurityUtils.getSubject();
-	    subject.logout();
-	    return "login/login";
+		//拦截器已经做了处理，不需要做了
+/*	    Subject subject = SecurityUtils.getSubject();
+	    subject.logout();*/
+	    return "redirect:login";
 	}
 }

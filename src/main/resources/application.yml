@@ -45,7 +45,7 @@ spring:
     http:
       multipart:
         #设置单个文件的大小限制
-        max-file-size: 100MB
+        max-file-size: 1000MB
         #设置单次请求的总大小限制
         max-request-size: 1000MB
     resources:

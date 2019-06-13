@@ -3,8 +3,11 @@ package com.yuanwang.common.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import com.yuanwang.sys.entity.Config;
+import com.yuanwang.sys.service.ConfigService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +56,7 @@ public class IndexMenuController extends BaseController<Integer>{
 		map.addAttribute("secondPer",secondPer);
 		map.addAttribute("id",id);
 		map.addAttribute("realName",user.getRealName());
+
 	}
 	
 }

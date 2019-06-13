@@ -54,9 +54,9 @@ spring:
       servlet:
         multipart:
           #设置单个文件的大小限制
-          max-file-size: -1
+          max-file-size: 1000MB
           #设置单次请求的总大小限制
-          max-request-size: -1
+          max-request-size: 2000MB
 # 配置请求头传输大小
 server:
  # servlet:

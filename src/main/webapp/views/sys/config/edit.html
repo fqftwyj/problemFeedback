@@ -36,17 +36,7 @@
         <input type="text" name="description" lay-verify="required" placeholder="请输入配置描述" autocomplete="off" class="layui-input" value="${result.description!}">
       </div>
     </div>
-<!--    <div class="layui-form-item">
-      <label class="layui-form-label">是否内置</label>
-      <div class="layui-input-inline">
-	  <select name='builtIn'>
-	       <option value="">请输入</option>
-	       <#list builtInEnum as obj>
-	       <option value="${obj}" <#if obj==result.builtIn>selected</#if> >${obj.desc}</option>
-	       </#list>
-	  </select>
-      </div>-->
-    </div>
+
     <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="LAY-config-submit" id="LAY-config-submit" value="确认">
     </div>

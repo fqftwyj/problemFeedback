@@ -51,20 +51,20 @@ spring:
       throw-exception-if-no-handler-found: true
     jmx:
       default-domain: WebFrame
-      servlet:
-        multipart:
-          #设置单个文件的大小限制
-          max-file-size: 1000MB
-          #设置单次请求的总大小限制
-          max-request-size: 2000MB
+    servlet:
+      multipart:
+        #设置单个文件的大小限制
+        max-file-size: 1000MB
+        #设置单次请求的总大小限制
+        max-request-size: 10000MB
 
 # 配置请求头传输大小
 server:
  # servlet:
    # context-path:/finacemanage
   max-http-header-size: 10000000
-
-  
+  tomcat:
+    max-http-post-size: -1
 # Shiro
 shiro:
   configLocation: classpath:/ehcache-shiro.xml

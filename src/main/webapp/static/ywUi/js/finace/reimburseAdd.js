@@ -202,7 +202,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         }
         ,auto: true
        /* ,bindAction: '#startUploadFile'*/
-        ,size: 50000//限制文件大小，单位 KB
+        ,size: 1024*1000//限制文件大小，单位 KB
         ,before:function(){
            /* debugger
             var size=inputObj.files[0].size;
@@ -221,12 +221,12 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             if(result.msg != '上传成功'){
                 layer.msg(result.msg, {icon:1});
             }else if(result.msg == '上传成功'){
-
                 var dat=result.data.split(";");
                 $("#uploadPath").val(dat[0]);
                 $("#uploadName").val(dat[1]);
                 var module=$("#module").val();
                 var html= "<span class=\"layui-inline layui-upload-choose\" >  <a  data-name=\""+dat[1]+"\" data-path="+dat[0]+" class=\"downloadA\" data-module="+module+" onclick=\"fqdownload('/upload/fileDownload?',this)\">"+dat[2]+"</a></span>";
+                $(".layui-upload-choose").remove();
                 $("#selectFile").after(html);
                 layer.msg("上传成功!",{icon:1});
                 layer.close(index);

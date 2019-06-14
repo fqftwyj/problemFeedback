@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,7 +53,7 @@ public class FileController {
 		String fileName=null;
 		String fileNames="";
 		String orignFileName="";
-		BufferedOutputStream buffStream=null;
+	/*	BufferedOutputStream buffStream=null;*/
 		if(StringUtils.isBlank(module)){
 			return ResultUtil.error("参数缺失图片所属模块参数");
 		}
@@ -69,17 +70,20 @@ public class FileController {
 					fileName=files[i].getOriginalFilename();
 					fileNames=","+files[i].getOriginalFilename();
 					orignFileName=","+files[i].getOriginalFilename();
-					byte[] bytes=files[i].getBytes();
+					//解决上传大文件报内存溢出错误OutOfMemory
+					FileCopyUtils.copy(files[i].getInputStream(),new FileOutputStream(new File(path+File.separator+startTime+fileName)));
+				    //下面那种方式解决会内存溢出
+					/*	byte[] bytes=files[i].getBytes();
 					buffStream =new BufferedOutputStream(new FileOutputStream(new File(path+File.separator+startTime+fileName)));
-					buffStream.write(bytes);
+					buffStream.write(bytes);*/
 				/*	filePath=",/static"+File.separator+module+File.separator+startTime+fileName+filePath;*/
 					filePath=","+startTime+fileName+filePath;
 				}
 			} catch (Exception e) {
 					return ResultUtil.error(e.getMessage());
-			} finally{
+			}/* finally{
 					buffStream.close();
-			}
+			}*/
 			return ResultUtil.success("上传成功",filePath.substring(1)+";"+fileNames.substring(1)+";"+orignFileName.substring(1));
 		}else{
 			return ResultUtil.error("上传文件为空");

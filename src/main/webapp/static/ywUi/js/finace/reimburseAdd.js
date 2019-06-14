@@ -202,7 +202,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
         }
         ,auto: true
        /* ,bindAction: '#startUploadFile'*/
-        ,size: 1024*100 //限制文件大小，单位 KB
+        ,size: 50000//限制文件大小，单位 KB
         ,before:function(){
            /* debugger
             var size=inputObj.files[0].size;

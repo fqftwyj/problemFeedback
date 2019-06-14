@@ -2,17 +2,247 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50622
+Source Server Version : 50725
 Source Host           : localhost:3306
-Source Database       : webframe
+Source Database       : finacemanage
 
 Target Server Type    : MYSQL
-Target Server Version : 50622
+Target Server Version : 50725
 File Encoding         : 65001
 
-Date: 2018-12-12 14:38:30
+Date: 2019-06-14 10:34:06
 */
+
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for finace_reimburse
+-- ----------------------------
+DROP TABLE IF EXISTS `finace_reimburse`;
+CREATE TABLE `finace_reimburse` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `staff_code` varchar(255) NOT NULL COMMENT '员工编号',
+  `office_code` varchar(255) NOT NULL COMMENT '科室编号',
+  `reimburse_type` smallint(2) NOT NULL COMMENT '报销类别【enum】(1:外出培训:outtrain)',
+  `reimburse_state` smallint(2) NOT NULL COMMENT '报销状态【enum】(1:已上报:hasSubmit,0:未上报:notSubmit,2:重新上报:reSubmit)',
+  `reimburse_date` datetime NOT NULL COMMENT ' 报销日期',
+  `reimburse_members` varchar(255) NOT NULL COMMENT '报销成员',
+  `reimburse_reason` varchar(5000) NOT NULL COMMENT '报销理由',
+  `reimburse_items` text NOT NULL COMMENT '报销事项',
+  `reimburse_cost` varchar(255) NOT NULL COMMENT '报销费用',
+  `upload_path` varchar(2000) NOT NULL COMMENT '上传文件路径',
+  `upload_name` varchar(2000) NOT NULL COMMENT '上传文件名称',
+  `del_flag` varchar(11) NOT NULL DEFAULT '0' COMMENT '伪删除标记',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of finace_reimburse
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for finace_review
+-- ----------------------------
+DROP TABLE IF EXISTS `finace_review`;
+CREATE TABLE `finace_review` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id(审查id)',
+  `reimburse_id` int(11) DEFAULT NULL COMMENT '报销id',
+  `review_opinion` varchar(2000) NOT NULL COMMENT '审查意见',
+  `review_state` smallint(2) NOT NULL COMMENT '审查类别【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of finace_review
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sys_config
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_config`;
+CREATE TABLE `sys_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `config_name` varchar(200) DEFAULT NULL COMMENT '配置名',
+  `config_value` varchar(200) DEFAULT NULL COMMENT '配置值',
+  `description` varchar(200) DEFAULT NULL COMMENT '配置描述',
+  `built_in` int(2) DEFAULT NULL COMMENT '是否内置【enum】(0:否:FALSE,1:是:TRUE)',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统配置表';
+
+-- ----------------------------
+-- Records of sys_config
+-- ----------------------------
+INSERT INTO `sys_config` VALUES ('1', 'MAX_ERRORPASS_NUM', '5', '用户密码输入错误次数', '1');
+INSERT INTO `sys_config` VALUES ('2', 'MIN_PASSWORD_LENGTH', '6', '用户密码输入最少长度', '1');
+INSERT INTO `sys_config` VALUES ('3', 'SYSTEM_NAME', '财务报销系统', '系统名称', '1');
+INSERT INTO `sys_config` VALUES ('4', 'DEFAULT_PASSWORD', '123456', '默认重置密码', '1');
+INSERT INTO `sys_config` VALUES ('5', 'PASSWORD_COMPLEXITY', '1', '密码复杂度（0关闭，1开启）', '1');
+INSERT INTO `sys_config` VALUES ('6', 'AUTO_UNLOCK', '60', '账号自动解锁时间（单位秒）', '1');
+INSERT INTO `sys_config` VALUES ('7', 'REVIEW_STAFFCODE', '1732', '审查人员工号', '1');
+
+-- ----------------------------
+-- Table structure for sys_office
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_office`;
+CREATE TABLE `sys_office` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `office_code` varchar(250) NOT NULL COMMENT '科室编号',
+  `office_name` varchar(250) NOT NULL COMMENT '科室名称',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_office
+-- ----------------------------
+INSERT INTO `sys_office` VALUES ('1', '10101', '风湿免疫、老年病病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('2', '10103', '风湿免疫科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('3', '10105', '老年病门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('4', '10107', '方便门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('5', '10109', '市府保健门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('6', '10201', '骨二科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('7', '10203', '骨一科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('8', '10205', '骨科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('9', '10207', '腰腿痛微创门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('10', '10301', '普外三科（肿瘤、胃肠）病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('11', '10305', '肿瘤科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('12', '10401', '普外二科（肝胆胰）病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('13', '10403', '肝胆外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('14', '10501', '消化内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('15', '10505', '消化内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('16', '10601', '血液内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('17', '10603', '血液内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('18', '10701', '普外一科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('19', '10703', '普外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('20', '10705', '乳腺外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('21', '10801', '心胸血管外科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('22', '10803', '心胸血管外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('23', '10901', '呼吸内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('24', '10903', '呼吸内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('25', '11001', '泌尿外科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('26', '11003', '泌尿外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('27', '11005', '男性科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('28', '11101', '皮肤科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('29', '11103', '皮肤科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('30', '11201', '肾内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('31', '11202', '血透室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('32', '11203', '肾内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('33', '11301', '内分泌科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('34', '11303', '内分泌科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('35', '11401', '眼科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('36', '11405', '眼科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('37', '11407', '视光门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('38', '11501', '耳鼻喉科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('39', '11503', '耳鼻喉科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('40', '11601', '口腔科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('41', '11603', '口腔科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('42', '11701', '心血管内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('43', '11703', '心血管内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('44', '11705', '起搏器门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('45', '11801', '产科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('46', '11803', '产科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('47', '11901', '妇科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('48', '11903', '妇科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('49', '12001', '儿科、新生儿重症监护病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('50', '12003', '儿科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('51', '12101', '内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('52', '12103', '全科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('53', '12105', '肿瘤放疗科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('54', '12201', '重症医学科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('55', '12301', '肛肠、烧伤整形科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('56', '12303', '肛肠科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('57', '12305', '烧伤整形科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('58', '12307', '整形美容门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('59', '12501', '神经外科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('60', '12503', '神经外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('61', '12601', '神经内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('62', '12603', '神经内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('63', '12605', '失眠与心理咨询门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('64', '12701', '中西医结合病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('65', '12703', '中医门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('66', '12705', '中医骨伤科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('67', '12707', '软组织挫伤门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('68', '12709', '推拿科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('69', '12711', '针灸科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('70', '12801', '感染科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('71', '12802', '感染科二病区（呼吸）', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('72', '12803', '感染科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('73', '12805', '发热门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('74', '12807', '肠道门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('75', '12809', '结核病门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('76', '12901', '综合病区、EICU', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('77', '12903', '急诊医学科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('78', '13101', '疼痛科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('79', '13103', '小针刀门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('80', '13403', '体检中心门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('81', '13405', '驾驶员体检中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('82', '13501', '介入治疗中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('83', '13601', '秋丰门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('84', '201', '手术麻醉科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('85', '202', '医学检验科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('86', '203', '病理科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('87', '204', '放射科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('88', '205', 'B超室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('89', '206', '功能检查科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('90', '207', '内镜中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('91', '208', '骨密度室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('92', '210', '放疗中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('93', '212', '高压氧治疗中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('94', '213', '输血科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('95', '214', '输液室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('96', '215', '西药房', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('97', '216', '中药房', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('98', '301', '供应室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('99', '302', '营养室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('100', '303', '病区服务中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('101', '304', '门诊部-候诊室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('102', '305', '门诊部-门诊一站式', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('103', '306', '财务科-挂号收费处', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('104', '307', '财务科-住院处', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('105', '308', '质量管理办公室-病案室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('106', '310', '洗衣组', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('107', '311', '电工组', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('108', '312', '污水处理', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('109', '315', '急救中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('110', '319', '总务维修', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('111', '320', '氧气组', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('112', '401', '院办', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('113', '402', '党委', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('114', '403', '团委', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('115', '404', '工会', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('116', '405', '科教科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('117', '406', '外联办', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('118', '407', '档案室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('119', '408', '离退休管理办公室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('120', '409', '医务科-图书室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('121', '410', '人力资源部', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('122', '411', '财务科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('123', '412', '医保科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('124', '413', '设备科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('125', '414', '信息中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('126', '415', '医务科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('127', '416', '护理部', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('128', '417', '院感科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('129', '418', '信息中心-统计室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('130', '419', '总务科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('131', '420', '基建科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('132', '421', '保卫科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('133', '422', '职工食堂', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('134', '423', '公共卫生科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('135', '424', '质量管理办公室-质控科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('136', '428', '行政车队', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('137', '429', '门诊部', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('138', '432', '质量管理办公室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('139', '436', '后勤仓库', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('140', '438', '锅炉房', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('141', '439', '下派指导员', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('142', '440', '规培人员', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
+INSERT INTO `sys_office` VALUES ('143', '441', '外借人员', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -43,10 +273,10 @@ INSERT INTO `sys_permission` VALUES ('104', '2019-05-10 09:44:03', '2019-05-10 0
 INSERT INTO `sys_permission` VALUES ('10202', '2019-06-04 14:25:25', '2019-06-04 14:25:25', '权限管理', 'qxgl', '1', '/sys/permission/index', '1', '1', '1', '102');
 INSERT INTO `sys_permission` VALUES ('10203', '2019-06-04 14:26:05', '2019-06-04 14:26:05', '角色管理', 'jsgl', '1', '/sys/role/index', '2', '2', '2', '102');
 INSERT INTO `sys_permission` VALUES ('10204', '2019-06-04 14:26:35', '2019-06-04 14:26:52', '用户管理', '3', '1', '/sys/user/index', '3', '3', '3', '102');
+INSERT INTO `sys_permission` VALUES ('10205', '2019-06-13 14:11:17', '2019-06-13 14:11:32', '系统配置', 'xtpz', '1', '/sys/config/index', '1', '系统配置菜单', '4', '102');
 INSERT INTO `sys_permission` VALUES ('10301', '2019-05-10 09:22:29', '2019-05-16 11:23:43', '报销清单', 'bxgl', '1', '/finace/reimburse/index', 'bxgl', 'bxgl', '1', '103');
 INSERT INTO `sys_permission` VALUES ('10401', '2019-05-10 10:45:33', '2019-05-31 17:14:34', '待审查清单', 'dscqd', '1', '/finace/review/index?type=1', 'dscqd', 'dscqd', '1', '104');
 INSERT INTO `sys_permission` VALUES ('10402', '2019-05-10 10:46:34', '2019-05-31 17:14:42', '历史审查清单', 'lsscqd', '1', '/finace/review/index?type=2', 'lsscqd', 'lsscqd', '2', '104');
-
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -59,7 +289,7 @@ CREATE TABLE `sys_role` (
   `name` varchar(200) DEFAULT NULL COMMENT '角色名',
   `description` varchar(4000) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
@@ -67,6 +297,7 @@ CREATE TABLE `sys_role` (
 INSERT INTO `sys_role` VALUES ('1', '2018-08-07 14:56:57', '2019-06-04 13:41:18', '后台管理员', '后台管理员');
 INSERT INTO `sys_role` VALUES ('2', '2019-05-10 09:10:26', '2019-05-10 10:54:43', '财务报销', '财务报销');
 INSERT INTO `sys_role` VALUES ('3', '2019-05-10 10:49:07', '2019-05-10 10:49:07', '财务审查', '财务审查');
+
 -- ----------------------------
 -- Table structure for sys_role_permission
 -- ----------------------------
@@ -76,7 +307,7 @@ CREATE TABLE `sys_role_permission` (
   `role_id` int(11) DEFAULT NULL COMMENT '角色id',
   `permission_id` int(11) DEFAULT NULL COMMENT '权限id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 COMMENT='角色权限关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8 COMMENT='角色权限关系表';
 
 -- ----------------------------
 -- Records of sys_role_permission
@@ -86,11 +317,6 @@ INSERT INTO `sys_role_permission` VALUES ('2', '2', '10301');
 INSERT INTO `sys_role_permission` VALUES ('3', '3', '104');
 INSERT INTO `sys_role_permission` VALUES ('4', '3', '10401');
 INSERT INTO `sys_role_permission` VALUES ('5', '3', '10402');
-INSERT INTO `sys_role_permission` VALUES ('6', '1', '1');
-INSERT INTO `sys_role_permission` VALUES ('7', '1', '102');
-INSERT INTO `sys_role_permission` VALUES ('8', '1', '10202');
-INSERT INTO `sys_role_permission` VALUES ('9', '1', '10203');
-INSERT INTO `sys_role_permission` VALUES ('10', '1', '10204');
 INSERT INTO `sys_role_permission` VALUES ('11', '5', '1');
 INSERT INTO `sys_role_permission` VALUES ('12', '5', '102');
 INSERT INTO `sys_role_permission` VALUES ('13', '5', '10202');
@@ -101,6 +327,12 @@ INSERT INTO `sys_role_permission` VALUES ('17', '5', '10301');
 INSERT INTO `sys_role_permission` VALUES ('18', '5', '104');
 INSERT INTO `sys_role_permission` VALUES ('19', '5', '10401');
 INSERT INTO `sys_role_permission` VALUES ('20', '5', '10402');
+INSERT INTO `sys_role_permission` VALUES ('62', '1', '1');
+INSERT INTO `sys_role_permission` VALUES ('63', '1', '102');
+INSERT INTO `sys_role_permission` VALUES ('64', '1', '10202');
+INSERT INTO `sys_role_permission` VALUES ('65', '1', '10203');
+INSERT INTO `sys_role_permission` VALUES ('66', '1', '10204');
+INSERT INTO `sys_role_permission` VALUES ('67', '1', '10205');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -119,7 +351,7 @@ CREATE TABLE `sys_user` (
   `phone` varchar(255) DEFAULT NULL COMMENT '联系电话',
   `built_in` int(2) DEFAULT NULL COMMENT '是否内置【enum】(0:FALSE:,1:是:TRUE)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1280 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=1279 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -1402,6 +1634,7 @@ INSERT INTO `sys_user` VALUES ('1275', '2019-06-04 08:53:01', '2019-06-04 08:53:
 INSERT INTO `sys_user` VALUES ('1276', '2019-06-04 08:53:01', '2019-06-04 08:53:01', '1637', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '人力资源部', '章舒莎', '18072899928', '0');
 INSERT INTO `sys_user` VALUES ('1277', '2019-06-04 08:53:01', '2019-06-04 08:53:01', '813', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '人力资源部', '叶萍', '13968191313', '0');
 INSERT INTO `sys_user` VALUES ('1278', '2019-06-05 14:45:58', '2019-06-05 14:45:58', '10000', 'F59BD65F7EDAFB087A81D4DCA06C4910', '1', '0', '', '后台管理员', '15988864336', '1');
+
 -- ----------------------------
 -- Table structure for sys_user_role
 -- ----------------------------
@@ -2695,235 +2928,3 @@ INSERT INTO `sys_user_role` VALUES ('1276', '1276', '2');
 INSERT INTO `sys_user_role` VALUES ('1277', '1277', '2');
 INSERT INTO `sys_user_role` VALUES ('1278', '1278', '1');
 INSERT INTO `sys_user_role` VALUES ('1279', '1279', '3');
-
-
-
--- ----------------------------
--- 科室字典表
--- Table structure for sys_office
--- ----------------------------
-DROP TABLE IF EXISTS `sys_office`;
-CREATE TABLE `sys_office` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `office_code` varchar(250) NOT NULL COMMENT '科室编号',
-  `office_name` varchar(250) NOT NULL COMMENT '科室名称',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of sys_office
--- ----------------------------
-INSERT INTO `sys_office` VALUES ('1', '10101', '风湿免疫、老年病病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('2', '10103', '风湿免疫科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('3', '10105', '老年病门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('4', '10107', '方便门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('5', '10109', '市府保健门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('6', '10201', '骨二科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('7', '10203', '骨一科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('8', '10205', '骨科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('9', '10207', '腰腿痛微创门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('10', '10301', '普外三科（肿瘤、胃肠）病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('11', '10305', '肿瘤科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('12', '10401', '普外二科（肝胆胰）病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('13', '10403', '肝胆外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('14', '10501', '消化内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('15', '10505', '消化内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('16', '10601', '血液内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('17', '10603', '血液内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('18', '10701', '普外一科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('19', '10703', '普外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('20', '10705', '乳腺外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('21', '10801', '心胸血管外科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('22', '10803', '心胸血管外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('23', '10901', '呼吸内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('24', '10903', '呼吸内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('25', '11001', '泌尿外科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('26', '11003', '泌尿外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('27', '11005', '男性科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('28', '11101', '皮肤科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('29', '11103', '皮肤科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('30', '11201', '肾内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('31', '11202', '血透室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('32', '11203', '肾内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('33', '11301', '内分泌科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('34', '11303', '内分泌科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('35', '11401', '眼科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('36', '11405', '眼科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('37', '11407', '视光门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('38', '11501', '耳鼻喉科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('39', '11503', '耳鼻喉科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('40', '11601', '口腔科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('41', '11603', '口腔科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('42', '11701', '心血管内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('43', '11703', '心血管内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('44', '11705', '起搏器门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('45', '11801', '产科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('46', '11803', '产科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('47', '11901', '妇科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('48', '11903', '妇科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('49', '12001', '儿科、新生儿重症监护病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('50', '12003', '儿科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('51', '12101', '内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('52', '12103', '全科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('53', '12105', '肿瘤放疗科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('54', '12201', '重症医学科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('55', '12301', '肛肠、烧伤整形科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('56', '12303', '肛肠科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('57', '12305', '烧伤整形科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('58', '12307', '整形美容门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('59', '12501', '神经外科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('60', '12503', '神经外科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('61', '12601', '神经内科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('62', '12603', '神经内科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('63', '12605', '失眠与心理咨询门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('64', '12701', '中西医结合病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('65', '12703', '中医门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('66', '12705', '中医骨伤科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('67', '12707', '软组织挫伤门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('68', '12709', '推拿科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('69', '12711', '针灸科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('70', '12801', '感染科病区', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('71', '12802', '感染科二病区（呼吸）', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('72', '12803', '感染科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('73', '12805', '发热门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('74', '12807', '肠道门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('75', '12809', '结核病门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('76', '12901', '综合病区、EICU', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('77', '12903', '急诊医学科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('78', '13101', '疼痛科门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('79', '13103', '小针刀门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('80', '13403', '体检中心门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('81', '13405', '驾驶员体检中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('82', '13501', '介入治疗中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('83', '13601', '秋丰门诊', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('84', '201', '手术麻醉科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('85', '202', '医学检验科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('86', '203', '病理科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('87', '204', '放射科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('88', '205', 'B超室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('89', '206', '功能检查科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('90', '207', '内镜中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('91', '208', '骨密度室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('92', '210', '放疗中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('93', '212', '高压氧治疗中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('94', '213', '输血科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('95', '214', '输液室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('96', '215', '西药房', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('97', '216', '中药房', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('98', '301', '供应室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('99', '302', '营养室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('100', '303', '病区服务中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('101', '304', '门诊部-候诊室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('102', '305', '门诊部-门诊一站式', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('103', '306', '财务科-挂号收费处', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('104', '307', '财务科-住院处', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('105', '308', '质量管理办公室-病案室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('106', '310', '洗衣组', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('107', '311', '电工组', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('108', '312', '污水处理', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('109', '315', '急救中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('110', '319', '总务维修', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('111', '320', '氧气组', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('112', '401', '院办', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('113', '402', '党委', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('114', '403', '团委', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('115', '404', '工会', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('116', '405', '科教科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('117', '406', '外联办', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('118', '407', '档案室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('119', '408', '离退休管理办公室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('120', '409', '医务科-图书室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('121', '410', '人力资源部', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('122', '411', '财务科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('123', '412', '医保科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('124', '413', '设备科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('125', '414', '信息中心', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('126', '415', '医务科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('127', '416', '护理部', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('128', '417', '院感科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('129', '418', '信息中心-统计室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('130', '419', '总务科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('131', '420', '基建科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('132', '421', '保卫科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('133', '422', '职工食堂', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('134', '423', '公共卫生科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('135', '424', '质量管理办公室-质控科', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('136', '428', '行政车队', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('137', '429', '门诊部', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('138', '432', '质量管理办公室', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('139', '436', '后勤仓库', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('140', '438', '锅炉房', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('141', '439', '下派指导员', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('142', '440', '规培人员', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-INSERT INTO `sys_office` VALUES ('143', '441', '外借人员', '2019-05-20 08:53:01', '2019-05-20 08:53:01');
-
-
--- ----------------------------
--- 报销列表
--- Table structure for finace_reimburse
--- ----------------------------
-DROP TABLE IF EXISTS `finace_reimburse`;
-CREATE TABLE `finace_reimburse` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `staff_code` varchar(255) NOT NULL COMMENT '员工编号',
-  `office_code` varchar(255) NOT NULL COMMENT '科室编号',
-  `reimburse_type` smallint(2) NOT NULL COMMENT '报销类别【enum】(1:外出培训:outtrain)',
-  `reimburse_state` smallint(2) NOT NULL COMMENT '报销状态【enum】(1:已上报:hasSubmit,0:未上报:notSubmit,2:重新上报:reSubmit)',
-  `reimburse_date` datetime NOT NULL COMMENT ' 报销日期',
-  `reimburse_members` varchar(255) NOT NULL COMMENT '报销成员',
-  `reimburse_reason` varchar(5000) NOT NULL COMMENT '报销理由',
-  `reimburse_items` text NOT NULL COMMENT '报销事项',
-  `reimburse_cost` varchar(255) NOT NULL COMMENT '报销费用',
-  `upload_path` varchar(2000) NOT NULL COMMENT '上传文件路径',
-  `upload_name` varchar(2000) NOT NULL COMMENT '上传文件名称',
-  `del_flag` varchar(11) NOT NULL DEFAULT '0' COMMENT '伪删除标记',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- 审查列表
--- Table structure for finace_review
--- ----------------------------
-DROP TABLE IF EXISTS `finace_review`;
-CREATE TABLE `finace_review` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id(审查id)',
-  `reimburse_id` int(11) DEFAULT NULL COMMENT '报销id',
-  `review_opinion` varchar(2000) NOT NULL COMMENT '审查意见',
-  `review_state` smallint(2) NOT NULL COMMENT '审查类别【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- 系统配置表Table structure for sys_config
--- ----------------------------
-DROP TABLE IF EXISTS `sys_config`;
-CREATE TABLE `sys_config`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `config_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置名',
-  `config_value` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置值',
-  `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置描述',
-  `built_in` int(2) NULL DEFAULT NULL COMMENT '是否内置【enum】(0:否:FALSE,1:是:TRUE)',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置表' ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of sys_config
--- ----------------------------
-INSERT INTO `sys_config` VALUES (1, 'MAX_ERRORPASS_NUM', '5', '用户密码输入错误次数', 1);
-INSERT INTO `sys_config` VALUES (2, 'MIN_PASSWORD_LENGTH', '6', '用户密码输入最少长度', 1);
-INSERT INTO `sys_config` VALUES (3, 'SYSTEM_NAME', '财务报销系统', '系统名称', 1);
-INSERT INTO `sys_config` VALUES (4, 'DEFAULT_PASSWORD', '123456', '默认重置密码', 1);
-INSERT INTO `sys_config` VALUES (5, 'PASSWORD_COMPLEXITY', '1', '密码复杂度（0关闭，1开启）', 1);
-INSERT INTO `sys_config` VALUES (6, 'AUTO_UNLOCK', '60', '账号自动解锁时间（单位秒）', 1);
-INSERT INTO `sys_config` VALUES (7, 'REVIEW_STAFFCODE', '1722', '审查人员工号', 1);
-
-SET FOREIGN_KEY_CHECKS = 1;

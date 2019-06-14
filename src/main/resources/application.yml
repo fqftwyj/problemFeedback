@@ -57,6 +57,7 @@ spring:
           max-file-size: 1000MB
           #设置单次请求的总大小限制
           max-request-size: 2000MB
+
 # 配置请求头传输大小
 server:
  # servlet:

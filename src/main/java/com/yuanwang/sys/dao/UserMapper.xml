@@ -70,7 +70,7 @@
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> updated_time = #{updatedTime}
     		</if>
 	    	<if test="userName!=null and userName!=''">
-    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>  user_name like concat('%',#{userName},'%')
+    		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>  user_name = #{userName}
     		</if>
 	    	<if test="password!=null and password!=''">
     		 <choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose> password = #{password}

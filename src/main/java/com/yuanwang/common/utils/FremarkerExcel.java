@@ -2,11 +2,16 @@ package com.yuanwang.common.utils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 public class FremarkerExcel {
@@ -101,10 +106,10 @@ public class FremarkerExcel {
             throw e;
         }
     }
-    //下载附件粘贴单
+    //下载指定路径下的文件
     public  void dowloadAttachExcel(String path, String templateNM, HttpServletResponse response) throws Exception{
         //先生成excel到本地
-        String lastPath=path  +File.separator+ "财务管理系统操作手册-审查流程.doc";
+        String lastPath=path  +File.separator+ templateNM;
         //页面上直接下载
         //设置响应头和客户端保存文件名
         response.setContentType("multipart/form-data;charset=utf-8");
@@ -131,7 +136,59 @@ public class FremarkerExcel {
         }
     }
 
-
+    //下载指定路径下的文件zip格式
+    public  void dowloadAttachZip(String path, String templateNM, HttpServletResponse response) throws Exception{
+        //下载文件名乱码问题解决
+        templateNM=  new String(templateNM.getBytes("gbk"),"iso8859-1");
+        //将文件进行打包下载
+        try {
+            OutputStream out = response.getOutputStream();
+            byte[] data = createZip(path+File.separator+"doc");//服务器存储地址
+            response.reset();
+            response.setHeader("Content-Disposition","attachment;fileName="+templateNM);
+            response.addHeader("Content-Length", ""+data.length);
+            response.setContentType("application/octet-stream;charset=UTF-8");
+            IOUtils.write(data, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    //创建压缩包
+    public byte[] createZip(String srcSource) throws Exception{
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        //将目标文件打包成zip导出
+        File file = new File(srcSource);
+        a(zip,file,"");
+        IOUtils.closeQuietly(zip);
+        return outputStream.toByteArray();
+    }
+    //遍历读文件
+    public void a(ZipOutputStream zip, File file, String dir) throws Exception {
+        //如果当前的是文件夹，则进行进一步处理
+        if (file.isDirectory()) {
+            //得到文件列表信息
+            File[] files = file.listFiles();
+            //将文件夹添加到下一级打包目录
+            zip.putNextEntry(new ZipEntry(dir + "/"));
+            dir = dir.length() == 0 ? "" : dir + "/";
+            //循环将文件夹中的文件打包
+            for (int i = 0; i < files.length; i++) {
+                a(zip, files[i], dir + files[i].getName());         //递归处理
+            }
+        } else {   //当前的是文件，打包处理
+            //文件输入流
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+            ZipEntry entry = new ZipEntry(dir);
+            zip.putNextEntry(entry);
+            zip.write(FileUtils.readFileToByteArray(file));
+            IOUtils.closeQuietly(bis);
+            zip.flush();
+            zip.closeEntry();
+        }
+    }
 
 
 }

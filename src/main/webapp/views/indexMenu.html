@@ -50,28 +50,21 @@
 	                <dl class="layui-nav-child layui-anim layui-anim-upbit">
 						<dd><a>${realName}</a></dd>
 						<dd id="tab1"><a>修改密码</a></dd>
-						<!--<dd><a  lay-href="/sys/user/toEditPassWord">修改密码</a></dd> layui-icon-download-circle-->
-						<dd><a onclick="download1()">操作说明下载</a></dd>
+						<#if Session["roleIds"]!=',1,'>
+						  <dd><a onclick="download1()">操作说明下载</a></dd>
+					    </#if>
 	                    <dd><a href="login/logOut">退出登录</a></dd>
 	                </dl>
 	              </li>
 				<li class="layui-nav-item">
 
 				</li>
-	             <!-- <li class="layui-nav-item">
-					&lt;!&ndash;  <dd><a href="">操作手册下载</a></dd>&ndash;&gt;
-	              	 <a href="javascript:;" class="yw-a-noword">
-	              	 		<i class="iconfont icon-help01 yw-iconfont-noword"></i>
-	              	 		<span class="layui-nav-more" style="display: none;"></span>
-	              	 </a>
-	              </li>-->
-                <li class="layui-nav-item">
-
+               <!-- <li class="layui-nav-item">
                     <a onclick="download1()" class="yw-a-noword">
                         <i class="iconfont layui-icon-download-circle yw-iconfont-noword"></i>
                         <span class="layui-nav-more" style="display: none;"></span>
                     </a>
-                </li>
+                </li>-->
             </ul>
           </div>
         </div>

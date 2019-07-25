@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import com.yuanwang.sys.entity.Config;
+import com.yuanwang.sys.entity.Role;
 import com.yuanwang.sys.service.ConfigService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -52,7 +53,15 @@ public class LoginController {
 		/*	currentUser.login(token);//验证角色和权限   */
 			User user=(User) currentUser.getPrincipal();
 			session.setAttribute("user", user);
+			//获取角色Ids
+			List<Role> roles= user.getRoles();
+			String roleIds="";
+			for(Role r:roles){
+				roleIds+=","+r.getId();
 
+			}
+			roleIds=roleIds.equals("")?roleIds:roleIds+",";
+			session.setAttribute("roleIds", roleIds);
 			return ResultUtil.success("登录成功");
 		}catch(UnknownAccountException e){
 			return ResultUtil.error("没有该用户");

@@ -1,11 +1,15 @@
 package com.yuanwang.common.controller;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.yuanwang.common.utils.FremarkerExcel;
+import com.yuanwang.sys.entity.Role;
+import com.yuanwang.sys.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -141,12 +145,32 @@ public class FileController {
 	 */
 	@RequestMapping("exportUseDoc")
 	@ResponseBody
-	public String exportUseDoc(HttpServletResponse response) {
+	public String exportUseDoc(HttpServletResponse response, HttpSession session) {
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
 			String prePath=this.getClass().getResource("/").getPath();
-			prePath= new String(prePath.getBytes("gbk"),"utf-8");
-			fexcle.dowloadAttachExcel(prePath+File.separator+"doc","财务管理系统操作手册.doc",response);
+			User user=(User)session.getAttribute("user");
+			List<Role> roles= user.getRoles();
+			String templateNM="";
+			String roleIds="";
+			for(Role r:roles){
+				roleIds+=","+r.getId();
+
+			}
+			roleIds=roleIds.equals("")?roleIds:roleIds+",";
+			String suffixName="doc";
+			//根据角色来分配下载的操作手册
+			if(roleIds.contains(",2,") && roleIds.contains(",3,")){
+				fexcle.dowloadAttachZip(prePath,"系统操作手册.zip",response);
+			} else if(roleIds.contains(",2,")){
+				templateNM="财务管理系统操作手册-报销流程.doc";
+				fexcle.dowloadAttachExcel(prePath+File.separator+suffixName,templateNM,response);
+			}else if(roleIds.contains(",3,")){
+				templateNM="财务管理系统操作手册-审查流程.doc";
+				fexcle.dowloadAttachExcel(prePath+File.separator+suffixName,templateNM,response);
+			}
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

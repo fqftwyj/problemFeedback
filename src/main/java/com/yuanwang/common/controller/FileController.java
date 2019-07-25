@@ -4,6 +4,8 @@ import java.net.URLEncoder;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.yuanwang.common.utils.FremarkerExcel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -131,5 +133,23 @@ public class FileController {
 	    } catch (Exception e){
 	        throw e;
 	    }
+	}
+	/**
+	 * 下载使用手册
+	 * @param response 响应对象
+	 * @return 导出对象
+	 */
+	@RequestMapping("exportUseDoc")
+	@ResponseBody
+	public String exportUseDoc(HttpServletResponse response) {
+		try {
+			FremarkerExcel fexcle=new FremarkerExcel();
+			String prePath=this.getClass().getResource("/").getPath();
+			prePath= new String(prePath.getBytes("gbk"),"utf-8");
+			fexcle.dowloadAttachExcel(prePath+File.separator+"doc","财务管理系统操作手册.doc",response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

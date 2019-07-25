@@ -104,7 +104,7 @@ public class FremarkerExcel {
     //下载附件粘贴单
     public  void dowloadAttachExcel(String path, String templateNM, HttpServletResponse response) throws Exception{
         //先生成excel到本地
-        String lastPath=path  +File.separator+ "other.xlsx";
+        String lastPath=path  +File.separator+ "财务管理系统操作手册-审查流程.doc";
         //页面上直接下载
         //设置响应头和客户端保存文件名
         response.setContentType("multipart/form-data;charset=utf-8");

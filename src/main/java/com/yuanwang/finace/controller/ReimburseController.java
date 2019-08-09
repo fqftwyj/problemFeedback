@@ -453,9 +453,10 @@ public class ReimburseController extends BaseController<Reimburse>{
 		Double totalFee=totalCarBoatTravelDou+totalotherFeeDou;
 		//最终的合计，四舍五入保留两位小数
 		dataMap.put("totalFee", (ChineseNumber.getChineseNumber((double)Math.round(totalFee*100)/100)));
-		System.out.println(String.valueOf(dataMap.get("totalFee")));
+	/*	System.out.println(String.valueOf(dataMap.get("totalFee")));*/
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
+
 			fexcle.createWord(prefixPath+File.separator+"excel","core-office.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();

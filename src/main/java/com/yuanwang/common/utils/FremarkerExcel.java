@@ -37,7 +37,7 @@ public class FremarkerExcel {
             e.printStackTrace();
         }
     }
-
+   //下载excel文件
     public  void createWord2(String path, String templateNM, Map<String, Object> dataMap, Map<String, Object> resMap,HttpServletResponse response) throws Exception{
         /*   getData(dataMap);*/
         // 这里赋值的时候需要注意,xml中需要的数据你必须提供给它,不然会报找不到某元素错的.
@@ -110,6 +110,7 @@ public class FremarkerExcel {
             throw e;
         }
     }
+    //下载 pdf文件
     public  void createWord(String path, String templateNM, Map<String, Object> dataMap, Map<String, Object> resMap,HttpServletResponse response) throws Exception{
      /*   getData(dataMap);*/
         // 这里赋值的时候需要注意,xml中需要的数据你必须提供给它,不然会报找不到某元素错的.
@@ -141,7 +142,6 @@ public class FremarkerExcel {
             e1.printStackTrace();
         }
 
-
         try {
             t.process(dataMap, out);
             out.flush();
@@ -151,28 +151,6 @@ public class FremarkerExcel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //excel转成pdf
-        // 验证License
-        if (!getLicense()) {
-            return;
-        }
-        FileOutputStream fileOS =null;
-        File pdfFile =null;
-        try {
-            long old = System.currentTimeMillis();
-            Workbook wb = new Workbook(lastPath);// 原始excel路径
-            String lastpdfPath=lastPath.substring(0,lastPath.lastIndexOf("."))+".pdf";
-            pdfFile = new File(lastpdfPath);// 输出路径
-            fileOS = new FileOutputStream(pdfFile);
-            wb.save(fileOS, SaveFormat.PDF);
-            long now = System.currentTimeMillis();
-            System.out.println("共耗时：" + ((now - old) / 1000.0) + "秒");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            fileOS.flush();
-            fileOS.close();
-        }
        //页面上直接下载
         //设置响应头和客户端保存文件名
         response.setContentType("multipart/form-data;charset=utf-8");
@@ -181,21 +159,45 @@ public class FremarkerExcel {
         String downloadFileName = URLEncoder.encode("外出培训（进修）报销单-"+userName+reimburseDate+".pdf","UTF-8");
         // 设置响应头，控制浏览器下载该文件
         response.setHeader("Content-Disposition", "attachment;filename=" + downloadFileName);
-
         try {
-            //打开本地文件流
-            InputStream inputStream = new FileInputStream(lastPath);
-            //激活下载操作
-            OutputStream os = response.getOutputStream();
-            //循环写入输出流
-            byte[] b = new byte[2048];
-            int length;
-            while ((length = inputStream.read(b)) > 0) {
-                os.write(b, 0, length);
+            //excel转成pdf
+            // 验证License
+            if (!getLicense()) {
+                return;
             }
-            // 这里主要关闭。
-            os.close();
-            inputStream.close();
+            FileOutputStream fileOS =null;
+            File pdfFile =null;
+            try {
+                long old = System.currentTimeMillis();
+                Workbook wb = new Workbook(lastPath);// 原始excel路径
+                String lastpdfPath=lastPath.substring(0,lastPath.lastIndexOf("."))+".pdf";
+                pdfFile = new File(lastpdfPath);// 输出路径
+                fileOS = new FileOutputStream(pdfFile);
+                wb.save(fileOS, SaveFormat.PDF);
+                long now = System.currentTimeMillis();
+                System.out.println("共耗时：" + ((now - old) / 1000.0) + "秒");
+
+                //打开本地文件流,将pdf的文件流写入下载的文件里
+                InputStream inputStream = new FileInputStream(lastpdfPath);
+                //激活下载操作
+                OutputStream os = response.getOutputStream();
+                //循环写入输出流
+                byte[] b = new byte[2048];
+                int length;
+                while ((length = inputStream.read(b)) > 0) {
+                    os.write(b, 0, length);
+                }
+                // 这里主要关闭。
+                os.close();
+                inputStream.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                fileOS.flush();
+                fileOS.close();
+            }
+
             //下载后删除excel文件
             if(outFile.exists()){
                 outFile.delete();

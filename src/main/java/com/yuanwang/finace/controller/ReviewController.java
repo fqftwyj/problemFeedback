@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yuanwang.common.utils.TestSms;
 import com.yuanwang.finace.entity.Reimburse;
+import com.yuanwang.finace.entity.enums.FoundSourceEnum;
 import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
 import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
 import com.yuanwang.finace.service.ReimburseService;
@@ -80,7 +81,7 @@ public class ReviewController extends BaseController<Review>{
 	 */
 	@RequestMapping(CONSTANT_LIST)
 	@ResponseBody
-	public Result index(Review review,Reimburse reimburse,int type, ModelMap map,HttpSession session,Integer page,Integer limit){
+	public Result index(Review review,Reimburse reimburse,int type,int flag, ModelMap map,HttpSession session,Integer page,Integer limit){
 		Map<String,Object> search=new HashMap<String,Object>();
 		search.put("reimburseType", reimburse.getReimburseType());
 		search.put("staffCode", reimburse.getStaffCode());
@@ -98,6 +99,8 @@ public class ReviewController extends BaseController<Review>{
 		}
 		search.put("type", type);
         map.put("type",type);
+		search.put("flag", flag);
+		map.put("flag",flag);
 		PageInfo<Review> pageinfo = reviewService.findByPage(search,ProjectDefined.DEFAULT_ORDER_BY,(page==null?1:page),(limit==null?99999:limit));
 		return ResultUtil.success("查询成功", (int)pageinfo.getTotal(), pageinfo.getList());
 	}
@@ -141,6 +144,8 @@ public class ReviewController extends BaseController<Review>{
 	 */
 	@RequestMapping(CONSTANT_EDIT)
 	public void updateJump(Integer id,Integer reimburseId,Integer type, ModelMap map,HttpSession session){
+		//设置经费来源枚举列表
+		map.put("foundSourceEnum", FoundSourceEnum.values());
 		//获取科室列表
 		List<Office>  officeList=officeService.findAll();
 		map.put("officeList", officeList);

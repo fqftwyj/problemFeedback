@@ -5,7 +5,31 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
    laydate=layui.laydate,
    upload=layui.upload;
     //常规用法
+    var  $snObj= $("input[name='specialName']");
+    var val=$("select[name='foundSource']").val();
+    if(val=='KEYDISCIPLINES'|| val=='RESEARCHTOPICS' || val=='TALENTTRAIN' ){
 
+        $("#specialNameId").css("display","inline-block");
+        $snObj.attr("lay-verify","required");
+    }else{
+        $snObj.val("");
+        $snObj.removeAttr("lay-verify");
+        $("#specialNameId").css("display","none");
+    }
+    //监听下拉框选中事件
+    form.on('select(foundSourceSel)', function (data) {
+
+        if(data.value=='KEYDISCIPLINES'|| data.value=='RESEARCHTOPICS' || data.value=='TALENTTRAIN' ){
+            $("#specialNameId").css("display","inline-block");
+            $snObj.attr("lay-verify","required");
+        }else{
+            $snObj.val("");
+            $snObj.removeAttr("lay-verify");
+            $("#specialNameId").css("display","none");
+        }
+        form.render();
+
+    });
 
     //鼠标悬停提示特效
     //车船费报销

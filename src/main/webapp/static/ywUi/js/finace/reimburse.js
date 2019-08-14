@@ -3,6 +3,7 @@ layui.define(['table', 'form'], function (exports) {
         , table = layui.table
         , form = layui.form;
 
+
     table.render({
         elem: '#LAY-reimburse-table'
         , url: 'list' //模拟接口
@@ -121,6 +122,8 @@ layui.define(['table', 'form'], function (exports) {
                         newData.reimburseMembers = dat.reimburseMembers;
                         newData.reimburseDate = dat.reimburseDate;
                         newData.reimburseReason = dat.reimburseReason;
+                        newData.foundSource=dat.foundSource;
+                        newData.specialName=dat.specialName;
                         newData.reimburseType = dat.reimburseType;
                         newData.staffCode = dat.staffCode;
                         newData.uploadPath = dat.uploadPath;

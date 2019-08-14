@@ -19,7 +19,7 @@ import com.yuanwang.common.utils.FremarkerExcel;
 import com.yuanwang.common.utils.StringHelper;
 import com.yuanwang.common.utils.TestSms;
 import com.yuanwang.finace.entity.Review;
-import com.yuanwang.finace.entity.enums.ReviewStateEnum;
+import com.yuanwang.finace.entity.enums.*;
 import com.yuanwang.finace.service.ReimburseService;
 import com.yuanwang.finace.service.ReviewService;
 import com.yuanwang.sys.entity.Config;
@@ -44,8 +44,6 @@ import com.yuanwang.common.result.ResultUtil;
 import com.yuanwang.common.utils.excelexport.IChange;
 import com.yuanwang.common.utils.excelexport.ExcelFacts;
 import com.yuanwang.finace.entity.Reimburse;
-import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
-import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
 
 /**
  * ReimburseController
@@ -144,6 +142,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		User user=(User)session.getAttribute("user");
 		map.put("userName", user.getUserName());
+		//设置经费来源枚举列表
+		map.put("foundSourceEnum", FoundSourceEnum.values());
 	}
 	/**新增功能
 	 * @param t 新增对象
@@ -180,6 +180,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 	 */
 	@RequestMapping(CONSTANT_EDIT)
 	public void updateJump(Integer id, ModelMap map,HttpSession session){
+		//设置经费来源枚举列表
+		map.put("foundSourceEnum", FoundSourceEnum.values());
         User user=(User)session.getAttribute("user");
         map.put("userName", user.getUserName());
 		//获取科室列表
@@ -257,6 +259,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 					review.setReimburseId(reimburse.getId());
 					review.setReviewState(ReviewStateEnum.NOTREVIEW);
 					review.setReviewOpinion("");
+					review.setSecondReviewState(SecondReviewStateEnum.UNKONW);
+					review.setSecondReviewOpinion("");
 					reviewService.save(review,reviewmap,OperatorEnum.AND);
 				}
 			}else  if(type==3){

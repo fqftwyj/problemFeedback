@@ -48,6 +48,26 @@
 
         </div>
       </div>
+  <div class="layui-col-md11">
+    <div class="layui-inline">
+      <label class="layui-form-label">  <span class="layui-form-label-span-must" >*</span>经费来源：</label>
+      <div class="layui-input-block" style="display: block;">
+        <select name='foundSource' lay-filter="foundSourceSel">
+         <!-- <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>-->
+        <#list foundSourceEnum as obj>
+        <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc}</option>
+       </#list>
+       </select>
+  </div>
+</div>
+<div class="layui-inline" id="specialNameId">
+  <label class="layui-form-label">  <span class="layui-form-label-span-must" >*</span>专项名称：</label>
+  <div class="layui-input-block-special" >
+    <input type="text" name="specialName" placeholder="请输入" autocomplete="off"
+           class="layui-input" value="${result.specialName}" lay-verify="required">
+  </div>
+</div>
+</div>
     <input type="hidden" name="reimburseType" value="${result.reimburseType}" >
     <input type="hidden" name="staffCode" value="${result.staffCode}" >
     </div>

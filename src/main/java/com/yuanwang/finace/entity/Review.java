@@ -5,6 +5,8 @@ import com.yuanwang.common.core.BaseEntity;
 import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
 import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
 import com.yuanwang.finace.entity.enums.ReviewStateEnum;
+import com.yuanwang.finace.entity.enums.SecondReviewStateEnum;
+
 /**
  * 
  * @author  crj
@@ -19,6 +21,9 @@ public class Review extends BaseEntity{
 	//审查意见
 	private String reviewOpinion;	
 	private ReviewStateEnum reviewState;
+	private SecondReviewStateEnum secondReviewState;
+	//第二级审查意见
+	private String secondReviewOpinion;
 	//创建时间
 	private String createTime;
 	//更新时间
@@ -113,5 +118,27 @@ public class Review extends BaseEntity{
 
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
+	}
+	/**获取审查类别【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)
+	 */
+	public SecondReviewStateEnum getSecondReviewState(){
+		return this.secondReviewState;
+	}
+	/**设置审查类别【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)
+	 * @param secondReviewState
+	 */
+	public void  setSecondReviewState(SecondReviewStateEnum secondReviewState){
+		this.secondReviewState = secondReviewState;
+	}
+	/**获取第二级审查意见
+	 */
+	public String getSecondReviewOpinion(){
+		return this.secondReviewOpinion;
+	}
+	/**设置第二级审查意见
+	 * @param secondReviewOpinion
+	 */
+	public void  setSecondReviewOpinion(String secondReviewOpinion){
+		this.secondReviewOpinion = secondReviewOpinion;
 	}
 }

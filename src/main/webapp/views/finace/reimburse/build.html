@@ -22,8 +22,8 @@
                         <select name='officeCode'  lay-verify="selectcheck" >
                             <option value="">请输入</option>
                             <#list officeList as obj>
-                            <option value="${obj.officeCode}">${obj.officeName}</option>
-                        </#list>
+                               <option value="${obj.officeCode}">${obj.officeName}</option>
+                            </#list>
                         </select>
                     </div>
                 </div>
@@ -53,6 +53,36 @@
                     </div>
 
                 </div>
+            </div>
+            <div class="layui-col-md11">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>经费来源：</label>
+                    <div class="layui-input-block" style="display: block;">
+                        <select name="foundSource"  lay-verify="selectcheck"  lay-filter="foundSourceSel">
+                          <!--  <option value="">请输入</option>-->
+                            <#list foundSourceEnum as obj>
+                            <option value="${obj}">${obj.desc}</option>
+                           </#list>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline" id="specialNameId">
+                    <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>专项名称：</label>
+                    <div class="layui-input-block-special" >
+                        <input type="text" name="specialName" placeholder="请输入" autocomplete="off"
+                               class="layui-input" lay-verify="required">
+                    </div>
+                   <!-- <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+                        <i class="layui-icon layui-icon-about title-text-icon  title-text-icon-second-separator"
+                           id="travelPeopleInfo"></i>
+                    </div>-->
+                </div>
+                <!--  <div class="layui-inline">
+                      <label class="layui-form-label">报销日期：</label>
+                      <div class="layui-input-block">
+                          <input type="text" name="reimburseDate" id="reimburse_date" placeholder="请输入" autocomplete="off" class="layui-input">
+                      </div>
+                  </div>-->
             </div>
 
         </div>

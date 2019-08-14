@@ -48,6 +48,30 @@
 
       </div>
     </div>
+  <div class="layui-col-md11">
+    <div class="layui-inline">
+      <label class="layui-form-label">经费来源：</label>
+      <div class="layui-input-block" style="display: block;">
+    <select disabled="disabled">
+   <!--   <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>-->
+    <#list foundSourceEnum as obj>
+    <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc！}</option>
+</#list>
+</select>
+  </div>
+</div>
+<div class="layui-inline">
+  <label class="layui-form-label">：</label>
+  <div class="layui-input-block-special" >
+    <input type="text"  placeholder="请输入" autocomplete="off" id="specialName"
+           class="layui-input" value="${result.specialName}" lay-verify="required" readonly="readonly">
+  </div>
+  <!-- <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+     <i class="layui-icon layui-icon-about title-text-icon  title-text-icon-second-separator"
+        id="travelPeopleInfo"></i>
+   </div>-->
+</div>
+</div>
   </div>
   <div class="layui-card-body  layui-card-body-scroll">
     <div class="reimburse-card-body-title">

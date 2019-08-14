@@ -2,6 +2,7 @@ package com.yuanwang.finace.entity;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yuanwang.common.core.BaseEntity;
+import com.yuanwang.finace.entity.enums.FoundSourceEnum;
 import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
 import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
 /**
@@ -21,6 +22,9 @@ public class Reimburse extends BaseEntity{
 	private String officeName;
 	private ReimburseTypeEnum reimburseType;
 	private ReimburseStateEnum reimburseState;
+	private FoundSourceEnum foundSource;
+	//专项名称
+	private String specialName;
 	// 报销日期
 	private String reimburseDate;
 	//报销成员
@@ -208,5 +212,28 @@ public class Reimburse extends BaseEntity{
 	public void  setUpdateTime(Date updateTime){
 		this.updateTime = updateTime;
 	}
+	/**获取经费来源【enum】(1:医院1（临床、医技科室）:clinicalMedicine,2:医院2（护理）:nurse,3:医院3（行政后勤）:adminLogistic,4:重点学科专项:  keyDisciplines,5:科研课题专项:  researchTopics,6:人才培养专项:talentTrain)
+	 */
+	public FoundSourceEnum getFoundSource(){
+		return this.foundSource;
+	}
+	/**设置经费来源【enum】(1:医院1（临床、医技科室）:clinicalMedicine,2:医院2（护理）:nurse,3:医院3（行政后勤）:adminLogistic,4:重点学科专项:  keyDisciplines,5:科研课题专项:  researchTopics,6:人才培养专项:talentTrain)
+	 * @param foundSource
+	 */
+	public void  setFoundSource(FoundSourceEnum foundSource){
+		this.foundSource = foundSource;
+	}
+	/**获取专项名称
+	 */
+	public String getSpecialName(){
+		return this.specialName;
+	}
+	/**设置专项名称
+	 * @param specialName
+	 */
+	public void  setSpecialName(String specialName){
+		this.specialName = specialName;
+	}
+
 	
 }

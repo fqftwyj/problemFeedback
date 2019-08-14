@@ -5,11 +5,11 @@ package com.yuanwang.finace.entity.enums;
  * @author  crj
  * @version v1.0.0
  * 描述：自动生成的代码
- * @since 2019-05-16 11:15:07
+ * @since 2019-08-14 15:53:34
  */
 public enum ReimburseTypeEnum{
 
-    OUTTRAIN(1,"外出培训");
+    OUTTRAIN(0,"外出培训");
 	
 	private int value;
 	private String desc;

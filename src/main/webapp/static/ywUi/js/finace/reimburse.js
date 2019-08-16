@@ -39,7 +39,7 @@ layui.define(['table', 'form'], function (exports) {
                                 return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
                             }
                         } else {
-                            return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                            return '<span style="color: #777;font-weight: bold;">  未知</span>';
                         }
                     }else{
                         return '<span style="color: #777;font-weight: bold;">  --</span>';
@@ -64,7 +64,7 @@ layui.define(['table', 'form'], function (exports) {
                                 return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
                             }
                         } else {
-                            return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                            return '<span style="color: #777;font-weight: bold;">  未知</span>';
                         }
                     }else{
                         if (d.review && d.review.secondReviewState) {
@@ -78,20 +78,20 @@ layui.define(['table', 'form'], function (exports) {
                             } else if (obj == "NOTPASSREVIEW") {
                                 return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
                             }else if (obj == "UNKONW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  未知</span>';
+                                return '<span style="color: #777;font-weight: bold;">  未知</span>';
                             }
                         } else {
-                            return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                            return '<span style="color: #777;font-weight: bold;">  未知</span>';
                         }
                     }
 
 
                 }
             }
-           ,  {
+           ,/*  {
                 title: '审查意见（护理部/科教科）', templet: '#titleTiplhl'
-            },{
-                title: '审查意见(财务)', templet: '#titleTipl'
+            }, {
+                title: '审查意见(财务)', templet: '#titleTiplcw'
             }
             , {
                 field: 'reimburseDate',  width: '8%',title: ' 报销日期', templet: function (d) {
@@ -103,7 +103,7 @@ layui.define(['table', 'form'], function (exports) {
 
                 }
             }
-            , {title: '提交上报', width: '8%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
+            , */{title: '提交上报', width: '8%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
             , {title: '操作', width: '22%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
         ]]
         , page: true

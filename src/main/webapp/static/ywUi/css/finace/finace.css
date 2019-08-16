@@ -47,6 +47,12 @@
 .layui-inline .layui-input-block-left{
     margin-left: 170px;
 }
+.layui-inline .layui-form-label-big-width{
+    width: 200px;
+}
+.layui-inline .layui-input-block-big-left {
+    margin-left: 230px;
+}
 .layui-card-body .reimburse-attach-explation-div{
     overflow: hidden;
     margin-bottom: 30px;

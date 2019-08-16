@@ -240,8 +240,13 @@ public class ReviewController extends BaseController<Review>{
 			//财务科未通过或者护理，科教未通过都通知申请人已打回
 			ReviewStateEnum reviewStateEnum=review.getReviewState();
 			SecondReviewStateEnum secondReviewStateEnum=review.getSecondReviewState();
-			if(reviewStateEnum.equals(ReviewStateEnum.NOTPASSREVIEW) || (secondReviewStateEnum !=null && secondReviewStateEnum.equals(ReviewStateEnum.NOTPASSREVIEW))){
+			if(reviewStateEnum.equals(ReviewStateEnum.NOTPASSREVIEW) || (secondReviewStateEnum !=null && secondReviewStateEnum.equals(SecondReviewStateEnum.NOTPASSREVIEW))){
 				result.setReimburseState(ReimburseStateEnum.RESUBMIT);
+				if((secondReviewStateEnum !=null && secondReviewStateEnum.equals(SecondReviewStateEnum.NOTPASSREVIEW))){
+					//二級打回时一级的审查结果和意见复制二级的
+					review.setReviewState(ReviewStateEnum.NOTPASSREVIEW);
+					review.setReviewOpinion(review.getSecondReviewOpinion());
+				}
 				flag0=reimburseService.update(result,map,OperatorEnum.AND);
 				//重新打回后，发送重新上报的短信提醒报销的账户
 				TestSms.sendphoneMain("你有报销流程审查未通过被打回，请确认（财务报销系统）",phone);

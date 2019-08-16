@@ -53,15 +53,15 @@
       <label class="layui-form-label">经费来源：</label>
       <div class="layui-input-block" style="display: block;">
     <select disabled="disabled">
-   <!--   <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>-->
+      <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>
     <#list foundSourceEnum as obj>
-    <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc！}</option>
-</#list>
-</select>
-  </div>
+    <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc!}</option>
+    </#list>
+    </select>
+   </div>
 </div>
-<div class="layui-inline">
-  <label class="layui-form-label">：</label>
+<div class="layui-inline" id="specialNameId">
+  <label class="layui-form-label">专项名称：</label>
   <div class="layui-input-block-special" >
     <input type="text"  placeholder="请输入" autocomplete="off" id="specialName"
            class="layui-input" value="${result.specialName}" lay-verify="required" readonly="readonly">
@@ -267,7 +267,11 @@
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label">审查意见：</label>
       <div class="layui-input-block">
+        <#if flag==1 && result.foundSource!='ADMINLOGISTIC'>
+        <textarea placeholder="请输入内容"   name="secondReviewOpinion" class="layui-textarea" >${result.review.secondReviewOpinion!}</textarea>
+        <#else>
         <textarea placeholder="请输入内容"   name="reviewOpinion" class="layui-textarea" >${result.review.reviewOpinion!}</textarea>
+      </#if>
       </div>
     </div>
   </div>
@@ -275,8 +279,17 @@
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label">审查结果：</label>
       <div class="layui-input-block">
+        <#if flag==1 && result.foundSource!='ADMINLOGISTIC'>
+        <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.secondReviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
+        <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.secondReviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+        <input type="hidden" name="reviewState" value="${result.review.reviewState!}">
+        <input type="hidden" name="reviewOpinion" value="${result.review.reviewOpinion!}">
+        <#else>
         <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
         <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+        <input type="hidden" name="secondReviewState" value="${result.review.secondReviewState!}">
+         <input type="hidden" name="secondReviewOpinion" value="${result.review.secondReviewOpinion!}">
+    </#if>
       </div>
       <input type="hidden"  name="id"  value="${id}"/>
       <input type="hidden"  name="reimburseId"  value="${result.id}"/>
@@ -313,7 +326,14 @@
     //自定义验证规则-附件不能为空
     form.verify({
       validateRadioOne: function (value) {
-        var objs = $('input:radio[name="reviewState"]:checked');
+        debugger
+        var flag='${flag}';
+        var foundSource='${result.foundSource}';
+        var state="reviewState";
+        if(flag==1 && foundSource!='ADMINLOGISTIC'){
+          state="secondReviewState";
+        }
+        var objs = $('input:radio[name="'+state+'"]:checked');
         if (objs.length==0) {
           return "请选择审查结果";
         }
@@ -321,7 +341,16 @@
     });
 
   });
-
+  var  $snObj= $("#specialName");
+  var val=$("select[name='foundSource']").val();
+  if(val=='KEYDISCIPLINES'|| val=='RESEARCHTOPICS' || val=='TALENTTRAIN' ){
+    $("#specialNameId").css("display","inline-block");
+    $snObj.attr("lay-verify","required");
+  }else{
+    $snObj.val("");
+    $snObj.removeAttr("lay-verify");
+    $("#specialNameId").css("display","none");
+  }
 
   //下载文件
   function fqdownload(url,ele){

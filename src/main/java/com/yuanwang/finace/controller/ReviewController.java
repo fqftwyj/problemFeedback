@@ -14,9 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yuanwang.common.utils.TestSms;
 import com.yuanwang.finace.entity.Reimburse;
-import com.yuanwang.finace.entity.enums.FoundSourceEnum;
-import com.yuanwang.finace.entity.enums.ReimburseStateEnum;
-import com.yuanwang.finace.entity.enums.ReimburseTypeEnum;
+import com.yuanwang.finace.entity.enums.*;
 import com.yuanwang.finace.service.ReimburseService;
 import com.yuanwang.finace.service.ReviewService;
 import com.yuanwang.sys.entity.Office;
@@ -37,7 +35,7 @@ import com.yuanwang.common.result.ResultUtil;
 import com.yuanwang.common.utils.excelexport.IChange;
 import com.yuanwang.common.utils.excelexport.ExcelFacts;
 import com.yuanwang.finace.entity.Review;
-import com.yuanwang.finace.entity.enums.ReviewStateEnum;
+
 /**
  * ReviewController
  * 
@@ -63,11 +61,17 @@ public class ReviewController extends BaseController<Review>{
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_INDEX)
-	public void indexJump(ModelMap map,int type) {
+	public void indexJump(ModelMap map,int type,int flag) {
 		map.put("reimburseTypeEnum", ReimburseTypeEnum.values());
 		map.put("type", type);
+		map.put("flag", flag);
         if(type==2){
-            map.put("reviewStateEnum", ReviewStateEnum.values());
+        	if(flag==1){
+				map.put("secondReviewStateEnum", SecondReviewStateEnum.values());
+			}else{
+				map.put("reviewStateEnum", ReviewStateEnum.values());
+			}
+
         }
 	}
 	
@@ -137,13 +141,13 @@ public class ReviewController extends BaseController<Review>{
 		}
 		return ResultUtil.error("空数据");
 	}
-	
+
 	/**跳转编辑页面
 	 * @param id 编辑对象id
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
 	@RequestMapping(CONSTANT_EDIT)
-	public void updateJump(Integer id,Integer reimburseId,Integer type, ModelMap map,HttpSession session){
+	public void updateJump(Integer id,Integer reimburseId,Integer type,Integer flag, ModelMap map,HttpSession session){
 		//设置经费来源枚举列表
 		map.put("foundSourceEnum", FoundSourceEnum.values());
 		//获取科室列表
@@ -155,6 +159,7 @@ public class ReviewController extends BaseController<Review>{
 		map.put("userName", result.getStaffCode());
 		map.put("id",id);
 		map.put("type",type);
+		map.put("flag",flag);
 		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
 		//组装车船费列表
 		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();
@@ -187,11 +192,19 @@ public class ReviewController extends BaseController<Review>{
 		Review review=new Review();
 		if(!reviewList.isEmpty() && type==1 ){
 			review=reviewList.get(0);
-			if(!ReviewStateEnum.ISREVIEW.equals(review.getReviewState())){
+			int foundSource=result.getFoundSource().getValue();
+			//审查中按情况分
+			//只有财务科审查的情形
+			if(foundSource==2 && result.getReimburseState().equals(ReimburseStateEnum.HASSUBMIT) && ReviewStateEnum.NOTREVIEW.equals(review.getReviewState())){
 				review.setReviewState(ReviewStateEnum.ISREVIEW);
-				reviewService.update(review,reviewmap,OperatorEnum.AND);
+				//护理科教科第一级审查的情形
+			}else if(foundSource!=2 && result.getReimburseState().equals(ReimburseStateEnum.HASSUBMIT) && ReviewStateEnum.NOTREVIEW.equals(review.getReviewState())){
+					review.setReviewState(ReviewStateEnum.ISREVIEW);
+				//护理科教科第二级审查的情形
+			}else if(foundSource!=2  && result.getReimburseState().equals(ReimburseStateEnum.HASSUBMIT) && review.getReviewState().equals(ReviewStateEnum.PASSREVIEW) && SecondReviewStateEnum.NOTREVIEW.equals(review.getReviewState())){
+				review.setSecondReviewState(SecondReviewStateEnum.ISREVIEW);
 			}
-
+			reviewService.update(review,reviewmap,OperatorEnum.AND);
 		}
 
 		map.put("carboatfeesList", carboatfeesList);
@@ -208,7 +221,7 @@ public class ReviewController extends BaseController<Review>{
 	 */
 	@RequestMapping(CONSTANT_UPDATE)
 	@ResponseBody
-	public Result update(Review review){ 
+	public Result update(Review review,HttpSession session){
 		if(review != null && review.getId()!=null){
 			Map<String,Object> map=new HashMap<String,Object>();
 			/**
@@ -224,11 +237,13 @@ public class ReviewController extends BaseController<Review>{
 			mapPhone.put("userName",staffCode);
 			User user=userService.find(mapPhone);
 			String phone=user.getPhone();
-			if(review.getReviewState().equals(ReviewStateEnum.NOTPASSREVIEW)){
+			//财务科未通过或者护理，科教未通过都通知申请人已打回
+			ReviewStateEnum reviewStateEnum=review.getReviewState();
+			SecondReviewStateEnum secondReviewStateEnum=review.getSecondReviewState();
+			if(reviewStateEnum.equals(ReviewStateEnum.NOTPASSREVIEW) || (secondReviewStateEnum !=null && secondReviewStateEnum.equals(ReviewStateEnum.NOTPASSREVIEW))){
 				result.setReimburseState(ReimburseStateEnum.RESUBMIT);
 				flag0=reimburseService.update(result,map,OperatorEnum.AND);
 				//重新打回后，发送重新上报的短信提醒报销的账户
-
 				TestSms.sendphoneMain("你有报销流程审查未通过被打回，请确认（财务报销系统）",phone);
 			}
 			Integer flag = reviewService.update(review,map,OperatorEnum.AND);
@@ -238,7 +253,23 @@ public class ReviewController extends BaseController<Review>{
 			}else if(flag==1 && (flag0==1|| flag0==0)) {
 				//你的报销流程审核已通过，通知报销人员
 				if(flag==1 && flag0==0){
-					TestSms.sendphoneMain("你的报销流程审查已通过，请确认（财务报销系统）",phone);
+					int foundSource=result.getFoundSource().getValue();
+					int secondReviewState=review.getSecondReviewState().getValue();
+					int reviewState=review.getReviewState().getValue();
+					if(foundSource==2 || (foundSource!=2 && secondReviewState==2 )) {
+						TestSms.sendphoneMain("你的报销流程审查已通过，请确认（财务报销系统）", phone);
+					}else if(foundSource!=2 && reviewState==2 && secondReviewState==4){
+						Map<String,Object> mapPhone_cw=new HashMap<String,Object>();
+						mapPhone_cw.put("userName",session.getAttribute("CW_REVIEW_STAFFCODE"));
+						user=userService.find(mapPhone_cw);
+						Map<String,Object> reviewmap=new HashMap<String,Object>();
+						reviewmap.put("reimburseId",result.getId());
+						review.setSecondReviewState(SecondReviewStateEnum.NOTREVIEW);
+						review.setSecondReviewOpinion("");
+						reviewService.update(review,reviewmap,OperatorEnum.AND);
+						TestSms.sendphoneMain("你有待审查的报销流程(财务)，请确认（财务报销系统）", user.getPhone());
+					}
+
 				}
 				return ResultUtil.success("更新成功");
 			}else {

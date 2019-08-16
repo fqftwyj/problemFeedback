@@ -2,9 +2,9 @@ layui.define(['table', 'form'], function(exports){
   var $ = layui.$
   ,table = layui.table
   ,form = layui.form;
-  
-  //
+
     var type=$("#type").val();
+    var flag=$("#flag").val();
     var colsArr;
     if(type==1){
         colsArr= [[
@@ -22,11 +22,21 @@ layui.define(['table', 'form'], function(exports){
             {field: 'staffCode', title: '工号'}
             ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
             ,{ title: '审查状态', templet: function (d) {
-                        if (d.reviewState=="PASSREVIEW") {
-                            return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
-                        } else if ( d.reviewState=="NOTPASSREVIEW") {
-                            return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                debugger
+                        if(flag==1 &&  d.reviewState==2 && d.secondReviewState>1 && d.secondReviewState<4){
+                            if (d.secondReviewState=="PASSREVIEW") {
+                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                            } else if ( d.secondReviewState=="NOTPASSREVIEW") {
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                            }
+                        }else{
+                            if (d.reviewState=="PASSREVIEW") {
+                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                            } else if ( d.reviewState=="NOTPASSREVIEW") {
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                            }
                         }
+
 
                 }}
             ,{field: 'reimburseMembers', title: '报销成员'}
@@ -37,7 +47,7 @@ layui.define(['table', 'form'], function(exports){
     }
   table.render({
     elem: '#LAY-review-table'
-    ,url: 'list?type='+type //模拟接口
+    ,url: 'list?type='+type+'&flag='+flag //模拟接口
     ,cols:colsArr
     ,page: true
     ,limit: 30
@@ -58,7 +68,7 @@ layui.define(['table', 'form'], function(exports){
           layer.open({
               type: 2
               ,title: '报销详情'
-              ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type
+              ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type+"&flag="+flag
               , area: ['100%', '100%']
               ,btn: ['确定', '取消']
               ,yes: function(index, layero){
@@ -95,7 +105,7 @@ layui.define(['table', 'form'], function(exports){
           layer.open({
               type: 2
               ,title: '报销详情'
-              ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type
+              ,content: 'edit?reimburseId='+obj.data.reimburseId+"&id="+obj.data.id+"&type="+type+"&flag="+flag
               , area: ['100%', '100%']
               ,success: function(layero, index){
 

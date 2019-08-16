@@ -23,30 +23,78 @@ layui.define(['table', 'form'], function (exports) {
                 }
             }
             , { title: '报销成员', templet: '#memberTipl'}
-            , {
-                title: '审查状态', templet: function (d) {
-                    if (d.review && d.review.reviewState) {
-                        if (d.review.reviewState == "NOTREVIEW") {
+            ,{
+                title: '审查状态(护理部/科教科)', width: '15%',templet: function (d) {
+                    //分是那种审查状态
+                    if(d.foundSource!='ADMINLOGISTIC') {
+                        if (d.review && d.review.reviewState) {
+                            var obj=d.review.reviewState ;
+                            if (obj == "NOTREVIEW") {
+                                return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                            } else if (obj == "ISREVIEW") {
+                                return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                            } else if (obj == "PASSREVIEW") {
+                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                            } else if (obj == "NOTPASSREVIEW") {
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                            }
+                        } else {
                             return '<span style="color: #777;font-weight: bold;">  未审查</span>';
-                        } else if (d.review.reviewState == "ISREVIEW") {
-                            return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
-                        } else if (d.review.reviewState == "PASSREVIEW") {
-                            return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
-                        } else if (d.review.reviewState == "NOTPASSREVIEW") {
-                            return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
                         }
-                    } else {
-                        return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                    }else{
+                        return '<span style="color: #777;font-weight: bold;">  --</span>';
                     }
 
 
                 }
             }
             , {
-                title: '审查意见', templet: '#titleTipl'
+                title: '审查状态(财务)', templet: function (d) {
+                    //分是那种审查状态
+                    if(d.foundSource=='ADMINLOGISTIC') {
+                        if (d.review && d.review.reviewState) {
+                            var obj=d.review.reviewState ;
+                            if (obj == "NOTREVIEW") {
+                                return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                            } else if (obj == "ISREVIEW") {
+                                return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                            } else if (obj == "PASSREVIEW") {
+                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                            } else if (obj == "NOTPASSREVIEW") {
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                            }
+                        } else {
+                            return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                        }
+                    }else{
+                        if (d.review && d.review.secondReviewState) {
+                            var obj=d.review.secondReviewState;
+                            if (obj == "NOTREVIEW") {
+                                return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                            } else if (obj == "ISREVIEW") {
+                                return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                            } else if (obj == "PASSREVIEW") {
+                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                            } else if (obj == "NOTPASSREVIEW") {
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                            }else if (obj == "UNKONW") {
+                                return '<span style="color: #C14E4E;font-weight: bold;">  未知</span>';
+                            }
+                        } else {
+                            return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                        }
+                    }
+
+
+                }
+            }
+           ,  {
+                title: '审查意见（护理部/科教科）', templet: '#titleTiplhl'
+            },{
+                title: '审查意见(财务)', templet: '#titleTipl'
             }
             , {
-                field: 'reimburseDate', title: ' 报销日期', templet: function (d) {
+                field: 'reimburseDate',  width: '8%',title: ' 报销日期', templet: function (d) {
                     if (d.reimburseDate == "1900-01-01") {
                         return "--";
                     } else {
@@ -56,7 +104,7 @@ layui.define(['table', 'form'], function (exports) {
                 }
             }
             , {title: '提交上报', width: '8%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
-            , {title: '操作', width: '20%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
+            , {title: '操作', width: '22%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
         ]]
         , page: true
         , limit: 30
@@ -78,7 +126,21 @@ layui.define(['table', 'form'], function (exports) {
         } else {
             posturl = 'delete?ids=' + data.id
         }
-        if (obj.event === 'del') {
+        if (obj.event === 'show') {
+            var tr = $(obj.tr);
+            layer.open({
+                type: 2
+                , title: '查看流程'
+                , content: 'showContent?id=' + obj.data.id
+                /*    ,maxmin: true*/
+                , area: ['100%', '100%']
+                , success: function (layero, index) {
+
+                }
+
+            });
+        }
+        else if (obj.event === 'del') {
             layer.confirm('确定要删除此报销申请吗', function (index) {
                 $.ajax({
                     url: posturl,

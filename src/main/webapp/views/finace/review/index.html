@@ -35,19 +35,25 @@
                         </select>
                     </div>
                 </div>
-                <#if type==2>
+              <!--  <#if type==2>
                 <div class="layui-inline">
                     <label class="layui-form-label">审查状态</label>
                     <div class="layui-input-block">
                         <select name='reviewState'>
                             <option value="">请输入</option>
+                            <#if flag==1>
+                            <#list secondReviewStateEnum as obj>
+                            <option value="${obj}">${obj.desc}</option>
+                            </#list>
+                           <#else>
                             <#list reviewStateEnum as obj>
                             <option value="${obj}">${obj.desc}</option>
                             </#list>
+                            </#if>
                         </select>
                     </div>
                 </div>
-                </#if>
+                </#if>-->
                 <div class="layui-inline">
                     <label class="layui-form-label">报销成员</label>
                     <div class="layui-input-block">
@@ -75,6 +81,7 @@
         </div>
       </div>
       <input id="type" value="${type}" type="hidden">
+      <input id="flag" value="${flag}" type="hidden">
       <div class="layui-card-body">
         <table id="LAY-review-table" lay-filter="LAY-review-table"></table>  
         <script type="text/html" id="table-review-operation">
@@ -151,7 +158,7 @@
       add: function(){
         layer.open({
           type: 2
-          ,title: '添加管理员'
+          ,title: '新增审查意见'
           ,content: 'build'
           ,area: ['420px', '240px']
           ,btn: ['确定', '取消']

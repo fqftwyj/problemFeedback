@@ -47,8 +47,8 @@
                                    class="layui-input">
                         </div>
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">审查状态</label>
+                   <!-- <div class="layui-inline">
+                        <label class="layui-form-label">审查状态（财务）</label>
                         <div class="layui-input-block">
                             <select name='reviewState'>
                                 <option value="">请输入</option>
@@ -58,6 +58,17 @@
                             </select>
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">审查状态（护理部/科教科）</label>
+                        <div class="layui-input-block">
+                            <select name='reviewState'>
+                                <option value="">请输入</option>
+                                <#list reviewStateEnum as obj>
+                                <option value="${obj}">${obj.desc}</option>
+                            </#list>
+                            </select>
+                        </div>
+                    </div>-->
                     <div class="layui-inline">
                         <label class="layui-form-label">报销日期</label>
                         <div class="layui-input-inline">
@@ -94,7 +105,8 @@
                 {{# } }}
             </script>
             <script type="text/html" id="table-reimburse-operation">
-
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="show"><i
+                        class="layui-icon layui-icon-search"></i>查看</a>
                 {{# if( d.reimburseState=="NOTSUBMIT" || d.reimburseState=="RESUBMIT"){ }}
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
                         class="layui-icon layui-icon-edit"></i>编辑</a>
@@ -107,7 +119,7 @@
                         class="layui-icon layui-icon-delete"></i>删除</a>
                 {{# } }}
                 <!-- 这里同样支持 laytpl 语法，如： -->
-                {{# if(d.review!=null && d.review.reviewState =='PASSREVIEW'){ }}
+                {{# if((d.foundSource==2 && d.review!=null && d.review.reviewState =='PASSREVIEW'  ) ||(d.foundSource!=2 && d.review!=null && d.review.secondReviewState =='PASSREVIEW' )){ }}
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i
                         class="layui-icon layui-icon-download-circle"></i>下载</a>
                 {{# }else {}}
@@ -121,12 +133,33 @@
                 {{# }}}
             </script>
             <script type="text/html" id="titleTipl">
-                {{# if(d.review && d.review.reviewOpinion){ }}
-                <a href="javascript:;" data-d="{{d.review.reviewOpinion}}" onmouseover="show_shopm(this)" onmouseout="close_shopm(this)">{{d.review.reviewOpinion}}</a>
-                {{# }else {}}
-                --
+              {{# if(d.foundSource==2){ }}
+                    {{# if(d.review && d.review.reviewOpinion){ }}
+                    <a href="javascript:;" data-d="{{d.review.reviewOpinion}}" onmouseover="show_shopm(this)" onmouseout="close_shopm(this)">{{d.review.reviewOpinion}}</a>
+                    {{# }else {}}
+                    --
+                    {{# } }}
+               {{# }else {}}
+                      {{# if(d.review && d.review.secondReviewOpinion){ }}
+                      <a href="javascript:;" data-d="{{d.review.secondReviewOpinion}}" onmouseover="show_shopm(this)" onmouseout="close_shopm(this)">{{d.review.secondReviewOpinion}}</a>
+                      {{# }else {}}
+                      --
+                      {{# } }}
                 {{# } }}
             </script>
+            <script type="text/html" id="titleTiplhl">
+                {{# if(d.foundSource!=2){ }}
+                    {{# if(d.review && d.review.reviewOpinion){ }}
+                    <a href="javascript:;" data-d="{{d.review.reviewOpinion}}" onmouseover="show_shopm(this)" onmouseout="close_shopm(this)">{{d.review.reviewOpinion}}</a>
+                    {{# }else {}}
+                    --
+                    {{# } }}
+                {{# }else {}}
+                   --
+                {{# } }}
+            </script>
+
+
             <script type="text/html" id="memberTipl">
                 <a href="javascript:;" data-d="{{d.reimburseMembers}}" onmouseover="show_shopm(this)" onmouseout="close_shopm(this)">{{d.reimburseMembers}}</a>
             </script>

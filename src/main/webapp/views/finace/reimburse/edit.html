@@ -53,7 +53,7 @@
       <label class="layui-form-label">  <span class="layui-form-label-span-must" >*</span>经费来源：</label>
       <div class="layui-input-block" style="display: block;">
         <select name='foundSource' lay-filter="foundSourceSel">
-         <!-- <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>-->
+          <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>
         <#list foundSourceEnum as obj>
         <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc}</option>
        </#list>

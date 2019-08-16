@@ -173,7 +173,53 @@ public class ReimburseController extends BaseController<Reimburse>{
 		}
 		return ResultUtil.error("空数据");
 	}
-	
+	/**跳转查看流程内容
+	 * @param id 编辑对象id
+	 * @param map 传值对象,通过这个对象给前台传值
+	 */
+	@RequestMapping("showContent")
+	public void showContentJump(Integer id, ModelMap map,HttpSession session){
+		//设置经费来源枚举列表
+		map.put("foundSourceEnum", FoundSourceEnum.values());
+		User user=(User)session.getAttribute("user");
+		map.put("userName", user.getUserName());
+		//获取科室列表
+		List<Office>  officeList=officeService.findAll();
+		map.put("officeList", officeList);
+		map.put("reimburseStateEnum", ReimburseStateEnum.values());
+		Reimburse result = reimburseService.find(id);
+		map.put("result", result);
+		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
+		//组装车船费列表
+		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();
+		//组装出差补贴
+		List<Map<String, String>> travelAllowanceList =new ArrayList<Map<String, String>>();
+		//组装其他费用
+		List<Map<String, String>> otherFeeList =new ArrayList<Map<String, String>>();
+		//组装合计费用
+		JSONObject  totalFeeObj=new JSONObject();
+		List<Map<String, String>> totalFeeList =new ArrayList<Map<String, String>>();
+		if(json.size()>0) {
+			JSONArray carboatfeeArray = (JSONArray) json.getJSONObject(0).get("carboatfeeiItemsData");
+			JSONArray travelAllowanceArray = (JSONArray) json.getJSONObject(0).get("travelAllowanceItemsData");
+			JSONArray otherFeeArray = (JSONArray) json.getJSONObject(0).get("otherFeeItemsData");
+			//组装车船费列表
+			carboatfeesList = JSONArray.parseObject(carboatfeeArray.toJSONString(), List.class);
+			//组装出差补贴
+			travelAllowanceList = JSONArray.parseObject(travelAllowanceArray.toJSONString(), List.class);
+			//组装其他费用
+			otherFeeList = JSONArray.parseObject(otherFeeArray.toJSONString(), List.class);
+		}
+		JSONArray tataljson =  JSONArray.parseArray(result.getReimburseCost() ); // 首先把字符串转成 JSONArray  对象
+		if(tataljson.size()>0){
+			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
+		}
+		map.put("carboatfeesList", carboatfeesList);
+		map.put("travelAllowanceList", travelAllowanceList);
+		map.put("otherFeeList", otherFeeList);
+		map.put("totalCarBoatTravel", totalFeeList.get(0).get("totalCarBoatTravel"));
+		map.put("totalotherFee", totalFeeList.get(0).get("totalotherFee"));
+	}
 	/**跳转编辑页面
 	 * @param id 编辑对象id
 	 * @param map 传值对象,通过这个对象给前台传值
@@ -242,12 +288,15 @@ public class ReimburseController extends BaseController<Reimburse>{
 				//修改上报状态
 				reimburse = reimburseService.find(reimburse.getId());
 				reimburse.setReimburseState(ReimburseStateEnum.HASSUBMIT);
+
 				//获取当前时间 年-月-日
 				Date d=new Date();
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 				reimburse.setReimburseDate(sdf.format(d));
 
 				Review review=new Review();
+				review.setSecondReviewState(SecondReviewStateEnum.UNKONW);
+				review.setSecondReviewOpinion("");
 				Map<String,Object> reviewmap=new HashMap<String,Object>();
 				reviewmap.put("reimburseId",reimburse.getId());
 				List<Review> reviewList= reviewService.findList(reviewmap);
@@ -259,8 +308,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 					review.setReimburseId(reimburse.getId());
 					review.setReviewState(ReviewStateEnum.NOTREVIEW);
 					review.setReviewOpinion("");
-					review.setSecondReviewState(SecondReviewStateEnum.UNKONW);
-					review.setSecondReviewOpinion("");
+
 					reviewService.save(review,reviewmap,OperatorEnum.AND);
 				}
 			}else  if(type==3){
@@ -278,9 +326,19 @@ public class ReimburseController extends BaseController<Reimburse>{
 					//提交上报后，发送待审查短信提醒财务
 					//根据工号获取电话号码
 					Map<String,Object> mapPhone=new HashMap<String,Object>();
-					mapPhone.put("userName",session.getAttribute("REVIEW_STAFFCODE"));
+					int foundSource=reimburse.getFoundSource().getValue();
+					String staffCode="KJ_REVIEW_STAFFCODE";
+					String deptNM="科教科";
+					if(foundSource==2){
+						staffCode="CW_REVIEW_STAFFCODE";
+						deptNM="财务科";
+					}else if(foundSource==1){
+						staffCode="HL_REVIEW_STAFFCODE";
+						deptNM="护理部";
+					}
+					mapPhone.put("userName",session.getAttribute(staffCode));
 					User user=userService.find(mapPhone);
-					TestSms.sendphoneMain("你有待审查的报销流程，请确认（财务报销系统）",user.getPhone());
+					TestSms.sendphoneMain("你有待审查的报销流程("+deptNM+")，请确认（财务报销系统）",user.getPhone());
 				}
 				return ResultUtil.success("更新成功");
 			}else {

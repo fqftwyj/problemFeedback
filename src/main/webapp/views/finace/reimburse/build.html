@@ -59,7 +59,7 @@
                     <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>经费来源：</label>
                     <div class="layui-input-block" style="display: block;">
                         <select name="foundSource"  lay-verify="selectcheck"  lay-filter="foundSourceSel">
-                          <!--  <option value="">请输入</option>-->
+                            <option value="">请输入</option>
                             <#list foundSourceEnum as obj>
                             <option value="${obj}">${obj.desc}</option>
                            </#list>

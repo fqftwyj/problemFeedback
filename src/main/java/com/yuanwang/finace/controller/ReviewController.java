@@ -57,6 +57,7 @@ public class ReviewController extends BaseController<Review>{
 	private OfficeService officeService;
 	@Resource
 	private UserService userService;
+
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
@@ -185,7 +186,7 @@ public class ReviewController extends BaseController<Review>{
 		if(tataljson.size()>0){
 			totalFeeList = JSONArray.parseObject(tataljson.toJSONString(), List.class);
 		}
-		//查看报销详情时审查状态改为审查中
+		//查看报销详情时审核状态改为审核中
 		Map<String,Object> reviewmap=new HashMap<String,Object>();
 		reviewmap.put("reimburseId",reimburseId);
 		List<Review> reviewList= reviewService.findList(reviewmap);
@@ -193,14 +194,14 @@ public class ReviewController extends BaseController<Review>{
 		if(!reviewList.isEmpty() && type==1 ){
 			review=reviewList.get(0);
 			int foundSource=result.getFoundSource().getValue();
-			//审查中按情况分
-			//只有财务科审查的情形
+			//审核中按情况分
+			//只有财务科审核的情形
 			if(foundSource==2 && result.getReimburseState().equals(ReimburseStateEnum.HASSUBMIT) && ReviewStateEnum.NOTREVIEW.equals(review.getReviewState())){
 				review.setReviewState(ReviewStateEnum.ISREVIEW);
-				//护理科教科第一级审查的情形
+				//护理科教科第一级审核的情形
 			}else if(foundSource!=2 && result.getReimburseState().equals(ReimburseStateEnum.HASSUBMIT) && ReviewStateEnum.NOTREVIEW.equals(review.getReviewState())){
 					review.setReviewState(ReviewStateEnum.ISREVIEW);
-				//护理科教科第二级审查的情形
+				//护理科教科第二级审核的情形
 			}else if(foundSource!=2  && result.getReimburseState().equals(ReimburseStateEnum.HASSUBMIT) && review.getReviewState().equals(ReviewStateEnum.PASSREVIEW) && SecondReviewStateEnum.NOTREVIEW.equals(review.getReviewState())){
 				review.setSecondReviewState(SecondReviewStateEnum.ISREVIEW);
 			}
@@ -223,11 +224,11 @@ public class ReviewController extends BaseController<Review>{
 	@ResponseBody
 	public Result update(Review review,HttpSession session){
 		if(review != null && review.getId()!=null){
-			Map<String,Object> map=new HashMap<String,Object>();
+			Map<String,Object> map = new HashMap<String,Object>();
 			/**
 			 * 放入查重字段 map.put("name","测试");
 			 */
-			//如果审查不通过要修改报销状态为重新上传
+			//如果审核不通过要修改报销状态为重新上传
 			Integer flag0 =0;
 			int id=review.getReimburseId();
 			Reimburse result = reimburseService.find(id);
@@ -243,15 +244,15 @@ public class ReviewController extends BaseController<Review>{
 			if(reviewStateEnum.equals(ReviewStateEnum.NOTPASSREVIEW) || (secondReviewStateEnum !=null && secondReviewStateEnum.equals(SecondReviewStateEnum.NOTPASSREVIEW))){
 				result.setReimburseState(ReimburseStateEnum.RESUBMIT);
 				if((secondReviewStateEnum !=null && secondReviewStateEnum.equals(SecondReviewStateEnum.NOTPASSREVIEW))){
-					//二級打回时一级的审查结果和意见复制二级的
+					//二級打回时一级的审核结果和意见复制二级的
 					review.setReviewState(ReviewStateEnum.NOTPASSREVIEW);
 					review.setReviewOpinion(review.getSecondReviewOpinion());
 				}
-				flag0=reimburseService.update(result,map,OperatorEnum.AND);
+				flag0=reimburseService.update(result, map,OperatorEnum.AND);
 				//重新打回后，发送重新上报的短信提醒报销的账户
-				TestSms.sendphoneMain("你有报销流程审查未通过被打回，请确认（财务报销系统）",phone);
+				TestSms.sendphoneMain("你有报销流程审核未通过被打回，请确认（财务报销系统）",phone);
 			}
-			Integer flag = reviewService.update(review,map,OperatorEnum.AND);
+			Integer flag = reviewService.update(review, map,OperatorEnum.AND);
 			if(flag==2) {
 				return ResultUtil.error("已存在");
 				//通过或不通过都更新成功
@@ -262,7 +263,7 @@ public class ReviewController extends BaseController<Review>{
 					int secondReviewState=review.getSecondReviewState().getValue();
 					int reviewState=review.getReviewState().getValue();
 					if(foundSource==2 || (foundSource!=2 && secondReviewState==2 )) {
-						TestSms.sendphoneMain("你的报销流程审查已通过，请确认（财务报销系统）", phone);
+						TestSms.sendphoneMain("你的报销流程审核已通过，请确认（财务报销系统）", phone);
 					}else if(foundSource!=2 && reviewState==2 && secondReviewState==4){
 						Map<String,Object> mapPhone_cw=new HashMap<String,Object>();
 						mapPhone_cw.put("userName",session.getAttribute("CW_REVIEW_STAFFCODE"));
@@ -272,7 +273,7 @@ public class ReviewController extends BaseController<Review>{
 						review.setSecondReviewState(SecondReviewStateEnum.NOTREVIEW);
 						review.setSecondReviewOpinion("");
 						reviewService.update(review,reviewmap,OperatorEnum.AND);
-						TestSms.sendphoneMain("你有待审查的报销流程(财务)，请确认（财务报销系统）", user.getPhone());
+						TestSms.sendphoneMain("你有待审核的报销流程(财务)，请确认（财务报销系统）", user.getPhone());
 					}
 
 				}

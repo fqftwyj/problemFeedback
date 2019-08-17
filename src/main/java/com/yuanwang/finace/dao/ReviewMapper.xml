@@ -11,12 +11,12 @@
 <mapper namespace="com.yuanwang.finace.dao.ReviewMapper" >
     <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
     <resultMap id="resultReviewMap" type="Review" > 
-			<id column="id" property="id" jdbcType="INTEGER" /><!--自增id(审查id)-->
+			<id column="id" property="id" jdbcType="INTEGER" /><!--自增id(审核id)-->
 			<result column="reimburse_id" property="reimburseId" jdbcType="INTEGER" /><!--报销id-->
-			<result column="review_opinion" property="reviewOpinion" jdbcType="VARCHAR" /><!--审查意见-->
-			<result column="review_state" property="reviewState" jdbcType="INTEGER" /><!--报销类别【enum】(0:未审查:notReview,1:已审查:hasReview)-->
-			<result column="second_review_state" property="secondReviewState" jdbcType="INTEGER" /><!--审查类别【enum】(0:未审查:notReview,1:obj:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)-->
-			<result column="second_review_opinion" property="secondReviewOpinion" jdbcType="VARCHAR" /><!--第二级审查意见-->
+			<result column="review_opinion" property="reviewOpinion" jdbcType="VARCHAR" /><!--审核意见-->
+			<result column="review_state" property="reviewState" jdbcType="INTEGER" /><!--报销类别【enum】(0:未审核:notReview,1:已审核:hasReview)-->
+			<result column="second_review_state" property="secondReviewState" jdbcType="INTEGER" /><!--审核类别【enum】(0:未审核:notReview,1:obj:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)-->
+			<result column="second_review_opinion" property="secondReviewOpinion" jdbcType="VARCHAR" /><!--第二级审核意见-->
 			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
 			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->
 			<result column="staff_code" property="staffCode" jdbcType="VARCHAR" /><!--员工编号-->
@@ -60,27 +60,27 @@
 				<choose><when test="operator=='or'">or</when><otherwise>and</otherwise></choose>
     		     rw.reimburse_id = #{reimburseId}
     		</if>
-    		   <!--财务科审查的待审查清单（只有财务和护理科教的二级）-->
+    		   <!--财务科审核的待审核清单（只有财务和护理科教的二级）-->
 				<if test="type!=null and type==1 and flag==1">
 					and rv.reimburse_state=1 and (rw.second_review_state <![CDATA[<]]> 2 || rw.second_review_state = 4 and rv.found_source <![CDATA[<>]]> 2) || (rv.found_source = 2 and rw.second_review_state=4 and rw.review_state <![CDATA[<]]> 2)
 				</if>
-				<!--护理部科审查的待审查清单-->
+				<!--护理部科审核的待审核清单-->
 				<if test="type!=null and type==1 and flag==2">
 					and rv.reimburse_state=1 and rw.review_state <![CDATA[<]]> 2 and rv.found_source=1 and rw.second_review_state=4
 				</if>
-				<!--科教科审查的待审查清单-->
+				<!--科教科审核的待审核清单-->
 				<if test="type!=null and type==1 and flag==3">
 					and rv.reimburse_state=1 and rw.review_state <![CDATA[<]]> 2 and rw.second_review_state=4 and (rv.found_source=0 || rv.found_source=3 || rv.found_source=4 || rv.found_source=5)
 				</if>
-				<!--财务科审查的历史清单-->
+				<!--财务科审核的历史清单-->
 				<if test="type!=null and type==2 and flag==1">
 					and rv.reimburse_state<![CDATA[= ]]> 1 and ( rv.found_source <![CDATA[<>]]> 2 and rw.second_review_state <![CDATA[>]]> 1 and  rw.second_review_state <![CDATA[<]]> 4 ) || (rv.found_source = 2 and rw.review_state <![CDATA[>]]> 1)
 				</if>
-				<!--护理部审查的历史清单-->
+				<!--护理部审核的历史清单-->
 				<if test="type!=null and type==2 and flag==2">
 					and rv.reimburse_state<![CDATA[= ]]> 1 and rw.review_state <![CDATA[>]]> 1 and rv.found_source=1
 				</if>
-				<!--科教科审查的历史清单-->
+				<!--科教科审核的历史清单-->
 				<if test="type!=null and type==2 and flag==3">
 					and rv.reimburse_state<![CDATA[= ]]> 1 and rw.review_state <![CDATA[>]]> 1 and (rv.found_source=0 || rv.found_source=3 || rv.found_source=4 || rv.found_source=5)
 				</if>

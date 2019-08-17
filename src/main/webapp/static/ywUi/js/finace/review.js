@@ -21,19 +21,19 @@ layui.define(['table', 'form'], function(exports){
             {title: '序号', width: 80,templet: '#indexTpl'},
             {field: 'staffCode', title: '工号'}
             ,{field: 'reimburseType', title: '报销类别', templet: '#table-review-reimburseType'}
-            ,{ title: '审查状态', templet: function (d) {
+            ,{ title: '审核状态', templet: function (d) {
                 debugger
                         if(flag==1 &&  d.reviewState==2 && d.secondReviewState>1 && d.secondReviewState<4){
                             if (d.secondReviewState=="PASSREVIEW") {
-                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                                return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if ( d.secondReviewState=="NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
                             }
                         }else{
                             if (d.reviewState=="PASSREVIEW") {
-                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                                return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if ( d.reviewState=="NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
                             }
                         }
 

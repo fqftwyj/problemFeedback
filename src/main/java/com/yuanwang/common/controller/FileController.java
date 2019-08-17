@@ -166,7 +166,7 @@ public class FileController {
 				templateNM="财务管理系统操作手册-报销流程.doc";
 				fexcle.dowloadAttachExcel(prePath+File.separator+suffixName,templateNM,response);
 			}else if(roleIds.contains(",3,")){
-				templateNM="财务管理系统操作手册-审查流程.doc";
+				templateNM="财务管理系统操作手册-审核流程.doc";
 				fexcle.dowloadAttachExcel(prePath+File.separator+suffixName,templateNM,response);
 			}
 

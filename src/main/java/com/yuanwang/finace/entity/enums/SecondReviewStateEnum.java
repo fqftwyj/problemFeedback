@@ -9,10 +9,10 @@ package com.yuanwang.finace.entity.enums;
  */
 public enum SecondReviewStateEnum{
 
-    NOTREVIEW(0,"未审查"),
-    ISREVIEW(1,"审查中"),
-    PASSREVIEW(2,"审查通过"),
-    NOTPASSREVIEW(3,"审查不通过"),
+    NOTREVIEW(0,"未审核"),
+    ISREVIEW(1,"审核中"),
+    PASSREVIEW(2,"审核通过"),
+    NOTPASSREVIEW(3,"审核不通过"),
     UNKONW(4,"未知");
 	
 	private int value;

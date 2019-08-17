@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>审查报销列表</title>
+  <title>审核报销列表</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport"
@@ -252,11 +252,11 @@
 </div>
 
 <div class="reimburse-card-body-title">
-  <div class="reimburse-card-body-title-text">审查结果 </div>
+  <div class="reimburse-card-body-title-text">审核结果 </div>
   <#if type==2>
   <div class="layui-col-md11">
     <div class="layui-inline layui-col-md11 layui-inline-total">
-      <label class="layui-form-label" >审查时间：</label>
+      <label class="layui-form-label" >审核时间：</label>
       <div class="layui-input-block layui-input-block-text">
         ${result.review.updateTime}
       </div>
@@ -265,7 +265,7 @@
 </#if>
 <div class="layui-col-md11">
   <div class="layui-inline layui-col-md11 layui-inline-total">
-    <label class="layui-form-label">审查结果：</label>
+    <label class="layui-form-label">审核结果：</label>
     <div class="layui-input-block">
       <#if flag==1 && result.foundSource!='ADMINLOGISTIC'>
       <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.secondReviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
@@ -285,7 +285,7 @@
 </div>
   <div class="layui-col-md11" >
     <div class="layui-inline layui-col-md11 layui-inline-total">
-      <label class="layui-form-label">审查意见：</label>
+      <label class="layui-form-label">审核意见：</label>
       <div class="layui-input-block">
         <#if flag==1 && result.foundSource!='ADMINLOGISTIC'>
         <textarea placeholder="请输入内容"   name="secondReviewOpinion" class="layui-textarea" >${result.review.secondReviewOpinion!}</textarea>
@@ -336,7 +336,7 @@
         }
         var objs = $('input:radio[name="'+state+'"]:checked');
         if (objs.length==0) {
-          return "请选择审查结果";
+          return "请选择审核结果";
         }
       }
     });

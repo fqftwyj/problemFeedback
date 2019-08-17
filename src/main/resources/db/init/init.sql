@@ -47,10 +47,10 @@ CREATE TABLE `finace_reimburse` (
 -- ----------------------------
 DROP TABLE IF EXISTS `finace_review`;
 CREATE TABLE `finace_review` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id(审查id)',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id(审核id)',
   `reimburse_id` int(11) DEFAULT NULL COMMENT '报销id',
-  `review_opinion` varchar(2000) NOT NULL COMMENT '审查意见',
-  `review_state` smallint(2) NOT NULL COMMENT '审查类别【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)',
+  `review_opinion` varchar(2000) NOT NULL COMMENT '审核意见',
+  `review_state` smallint(2) NOT NULL COMMENT '审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
@@ -82,7 +82,7 @@ INSERT INTO `sys_config` VALUES ('3', 'SYSTEM_NAME', '财务报销系统', '系�
 INSERT INTO `sys_config` VALUES ('4', 'DEFAULT_PASSWORD', '123456', '默认重置密码', '1');
 INSERT INTO `sys_config` VALUES ('5', 'PASSWORD_COMPLEXITY', '1', '密码复杂度（0关闭，1开启）', '1');
 INSERT INTO `sys_config` VALUES ('6', 'AUTO_UNLOCK', '60', '账号自动解锁时间（单位秒）', '1');
-INSERT INTO `sys_config` VALUES ('7', 'REVIEW_STAFFCODE', '1732', '审查人员工号', '1');
+INSERT INTO `sys_config` VALUES ('7', 'REVIEW_STAFFCODE', '1732', '审核人员工号', '1');
 
 -- ----------------------------
 -- Table structure for sys_office
@@ -269,14 +269,14 @@ CREATE TABLE `sys_permission` (
 INSERT INTO `sys_permission` VALUES ('1', '2018-08-07 09:47:32', '2018-08-07 09:47:34', '系统', 'adminxx', '0', '', null, '系统初级节点不可删除', '1', '0');
 INSERT INTO `sys_permission` VALUES ('102', '2018-08-16 10:01:38', '2018-08-16 10:01:40', '配置管理', 'set', '0', null, null, '配置管理', '2', '1');
 INSERT INTO `sys_permission` VALUES ('103', '2019-05-10 09:19:45', '2019-05-10 09:19:45', '财务报销', 'cwbx', '0', 'aa', 'bb', 'cc', '3', '1');
-INSERT INTO `sys_permission` VALUES ('104', '2019-05-10 09:44:03', '2019-05-10 09:44:03', '财务审查', 'cwsc', '0', 'aa', 'aa', 'aa', '4', '1');
+INSERT INTO `sys_permission` VALUES ('104', '2019-05-10 09:44:03', '2019-05-10 09:44:03', '财务审核', 'cwsc', '0', 'aa', 'aa', 'aa', '4', '1');
 INSERT INTO `sys_permission` VALUES ('10202', '2019-06-04 14:25:25', '2019-06-04 14:25:25', '权限管理', 'qxgl', '1', '/sys/permission/index', '1', '1', '1', '102');
 INSERT INTO `sys_permission` VALUES ('10203', '2019-06-04 14:26:05', '2019-06-04 14:26:05', '角色管理', 'jsgl', '1', '/sys/role/index', '2', '2', '2', '102');
 INSERT INTO `sys_permission` VALUES ('10204', '2019-06-04 14:26:35', '2019-06-04 14:26:52', '用户管理', '3', '1', '/sys/user/index', '3', '3', '3', '102');
 INSERT INTO `sys_permission` VALUES ('10205', '2019-06-13 14:11:17', '2019-06-13 14:11:32', '系统配置', 'xtpz', '1', '/sys/config/index', '1', '系统配置菜单', '4', '102');
 INSERT INTO `sys_permission` VALUES ('10301', '2019-05-10 09:22:29', '2019-05-16 11:23:43', '报销清单', 'bxgl', '1', '/finace/reimburse/index', 'bxgl', 'bxgl', '1', '103');
-INSERT INTO `sys_permission` VALUES ('10401', '2019-05-10 10:45:33', '2019-05-31 17:14:34', '待审查清单', 'dscqd', '1', '/finace/review/index?type=1', 'dscqd', 'dscqd', '1', '104');
-INSERT INTO `sys_permission` VALUES ('10402', '2019-05-10 10:46:34', '2019-05-31 17:14:42', '历史审查清单', 'lsscqd', '1', '/finace/review/index?type=2', 'lsscqd', 'lsscqd', '2', '104');
+INSERT INTO `sys_permission` VALUES ('10401', '2019-05-10 10:45:33', '2019-05-31 17:14:34', '待审核清单', 'dscqd', '1', '/finace/review/index?type=1', 'dscqd', 'dscqd', '1', '104');
+INSERT INTO `sys_permission` VALUES ('10402', '2019-05-10 10:46:34', '2019-05-31 17:14:42', '历史审核清单', 'lsscqd', '1', '/finace/review/index?type=2', 'lsscqd', 'lsscqd', '2', '104');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -296,7 +296,7 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 INSERT INTO `sys_role` VALUES ('1', '2018-08-07 14:56:57', '2019-06-04 13:41:18', '后台管理员', '后台管理员');
 INSERT INTO `sys_role` VALUES ('2', '2019-05-10 09:10:26', '2019-05-10 10:54:43', '财务报销', '财务报销');
-INSERT INTO `sys_role` VALUES ('3', '2019-05-10 10:49:07', '2019-05-10 10:49:07', '财务审查', '财务审查');
+INSERT INTO `sys_role` VALUES ('3', '2019-05-10 10:49:07', '2019-05-10 10:49:07', '财务审核', '财务审核');
 
 -- ----------------------------
 -- Table structure for sys_role_permission

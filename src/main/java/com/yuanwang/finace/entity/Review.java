@@ -18,11 +18,11 @@ public class Review extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 	//报销id
 	private Integer reimburseId;	
-	//审查意见
+	//审核意见
 	private String reviewOpinion;	
 	private ReviewStateEnum reviewState;
 	private SecondReviewStateEnum secondReviewState;
-	//第二级审查意见
+	//第二级审核意见
 	private String secondReviewOpinion;
 	//创建时间
 	private String createTime;
@@ -81,23 +81,23 @@ public class Review extends BaseEntity{
 	public void  setReimburseId(Integer reimburseId){
 		this.reimburseId = reimburseId;
 	}
-	/**获取审查意见
+	/**获取审核意见
 	*/
 	public String getReviewOpinion(){
 		return this.reviewOpinion;
 	}
-	/**设置审查意见
+	/**设置审核意见
 	 * @param reviewOpinion
 	 */
 	public void  setReviewOpinion(String reviewOpinion){
 		this.reviewOpinion = reviewOpinion;
 	}
-	/**获取报销类别【enum】(0:未审查:notReview,1:已审查:hasReview)
+	/**获取报销类别【enum】(0:未审核:notReview,1:已审核:hasReview)
 	*/
 	public ReviewStateEnum getReviewState(){
 		return this.reviewState;
 	}
-	/**设置审查状态【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)
+	/**设置审核状态【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)
 	 * @param reviewState
 	 */
 	public void  setReviewState(ReviewStateEnum reviewState){
@@ -119,23 +119,23 @@ public class Review extends BaseEntity{
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
-	/**获取审查类别【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)
+	/**获取审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)
 	 */
 	public SecondReviewStateEnum getSecondReviewState(){
 		return this.secondReviewState;
 	}
-	/**设置审查类别【enum】(0:未审查:notReview,1:审查中:isReview,2:审查通过:passReview,3:审查不通过:notpassReview)
+	/**设置审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)
 	 * @param secondReviewState
 	 */
 	public void  setSecondReviewState(SecondReviewStateEnum secondReviewState){
 		this.secondReviewState = secondReviewState;
 	}
-	/**获取第二级审查意见
+	/**获取第二级审核意见
 	 */
 	public String getSecondReviewOpinion(){
 		return this.secondReviewOpinion;
 	}
-	/**设置第二级审查意见
+	/**设置第二级审核意见
 	 * @param secondReviewOpinion
 	 */
 	public void  setSecondReviewOpinion(String secondReviewOpinion){

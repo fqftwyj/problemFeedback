@@ -84,7 +84,7 @@ public class TestSms {
      *@date:  上午 9:40 2019/6/10 0010
      **/
     public static void main(String[] args) throws SMException {
-        sendphoneMain("你有待审查的报销流程（财务报销系统）","15988864336");
+        sendphoneMain("你有待审核的报销流程（财务报销系统）","15988864336");
 
     }
 

@@ -68,6 +68,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 	ConfigService configService;
 	@Resource
 	UserService userService;
+	private int reviewState;
+
 	@PostConstruct //指定该方法在对象被创建后马上调用 相当于配置文件中的init-method属性
 	public void setPrefixPath() throws FileNotFoundException {
 	/*	File path = new File(ResourceUtils.getURL("classpath:").getPath());
@@ -323,7 +325,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 				if(type==3){
 					return ResultUtil.success("删除成功");
 				}else if(type==2){
-					//提交上报后，发送待审查短信提醒财务
+					//提交上报后，发送待审核短信提醒财务
 					//根据工号获取电话号码
 					Map<String,Object> mapPhone=new HashMap<String,Object>();
 					int foundSource=reimburse.getFoundSource().getValue();
@@ -338,7 +340,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 					}
 					mapPhone.put("userName",session.getAttribute(staffCode));
 					User user=userService.find(mapPhone);
-					TestSms.sendphoneMain("你有待审查的报销流程("+deptNM+")，请确认（财务报销系统）",user.getPhone());
+					TestSms.sendphoneMain("你有待审核的报销流程("+deptNM+")，请确认（财务报销系统）",user.getPhone());
 				}
 				return ResultUtil.success("更新成功");
 			}else {
@@ -507,6 +509,8 @@ public class ReimburseController extends BaseController<Reimburse>{
 		dataMap.put("reimburseMembers", result.getReimburseMembers());
 		dataMap.put("reimburseDate", result.getReimburseDate().equals("1900-01-01")?"":result.getReimburseDate());
 		dataMap.put("reimburseReason", result.getReimburseReason());
+		dataMap.put("foundSource", result.getFoundSource().getDesc());
+		dataMap.put("specialName", result.getSpecialName());
 		dataMap.put("collectList", collectList);
 		dataMap.put("totalCarBoatTravel", totalFeeList.get(0).get("totalCarBoatTravel"));
 		dataMap.put("totalotherFee", totalFeeList.get(0).get("totalotherFee"));
@@ -514,12 +518,54 @@ public class ReimburseController extends BaseController<Reimburse>{
 		Double totalotherFeeDou=Double.parseDouble(totalFeeList.get(0).get("totalotherFee"));
 		Double totalFee=totalCarBoatTravelDou+totalotherFeeDou;
 		//最终的合计，四舍五入保留两位小数
+		String  reviewResult="审核结果：";
+		int foundSource=result.getFoundSource().getValue();
+		int reviewState= result.getReview().getReviewState().getValue();
+
+		String reviewOpinion=result.getReview().getReviewOpinion();
+		int secondReviewState=result.getReview().getSecondReviewState().getValue();
+		String secondReviewOpinion=result.getReview().getSecondReviewOpinion();
+		//财务类型的报销
+		if(foundSource==2){
+			reviewResult+="(1)财务审核意见：";
+			if(reviewState==2){
+				reviewResult+="审核已通过";
+			}else if(reviewState==3){
+				reviewResult+="审核未通过";
+			}
+			reviewResult+=(reviewOpinion.equals("")?"":"，")+reviewOpinion+(reviewOpinion.equals("")?"":"。");
+		}else{//护理部
+			String nm="科教科";
+			if(foundSource==1){
+				nm="护理部";
+			}
+			reviewResult+="(1)"+nm+"审核意见：";
+			if(reviewState==2){
+				reviewResult+="审核已通过";
+			}else if(reviewState==3){
+				reviewResult+="审核未通过";
+			}
+			reviewResult+=(reviewOpinion.equals("")?"":"，")+reviewOpinion+(reviewOpinion.equals("")?"":"。");
+			if(secondReviewState==2 || secondReviewState==3){
+				reviewResult+="（2）财务审核意见：";
+				if(secondReviewState==2){
+					reviewResult+="审核已通过";
+				}else if(secondReviewState==3){
+					reviewResult+="审核未通过";
+				}
+				reviewResult+=(secondReviewOpinion.equals("")?"":"，")+secondReviewOpinion+(secondReviewOpinion.equals("")?"":"。");
+			}
+		
+
+		}
+		
+		dataMap.put("reviewResult", reviewResult);
 		dataMap.put("totalFee", (ChineseNumber.getChineseNumber((double)Math.round(totalFee*100)/100)));
-	/*	System.out.println(String.valueOf(dataMap.get("totalFee")));*/
+		dataMap.put("totalFeeSmall", (double)Math.round(totalFee*100)/100);
+		dataMap.put("reviewResult",reviewResult);
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-
-			fexcle.createWord(prefixPath+File.separator+"excel","core-office.ftl",dataMap, reMap,response);
+			fexcle.createWord(prefixPath+File.separator+"excel","core-office-8.16.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

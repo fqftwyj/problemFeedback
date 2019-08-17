@@ -24,19 +24,19 @@ layui.define(['table', 'form'], function (exports) {
             }
             , { title: '报销成员', templet: '#memberTipl'}
             ,{
-                title: '审查状态(护理部/科教科)', width: '15%',templet: function (d) {
-                    //分是那种审查状态
+                title: '审核状态(护理部/科教科)', width: '15%',templet: function (d) {
+                    //分是那种审核状态
                     if(d.foundSource!='ADMINLOGISTIC') {
                         if (d.review && d.review.reviewState) {
                             var obj=d.review.reviewState ;
                             if (obj == "NOTREVIEW") {
-                                return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                                return '<span style="color: #777;font-weight: bold;">  未审核</span>';
                             } else if (obj == "ISREVIEW") {
-                                return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                                return '<span style="color: #C19E4E;font-weight: bold;">  审核中</span>';
                             } else if (obj == "PASSREVIEW") {
-                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                                return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if (obj == "NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
                             }
                         } else {
                             return '<span style="color: #777;font-weight: bold;">  未知</span>';
@@ -49,19 +49,19 @@ layui.define(['table', 'form'], function (exports) {
                 }
             }
             , {
-                title: '审查状态(财务)', templet: function (d) {
-                    //分是那种审查状态
+                title: '审核状态(财务)', templet: function (d) {
+                    //分是那种审核状态
                     if(d.foundSource=='ADMINLOGISTIC') {
                         if (d.review && d.review.reviewState) {
                             var obj=d.review.reviewState ;
                             if (obj == "NOTREVIEW") {
-                                return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                                return '<span style="color: #777;font-weight: bold;">  未审核</span>';
                             } else if (obj == "ISREVIEW") {
-                                return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                                return '<span style="color: #C19E4E;font-weight: bold;">  审核中</span>';
                             } else if (obj == "PASSREVIEW") {
-                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                                return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if (obj == "NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
                             }
                         } else {
                             return '<span style="color: #777;font-weight: bold;">  未知</span>';
@@ -70,13 +70,13 @@ layui.define(['table', 'form'], function (exports) {
                         if (d.review && d.review.secondReviewState) {
                             var obj=d.review.secondReviewState;
                             if (obj == "NOTREVIEW") {
-                                return '<span style="color: #777;font-weight: bold;">  未审查</span>';
+                                return '<span style="color: #777;font-weight: bold;">  未审核</span>';
                             } else if (obj == "ISREVIEW") {
-                                return '<span style="color: #C19E4E;font-weight: bold;">  审查中</span>';
+                                return '<span style="color: #C19E4E;font-weight: bold;">  审核中</span>';
                             } else if (obj == "PASSREVIEW") {
-                                return '<span style="color:#58AB58;font-weight: bold;">  审查通过</span>';
+                                return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if (obj == "NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审查不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
                             }else if (obj == "UNKONW") {
                                 return '<span style="color: #777;font-weight: bold;">  未知</span>';
                             }
@@ -89,9 +89,9 @@ layui.define(['table', 'form'], function (exports) {
                 }
             }
            ,/*  {
-                title: '审查意见（护理部/科教科）', templet: '#titleTiplhl'
+                title: '审核意见（护理部/科教科）', templet: '#titleTiplhl'
             }, {
-                title: '审查意见(财务)', templet: '#titleTiplcw'
+                title: '审核意见(财务)', templet: '#titleTiplcw'
             }
             , {
                 field: 'reimburseDate',  width: '8%',title: ' 报销日期', templet: function (d) {

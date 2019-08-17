@@ -561,11 +561,11 @@ public class ReimburseController extends BaseController<Reimburse>{
 		
 		dataMap.put("reviewResult", reviewResult);
 		dataMap.put("totalFee", (ChineseNumber.getChineseNumber((double)Math.round(totalFee*100)/100)));
-		dataMap.put("totalFeeSmall", (double)Math.round(totalFee*100)/100);
+		dataMap.put("totalFeeSmall",String.valueOf ((double)Math.round(totalFee*100)/100));
 		dataMap.put("reviewResult",reviewResult);
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-			fexcle.createWord(prefixPath+File.separator+"excel","core-office-8.16.ftl",dataMap, reMap,response);
+			fexcle.createWord(prefixPath+File.separator+"excel","core-office-new.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

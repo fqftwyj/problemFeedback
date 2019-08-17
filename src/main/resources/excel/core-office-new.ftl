@@ -9,9 +9,9 @@
  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
   <Author>Administrator</Author>
   <LastAuthor>Windows User</LastAuthor>
-  <LastPrinted>2019-08-17T07:41:05Z</LastPrinted>
+  <LastPrinted>2019-08-17T08:30:55Z</LastPrinted>
   <Created>2019-06-05T07:43:00Z</Created>
-  <LastSaved>2019-08-17T07:47:19Z</LastSaved>
+  <LastSaved>2019-08-17T08:31:29Z</LastSaved>
   <Version>14.00</Version>
  </DocumentProperties>
  <CustomDocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
@@ -45,7 +45,7 @@
    <NumberFormat/>
    <Protection/>
   </Style>
-  <Style ss:ID="m40405824" ss:Parent="s46">
+  <Style ss:ID="m73454208" ss:Parent="s46">
    <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"
@@ -241,7 +241,7 @@
    <NumberFormat ss:Format="0.00_ "/>
    <Protection/>
   </Style>
-  <Style ss:ID="s89">
+  <Style ss:ID="s82">
    <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -296,7 +296,7 @@
  </Styles>
  <Worksheet ss:Name="Sheet1">
   <Names>
-   <NamedRange ss:Name="Print_Area" ss:RefersTo="=Sheet1!R1C1:R42C14"/>
+   <NamedRange ss:Name="Print_Area" ss:RefersTo="=Sheet1!R1C1:R43C14"/>
   </Names>
   <Table ss:ExpandedColumnCount="14"  x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
@@ -357,13 +357,13 @@
       ss:Name="Print_Area"/></Cell>
     <Cell ss:StyleID="s76"><Data ss:Type="String">报销日期</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="s89"><Data ss:Type="DateTime">${reimburseDate!''}</Data><NamedCell
+    <Cell ss:MergeAcross="1" ss:StyleID="s82"><Data ss:Type="DateTime">${reimburseDate!''}</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
    </Row>
    <Row ss:AutoFitHeight="0" ss:Height="33.75">
     <Cell ss:MergeAcross="1" ss:StyleID="s67"><Data ss:Type="String">出差事由</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
-    <Cell ss:MergeAcross="11" ss:StyleID="s102"><Data ss:Type="String">${reimburseReason!} </Data><NamedCell
+    <Cell ss:MergeAcross="11" ss:StyleID="s102"><Data ss:Type="String">${reimburseReason!}</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
    </Row>
    <Row ss:AutoFitHeight="0" ss:Height="33.75">
@@ -392,7 +392,6 @@
     <Cell ss:MergeAcross="2" ss:StyleID="s67"><Data ss:Type="String">其他费用</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
    </Row>
-
    <Row ss:AutoFitHeight="0" ss:Height="35.25">
     <Cell ss:StyleID="s67"><Data ss:Type="String">日期</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
@@ -417,7 +416,7 @@
    </Row>
    <#list collectList as obj>
    <Row ss:AutoFitHeight="0" ss:Height="45">
-    <Cell ss:StyleID="s89"><Data ss:Type="String">${obj.departureTime!''}</Data><NamedCell
+    <Cell ss:StyleID="s82"><Data ss:Type="String">${obj.departureTime!''}</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
     <Cell ss:StyleID="s68"><Data ss:Type="String">${obj.departurePlace!''}</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
@@ -517,7 +516,7 @@
    </Row>
    <Row ss:Height="14.25"/>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:MergeDown="26" ss:StyleID="m40405824"><Data ss:Type="String">日常费用报销原始单据粘贴单</Data><NamedCell
+    <Cell ss:MergeDown="26" ss:StyleID="m73454208"><Data ss:Type="String">日常费用报销原始单据粘贴单</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
     <Cell ss:StyleID="s72"><NamedCell ss:Name="Print_Area"/></Cell>
     <Cell ss:StyleID="s72"><NamedCell ss:Name="Print_Area"/></Cell>
@@ -941,12 +940,12 @@
    <ShowPageBreakZoom/>
    <PageBreakZoom>100</PageBreakZoom>
    <Selected/>
+   <TopRowVisible>9</TopRowVisible>
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>4</ActiveRow>
-     <ActiveCol>5</ActiveCol>
-     <RangeSelection>R5C6:R5C14</RangeSelection>
+     <ActiveRow>39</ActiveRow>
+     <ActiveCol>12</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>

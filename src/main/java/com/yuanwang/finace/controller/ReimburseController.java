@@ -565,7 +565,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		dataMap.put("reviewResult",reviewResult);
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-			fexcle.createWord(prefixPath+File.separator+"excel","core-office-new.ftl",dataMap, reMap,response);
+			fexcle.createWord(prefixPath+File.separator+"excel","core-office.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

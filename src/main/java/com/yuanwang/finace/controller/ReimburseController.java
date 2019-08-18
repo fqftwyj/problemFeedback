@@ -295,22 +295,24 @@ public class ReimburseController extends BaseController<Reimburse>{
 				Date d=new Date();
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 				reimburse.setReimburseDate(sdf.format(d));
-
 				Review review=new Review();
-				review.setSecondReviewState(SecondReviewStateEnum.UNKONW);
-				review.setSecondReviewOpinion("");
 				Map<String,Object> reviewmap=new HashMap<String,Object>();
 				reviewmap.put("reimburseId",reimburse.getId());
 				List<Review> reviewList= reviewService.findList(reviewmap);
 				if(!reviewList.isEmpty()){
 					review=reviewList.get(0);
+					if(review.getReviewState().getValue()==3 &&  review.getSecondReviewState().getValue()==3){
+						review.setSecondReviewState(SecondReviewStateEnum.UNKONW);
+						review.setSecondReviewOpinion("");
+					}
 					review.setReviewState(ReviewStateEnum.NOTREVIEW);
 					reviewService.update(review,reviewmap,OperatorEnum.AND);
 				}else{
+					review.setSecondReviewState(SecondReviewStateEnum.UNKONW);
+					review.setSecondReviewOpinion("");
 					review.setReimburseId(reimburse.getId());
 					review.setReviewState(ReviewStateEnum.NOTREVIEW);
 					review.setReviewOpinion("");
-
 					reviewService.save(review,reviewmap,OperatorEnum.AND);
 				}
 			}else  if(type==3){

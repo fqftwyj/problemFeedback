@@ -343,7 +343,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 					}
 					mapPhone.put("userName",session.getAttribute(staffCode));
 					User user=userService.find(mapPhone);
-					TestSms.sendphoneMain("你有待审核的报销流程("+deptNM+")，请确认（财务报销系统）",user.getPhone());
+					TestSms.sendphoneMain("你有待审核的报销流程，请确认（财务报销系统）",user.getPhone());
 				}
 				return ResultUtil.success("更新成功");
 			}else {

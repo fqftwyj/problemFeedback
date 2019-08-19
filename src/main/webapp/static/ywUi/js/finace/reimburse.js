@@ -36,7 +36,7 @@ layui.define(['table', 'form'], function (exports) {
                             } else if (obj == "PASSREVIEW") {
                                 return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if (obj == "NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核未通过</span>';
                             }
                         } else {
                             return '<span style="color: #777;font-weight: bold;">  未知</span>';
@@ -61,7 +61,7 @@ layui.define(['table', 'form'], function (exports) {
                             } else if (obj == "PASSREVIEW") {
                                 return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if (obj == "NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核未通过</span>';
                             }
                         } else {
                             return '<span style="color: #777;font-weight: bold;">  未知</span>';
@@ -76,7 +76,7 @@ layui.define(['table', 'form'], function (exports) {
                             } else if (obj == "PASSREVIEW") {
                                 return '<span style="color:#58AB58;font-weight: bold;">  审核通过</span>';
                             } else if (obj == "NOTPASSREVIEW") {
-                                return '<span style="color: #C14E4E;font-weight: bold;">  审核不通过</span>';
+                                return '<span style="color: #C14E4E;font-weight: bold;">  审核未通过</span>';
                             }else if (obj == "UNKONW") {
                                 return '<span style="color: #777;font-weight: bold;">  未知</span>';
                             }
@@ -93,7 +93,7 @@ layui.define(['table', 'form'], function (exports) {
             }, {
                 title: '审核意见(财务)', templet: '#titleTiplcw'
             }
-            , {
+            ,*/ {
                 field: 'reimburseDate',  width: '8%',title: ' 报销日期', templet: function (d) {
                     if (d.reimburseDate == "1900-01-01") {
                         return "--";
@@ -103,7 +103,7 @@ layui.define(['table', 'form'], function (exports) {
 
                 }
             }
-            , */{title: '提交上报', width: '8%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
+            , {title: '提交上报', width: '8%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-submit'}
             , {title: '操作', width: '22%', align: 'center', fixed: 'right', toolbar: '#table-reimburse-operation'}
         ]]
         , page: true

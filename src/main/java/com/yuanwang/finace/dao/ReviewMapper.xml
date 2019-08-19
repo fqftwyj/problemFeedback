@@ -15,7 +15,7 @@
 			<result column="reimburse_id" property="reimburseId" jdbcType="INTEGER" /><!--报销id-->
 			<result column="review_opinion" property="reviewOpinion" jdbcType="VARCHAR" /><!--审核意见-->
 			<result column="review_state" property="reviewState" jdbcType="INTEGER" /><!--报销类别【enum】(0:未审核:notReview,1:已审核:hasReview)-->
-			<result column="second_review_state" property="secondReviewState" jdbcType="INTEGER" /><!--审核类别【enum】(0:未审核:notReview,1:obj:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)-->
+			<result column="second_review_state" property="secondReviewState" jdbcType="INTEGER" /><!--审核类别【enum】(0:未审核:notReview,1:obj:isReview,2:审核通过:passReview,3:审核未通过:notpassReview)-->
 			<result column="second_review_opinion" property="secondReviewOpinion" jdbcType="VARCHAR" /><!--第二级审核意见-->
 			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /><!--创建时间-->
 			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" /><!--更新时间-->

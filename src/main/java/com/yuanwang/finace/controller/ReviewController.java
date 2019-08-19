@@ -228,7 +228,7 @@ public class ReviewController extends BaseController<Review>{
 			/**
 			 * 放入查重字段 map.put("name","测试");
 			 */
-			//如果审核不通过要修改报销状态为重新上传
+			//如果审核未通过要修改报销状态为重新上传
 			Integer flag0 =0;
 			int id=review.getReimburseId();
 			Reimburse result = reimburseService.find(id);

@@ -306,6 +306,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 						review.setSecondReviewOpinion("");
 					}
 					review.setReviewState(ReviewStateEnum.NOTREVIEW);
+					review.setReviewOpinion("");
 					reviewService.update(review,reviewmap,OperatorEnum.AND);
 				}else{
 					review.setSecondReviewState(SecondReviewStateEnum.UNKONW);

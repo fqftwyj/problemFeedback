@@ -97,7 +97,7 @@ public class Review extends BaseEntity{
 	public ReviewStateEnum getReviewState(){
 		return this.reviewState;
 	}
-	/**设置审核状态【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)
+	/**设置审核状态【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核未通过:notpassReview)
 	 * @param reviewState
 	 */
 	public void  setReviewState(ReviewStateEnum reviewState){
@@ -119,12 +119,12 @@ public class Review extends BaseEntity{
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
-	/**获取审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)
+	/**获取审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核未通过:notpassReview)
 	 */
 	public SecondReviewStateEnum getSecondReviewState(){
 		return this.secondReviewState;
 	}
-	/**设置审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)
+	/**设置审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核未通过:notpassReview)
 	 * @param secondReviewState
 	 */
 	public void  setSecondReviewState(SecondReviewStateEnum secondReviewState){

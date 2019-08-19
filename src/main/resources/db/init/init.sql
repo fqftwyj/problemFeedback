@@ -50,7 +50,7 @@ CREATE TABLE `finace_review` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id(审核id)',
   `reimburse_id` int(11) DEFAULT NULL COMMENT '报销id',
   `review_opinion` varchar(2000) NOT NULL COMMENT '审核意见',
-  `review_state` smallint(2) NOT NULL COMMENT '审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核不通过:notpassReview)',
+  `review_state` smallint(2) NOT NULL COMMENT '审核类别【enum】(0:未审核:notReview,1:审核中:isReview,2:审核通过:passReview,3:审核未通过:notpassReview)',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)

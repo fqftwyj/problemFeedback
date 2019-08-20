@@ -97,3 +97,14 @@
     line-height: 36px;
 }
 
+.layui-review-opition{
+    padding-left: 10px;
+    line-height: 20px;
+    padding-top: 10px;
+}
+/*查看详情，审查结果居中显示*/
+.reimburse-detail-result{
+    line-height: 40px;
+    height: 40px;
+    padding-left: 10px;
+}

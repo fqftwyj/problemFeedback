@@ -97,14 +97,14 @@
             <div class="separator-line-css carboatfeeMotherDiv" style="display:none"  id="carboatfeeMotherHideDiv">
                 <div class="layui-col-md11 mbottom">
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>出发时间：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->出发时间：</label>
                         <div class="layui-input-block">
                             <input type="text" name="departureTime"   placeholder="请输入" autocomplete="off"
                                    class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>出发地点：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->出发地点：</label>
                         <div class="layui-input-block">
                             <input type="text" name="departurePlace"  placeholder="请输入" autocomplete="off"
                                    class="layui-input">
@@ -113,14 +113,14 @@
                 </div>
                 <div class="layui-col-md11 mbottom">
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>到达时间：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->到达时间：</label>
                         <div class="layui-input-block">
                             <input type="text" name="arrivalTime"   placeholder="请输入" autocomplete="off"
                                    class="layui-input datetime">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>到达地点：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->到达地点：</label>
                         <div class="layui-input-block">
                             <input type="text" name="arrivalPlace"  placeholder="请输入" autocomplete="off"
                                    class="layui-input">
@@ -129,7 +129,7 @@
                 </div>
                 <div class="layui-col-md11 mbottom">
                     <div class="layui-inline layui-form">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>车船类别：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->车船类别：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='carboatType' >
                                 <option value="">请输入</option>
@@ -141,14 +141,14 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>单据张数：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->单据张数：</label>
                         <div class="layui-input-block">
                             <input type="text" name="docNumber" placeholder="请输入" autocomplete="off"
                                    class="layui-input"  lay-verify="int">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>车船费：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->车船费：</label>
                         <div class="layui-input-block">
                             <input type="text" name="carboatfee" placeholder="请输入" autocomplete="off"
                                    class="layui-input" lay-verify="money">
@@ -249,14 +249,14 @@
             <div class="travelStandardMotherDiv" style="display: none;" id="travelStandardMotherHideDiv">
                 <div class="layui-col-md11 mbottom" >
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>天数：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->天数：</label>
                         <div class="layui-input-block">
                             <input type="text" name="days" placeholder="请输入" autocomplete="off"
                                    class="layui-input days" lay-verify="int" >
                         </div>
                     </div>
                     <div class="layui-inline layui-form">
-                        <label class="layui-form-label" ><span class="layui-form-label-span-must" >*</span>标准：</label>
+                        <label class="layui-form-label" ><!--<span class="layui-form-label-span-must" >*</span>-->标准：</label>
                         <div class="layui-input-block" style="width: 182px;">
                             <select name='travelStandard'  lay-filter="travelStandard">
                                 <option value="">请输入</option>
@@ -268,7 +268,7 @@
 
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>金额：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->金额：</label>
                         <div class="layui-input-block">
                             <input type="text" name="travelmoney"  readonly="readonly" placeholder="请输入" autocomplete="off"
                                    class="layui-input">
@@ -331,21 +331,21 @@
             <div class="otherfeeMotherDiv" style="display:none" id="otherfeeMotherHideDiv">
                 <div class="layui-col-md11 mbottom" >
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>项目：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->项目：</label>
                         <div class="layui-input-block">
                             <input type="text" name="itemname" placeholder="请输入" autocomplete="off"
                                    class="layui-input"  >
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>单据张数：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->单据张数：</label>
                         <div class="layui-input-block">
                             <input type="text" name="otherdocnumber" placeholder="请输入" autocomplete="off"
                                    class="layui-input" lay-verify="int">
                         </div>
                     </div>
                     <div class="layui-inline layui-form">
-                        <label class="layui-form-label"><span class="layui-form-label-span-must" >*</span>金额：</label>
+                        <label class="layui-form-label"><!--<span class="layui-form-label-span-must" >*</span>-->金额：</label>
                         <div class="layui-input-block">
                             <input type="text" name="otherfeemoney" placeholder="请输入" autocomplete="off"
                                    class="layui-input" lay-verify="money">

@@ -52,7 +52,7 @@
     <div class="layui-inline">
       <label class="layui-form-label">经费来源：</label>
       <div class="layui-input-block" style="display: block;">
-    <select disabled="disabled">
+    <select disabled="disabled" id="foundSource">
       <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>
     <#list foundSourceEnum as obj>
     <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc!}</option>
@@ -60,17 +60,14 @@
     </select>
    </div>
 </div>
-<div class="layui-inline" id="specialNameId">
+<div class="layui-inline" id="specialNameId2">
   <label class="layui-form-label">专项名称：</label>
   <div class="layui-input-block-special" >
     <input type="text"  placeholder="请输入" autocomplete="off" id="specialName"
            class="layui-input" value="${result.specialName}" lay-verify="required" readonly="readonly">
   </div>
-  <!-- <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
-     <i class="layui-icon layui-icon-about title-text-icon  title-text-icon-second-separator"
-        id="travelPeopleInfo"></i>
-   </div>-->
 </div>
+
 </div>
   </div>
   <div class="layui-card-body  layui-card-body-scroll">
@@ -341,15 +338,14 @@
     });
 
   });
+  debugger
   var  $snObj= $("#specialName");
-  var val=$("select[name='foundSource']").val();
+  var val=$("#foundSource").val();
   if(val=='KEYDISCIPLINES'|| val=='RESEARCHTOPICS' || val=='TALENTTRAIN' ){
-    $("#specialNameId").css("display","inline-block");
-    $snObj.attr("lay-verify","required");
+    $("#specialNameId2").css("display","inline-block");
   }else{
     $snObj.val("");
-    $snObj.removeAttr("lay-verify");
-    $("#specialNameId").css("display","none");
+    $("#specialNameId2").css("display","none");
   }
 
   //下载文件

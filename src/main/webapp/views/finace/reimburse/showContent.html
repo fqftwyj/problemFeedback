@@ -49,7 +49,7 @@
     <div class="layui-inline">
       <label class="layui-form-label">经费来源：</label>
       <div class="layui-input-block" style="display: block;">
-        <select disabled="disabled">
+        <select disabled="disabled" name="foundSource">
           <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>
         <#list foundSourceEnum as obj>
         <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc!}</option>
@@ -250,27 +250,25 @@
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label layui-form-label-big-width">审核结果(护理部/科教科)：</label>
       <div class="layui-input-block layui-input-block-big-left">
-        <#if  result.foundSource!='ADMINLOGISTIC' && result.review?? && result.review.reviewState??>
-        <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-      <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+        <#if  result.foundSource!='ADMINLOGISTIC'  && result.review.reviewState??>
+        <div class="reimburse-detail-result" ><#if result.review.reviewState=='PASSREVIEW'><font color="green">通过</font><#elseif result.review.reviewState=='NOTPASSREVIEW'><font color="red">未通过</font><#else></#if></div>
+       <#else>
 
-    <#else>
-    <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"  ><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-    <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  ><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+      </#if>
+  </div>
 
-  </#if>
-</div>
-
-</div>
-</div>
+  </div>
+  </div>
   <div class="layui-col-md11" >
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label layui-form-label-big-width">审核意见(护理部/科教科)：</label>
-      <div class="layui-input-block layui-input-block-big-left">
-        <#if  result.foundSource!='ADMINLOGISTIC' && result.review && result.review.reviewOpinion>
-        <textarea   class="layui-textarea" readonly="readonly">${result.review.reviewOpinion!}</textarea>
+      <div class="layui-input-block layui-input-block-big-left layui-review-opition ">
+        <#if  result.foundSource!='ADMINLOGISTIC' && result.review.reviewOpinion??>
+          <#if result.review.reviewOpinion==''>
+          <#else>
+        ${result.review.reviewOpinion!}
+         </#if>
         <#else>
-        <textarea   class="layui-textarea" readonly="readonly"></textarea>
       </#if>
     </div>
   </div>
@@ -280,19 +278,19 @@
       <label class="layui-form-label layui-form-label-big-width">审核结果(财务科)：</label>
       <div class="layui-input-block layui-input-block-big-left">
 
-        <#if  result.foundSource=='ADMINLOGISTIC' && result.review?? && result.review.reviewOpinion??>
-        <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-      <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+        <#if  result.foundSource=='ADMINLOGISTIC'  && result.review.reviewOpinion??>
+        <div class="reimburse-detail-result" > <#if result.review.reviewState=='PASSREVIEW'><font color="green">通过</font><#elseif result.review.reviewState=='NOTPASSREVIEW'><font color="red">未通过</font><#else></#if></div>
     <input type="hidden" name="secondReviewState" value="${result.review.secondReviewState!}">
     <input type="hidden" name="secondReviewOpinion" value="${result.review.secondReviewOpinion!}">
-    <#elseif result.foundSource!='ADMINLOGISTIC' && result.review?? && result.review.secondReviewOpinion??>
-    <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.secondReviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-  <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.secondReviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
-<input  name="reviewOpinion" value="${result.review.reviewOpinion!}">
-<#else>
-<input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"  ><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-<input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  ><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
-</#if>
+    <#elseif result.foundSource!='ADMINLOGISTIC' && result.review.secondReviewOpinion??>
+    <div class="reimburse-detail-result" > <#if result.review.secondReviewState=='PASSREVIEW'><font color="green">通过</font><#elseif result.review.secondReviewState=='NOTPASSREVIEW'><font color="red">未通过</font><#else></#if></div>
+    <input  type="hidden" name="reviewOpinion" value="${result.review.reviewOpinion!}">
+    <input  type="hidden" name="reviewState" value="${result.review.reviewState}">
+    <#else>
+    <div class="reimburse-detail-result" > </div>
+    <input  type="hidden" name="reviewOpinion" value="${result.review.reviewOpinion!}">
+    <input type="hidden"  name="reviewState" value="${result.review.reviewState}">
+    </#if>
 
 </div>
 </div>
@@ -301,13 +299,19 @@
   <div class="layui-col-md11" >
     <div class="layui-inline layui-col-md11 layui-inline-total">
       <label class="layui-form-label layui-form-label-big-width">审核意见(财务科)：</label>
-      <div class="layui-input-block layui-input-block-big-left">
-        <#if  result.foundSource=='ADMINLOGISTIC' && result.review?? && result.review.reviewOpinion??>
-        <textarea     class="layui-textarea"  readonly="readonly">${result.review.reviewOpinion!}</textarea>
-        <#elseif result.foundSource!='ADMINLOGISTIC' && result.review?? && result.review.secondReviewOpinion??>
-        <textarea    class="layui-textarea"  readonly="readonly">${result.review.secondReviewOpinion!}</textarea>
+      <div class="layui-input-block layui-input-block-big-left layui-review-opition">
+        <#if  result.foundSource=='ADMINLOGISTIC'  && result.review.reviewOpinion??>
+          <#if result.review.reviewOpinion==''>
+          <#else>
+         ${result.review.reviewOpinion!}
+        </#if>
+        <#elseif result.foundSource!='ADMINLOGISTIC'  && result.review.secondReviewOpinion??>
+            <#if result.review.reviewOpinion==''>
+            <#else>
+              ${result.review.secondReviewOpinion!}
+          </#if>
+
         <#else>
-        <textarea     class="layui-textarea"  readonly="readonly"></textarea>
       </#if>
     </div>
   </div>

@@ -495,13 +495,13 @@ public class ReimburseController extends BaseController<Reimburse>{
 			map.put("arrivalPlace",carboatfeesList.get(i).get("arrivalPlace"));
 			map.put("carboatType",carboatfeesList.get(i).get("carboatType"));
 			map.put("docNumber",carboatfeesList.get(i).get("docNumber"));
-			map.put("carboatfee",carboatfeesList.get(i).get("carboatfee"));
+			map.put("carboatfee",carboatfeesList.get(i).get("carboatfee")==null?"":String.format("%.2f",Double.parseDouble(carboatfeesList.get(i).get("carboatfee"))));
 			map.put("days",travelAllowanceList.get(i).get("days"));
 			map.put("travelStandard",travelAllowanceList.get(i).get("travelStandard"));
-			map.put("travelmoney",travelAllowanceList.get(i).get("travelmoney"));
+			map.put("travelmoney",travelAllowanceList.get(i).get("travelmoney")==null?"":String.format("%.2f",Double.parseDouble(travelAllowanceList.get(i).get("travelmoney"))));
 			map.put("itemname",otherFeeList.get(i).get("itemname"));
 			map.put("otherdocnumber",otherFeeList.get(i).get("otherdocnumber"));
-			map.put("otherfeemoney",otherFeeList.get(i).get("otherfeemoney"));
+			map.put("otherfeemoney",otherFeeList.get(i).get("otherfeemoney")==null?"":String.format("%.2f",Double.parseDouble(otherFeeList.get(i).get("otherfeemoney"))));
 			collectList.add(map);
 		}
 		JSONArray tataljson =  JSONArray.parseArray(result.getReimburseCost()); // 首先把字符串转成 JSONArray  对象
@@ -568,7 +568,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 		dataMap.put("reviewResult",reviewResult);
 		try {
 			FremarkerExcel fexcle=new FremarkerExcel();
-			fexcle.createWord(prefixPath+File.separator+"excel","core-office.ftl",dataMap, reMap,response);
+			fexcle.createWord(prefixPath+File.separator+"excel","core-office-new.ftl",dataMap, reMap,response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

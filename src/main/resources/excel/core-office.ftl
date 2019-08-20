@@ -357,7 +357,7 @@
       ss:Name="Print_Area"/></Cell>
     <Cell ss:StyleID="s76"><Data ss:Type="String">报销日期</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="s82"><Data ss:Type="DateTime">${reimburseDate!''}</Data><NamedCell
+    <Cell ss:MergeAcross="1" ss:StyleID="s82"><Data ss:Type="String">${reimburseDate!''}</Data><NamedCell
       ss:Name="Print_Area"/></Cell>
    </Row>
    <Row ss:AutoFitHeight="0" ss:Height="33.75">

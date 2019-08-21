@@ -416,7 +416,7 @@
                 </div>
             </div>
         </div>
-            <div class="layui-card-body-scroll">
+           <!-- <div class="layui-card-body-scroll">
                 <div class="layui-col-md11 mbottom">
                     <input type="hidden"  name="module" id="module" value="${userName}"/>
                     <input type="hidden"  name="uploadPath" id="uploadPath"  />
@@ -428,10 +428,55 @@
                         <p id="allFileText"></p>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
 
-        <div class="reimburse-attach-explation-div">
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            <div id="uploadImg" class="layui-upload">
+                                <button type="button" class="layui-btn" id="upload" lay-verify="validateAttach">
+                                    <i class="layui-icon">&#xe67c;</i>上传报销附件<span style="color: red;font-size: 20px;">*</span>
+                                </button>
+                                <div class="layui-upload-list">
+                                    <table class="layui-table" style="text-align: center;">
+                                        <thead>
+                                        <tr>
+                                            <th style="text-align: center;">图片预览</th>
+                                            <th style="text-align: center;">大小</th>
+                                            <th style="text-align: center;">状态</th>
+                                            <th style="text-align: center;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="imgList"></tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="layui-btn" id="startUpload">开始上传</button>
+                              <!--  <div style="color: #c2c2c2;margin:10px 0;">温馨提示: 每次最多上传六张图片, 单张图片的大小不超过5MB, 长宽比例推荐1.5:1,
+                                    推荐上传图片长675px,宽450px
+                                </div>-->
+                            </div>
+                            <input type="hidden" name="uploadPath" id="imgInput"  >
+                            <input type="hidden" name="uploadName" id="imgInputName" >
+                            <input type="hidden"  name="module" id="module" value="${userName}"/>
+                        </blockquote>
+
+           <!-- <div class="layui-upload">
+                <button type="button" class="layui-btn layui-btn-normal" id="selectFile" lay-verify="validateAttach">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
+              &lt;!&ndash;  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>&ndash;&gt;
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>大小</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="demoList"></tbody>
+                    </table>
+                </div>
+                <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+            </div>-->
+
+            <div class="reimburse-attach-explation-div">
             <div class="layui-col-md11 mbottom">
                 <span class="reimburse-attach-explation-text">注：</span>
                 <span>签字完整的外出培训审批表、培训（进修）通知单、培训费/进修费发票（报销人背面签字）、
@@ -465,8 +510,8 @@
         //自定义验证规则-附件不能为空
         form.verify({
             validateAttach: function (value) {
-                var result = $("#uploadPath").val();
-                if (result =='') {
+                var len = $("#imgList").find("tr").length;
+                if (len==0) {
                     return "请先上传附件";
                 }
             }

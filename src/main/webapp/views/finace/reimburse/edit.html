@@ -415,14 +415,47 @@
         </button>-->
     <input type="hidden"  name="module" id="module" value="${userName}"/>
     <input type="hidden"  name="id"  value="${result.id}"/>
-    <input type="hidden"  name="uploadPath" id="uploadPath" value="${result.uploadPath}"/>
-    <input type="hidden"  name="uploadName" id="uploadName" value="${result.uploadName}"/>
-    <div class="layui-upload">
+    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+      <div id="uploadImg" class="layui-upload">
+        <button type="button" class="layui-btn" id="uploadEdit" lay-verify="validateAttach">
+          <i class="layui-icon">&#xe67c;</i>上传报销附件<span style="color: red;font-size: 20px;">*</span>
+        </button>
+        <div class="layui-upload-list">
+          <table class="layui-table" style="text-align: center;">
+            <thead>
+            <tr>
+              <th style="text-align: center;">文件名称</th>
+              <th style="text-align: center;">大小</th>
+              <th style="text-align: center;">状态</th>
+              <th style="text-align: center;">操作</th>
+            </tr>
+            </thead>
+            <tbody id="imgList">
+            <#list uploadList as up>
+            <tr id="upload-"+${up_index+1}>
+              <td><a  data-name="${up.uploadName}" data-path="${up.uploadPath}" class="downloadA" data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${up.uploadName}</a></td>
+              <td>${up.uploadSize}</td>
+              <td>已上传</td>
+              <td><button class="layui-btn layui-btn-danger demo-delete-edit"   txt="${up.uploadPath}" txtNM="${up.uploadName}">删除</button></td>
+            </tr>
+            </#list>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="layui-btn" id="startUpload">开始上传</button>
+        <!--  <div style="color: #c2c2c2;margin:10px 0;">温馨提示: 每次最多上传六张图片, 单张图片的大小不超过5MB, 长宽比例推荐1.5:1,
+              推荐上传图片长675px,宽450px
+          </div>-->
+      </div>
+      <input type="hidden" name="uploadPath" id="imgInput"     value="${result.uploadPath}">
+      <input type="hidden" name="uploadName" id="imgInputName"   value="${result.uploadName}">
+    </blockquote>
+   <!-- <div class="layui-upload">
       <span class="layui-form-label-span-must" >*</span>
       <button type="button" class="layui-btn layui-btn-normal" id="selectFile" lay-verify="validateAttach">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
       <span class="layui-inline layui-upload-choose" >  <a  data-name="${result.uploadName}" data-path="${result.uploadPath}" class="downloadA" data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
       <p id="allFileText"></p>
-    </div>
+    </div>-->
   </div>
 </div>
       <div class="reimburse-attach-explation-div">
@@ -450,21 +483,143 @@
     index: 'lib/index', //主入口模块
     verfy: '../../ywUi/js/commons/verfy',
     reimburseAdd: '../../ywUi/js/finace/reimburseAdd'
-  }).use(['index', 'reimburseAdd', 'form', 'verfy'], function () {
+  }).use(['index', 'reimburseAdd', 'form', 'verfy','upload'], function () {
     var $ = layui.$,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            upload=layui.upload;
 
     //自定义验证规则-附件不能为空
     form.verify({
       validateAttach: function (value) {
-        var result = $("#uploadPath").val();
-        if (result =='') {
+        var len = $("#imgList").find("tr").length;
+        if (len==0) {
           return "请先上传附件";
         }
       }
-    });
 
+
+    });
+    //组装删除后的文件路径或文件名字字符串
+    function afterDelStr(curName,names,nameArr,targetNameArr){
+      $.each(nameArr,function (k,v) {
+        if(v!=curName){
+          targetNameArr.push(v);
+        }
+      });
+      return targetNameArr.join(",");
+    }
+    $(".demo-delete-edit").click(function (data) {
+      debugger
+      //重组文件路径相关
+      var curPath=$(this).attr("txt");
+      var paths='${result.uploadPath}';
+      var pathArr=paths.split(",");
+      var lastPathStr=afterDelStr(curPath,paths,pathArr,[]);
+      //重组文件名称相关
+      var curName=$(this).attr("txt");
+      var names='${result.uploadName}';
+      var nameArr=names.split(",");
+      var lastNameStr=afterDelStr(curName,names,nameArr,[]);
+
+
+      $("#imgInput").val(lastPathStr);
+      $("#imgInputName").val(lastNameStr);
+      $(this).parent().parent().remove();
+    });
+    //多文件列表示例
+    var demoListView = $('#imgList');
+    var totalArray = new Array();
+    debugger
+    var uploadListIns= upload.render({
+      elem: '#uploadEdit'
+      ,url: '/upload/fileUpload'
+      /* , accept: 'images'  // 允许上传的文件类型*/
+      // , acceptMime: 'image/jpg,image/png'   // (只支持jpg和png格式，多个用逗号隔开),
+      , size: 1024*100        // 最大允许上传的文件大小  单位 KB
+      , auto: false //选择文件后不自动上传
+      , bindAction: '#startUpload' //指向一个按钮触发上传
+      , multiple: true   // 开启多文件上传
+      ,data: {
+        module: function(){
+          return $('#module').val();
+        }
+      }
+      , number: 6    //  同时上传文件的最大个数
+      , choose: function (obj) {
+        debugger
+        var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+        var arr = Object.keys(files);
+        totalArray = totalArray.concat(arr);
+        // 检查上传文件的个数
+        if (totalArray.length <= 6) {
+          //读取本地文件
+          obj.preview(function (index, file, result) {
+            var tr = $(['<tr id="upload-' + index + '">'
+                , '<td>' + file.name + '</td>'
+              , '<td>' + (file.size / 1014) + 'kb</td>'
+              , '<td>等待上传</td>'
+              , '<td>'
+              , '<button class="layui-btn demo-reload layui-hide">重传</button>'
+              , '<button class="layui-btn layui-btn-danger demo-delete">删除</button>'
+              , '</td>'
+              , '</tr>'].join(''));
+            //单个重传
+            tr.find('.demo-reload').on('click', function () {
+              obj.upload(index, file);
+            });
+
+            //删除
+            tr.find('.demo-delete').on('click', function () {
+              delete files[index]; //删除对应的文件
+              tr.remove();
+              uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+            });
+
+            demoListView.append(tr);
+          });
+        } else {
+          // 超出上传最大文件
+          layer.msg("上传文件最大不超过6个")
+        }
+
+      }
+      , done: function (res, index, upload) {
+        debugger
+        if (res.code == 0) { //上传成功
+          // 上传成功后将图片路径拼接到input中，多个路径用","分割
+          var dat=res.data.split(";");
+          var inputVal =  $("#imgInput").val();
+          var imgInputNameVal =$("#imgInputName").val() ;
+          var valDataPath = "";
+          var valData1Name = "";
+          if (inputVal) {
+            valDataPath = inputVal + "," + dat[0];
+            valData1Name = imgInputNameVal + "," + dat[1];
+          } else {
+            valDataPath =  dat[0];
+            valData1Name = dat[1];
+          }
+          $("#imgInput").val(valDataPath);
+          $("#imgInputName").val(valData1Name);
+
+          console.log( $("#imgInput").val()+"=="+ $("#imgInputName").val());
+          var tr = demoListView.find('tr#upload-' + index)
+                  , tds = tr.children();
+          tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+          tds.eq(3).html('<button class=\"layui-btn layui-btn-danger demo-delete-edit\"   txt=\"'+dat[0]+'\" txtNM=\"'+dat[0]+'\">删除</button>'); //清空操作
+          return delete this.files[index]; //删除文件队列已经上传成功的文件
+
+        }
+        this.error(index, upload);
+      }
+      , error: function (index, upload) {
+        var tr = demoListView.find('tr#upload-' + index)
+                , tds = tr.children();
+        tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+        tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+      }
+    });
 
   });
 //这里在这个页面再引入一个jquery.jsji

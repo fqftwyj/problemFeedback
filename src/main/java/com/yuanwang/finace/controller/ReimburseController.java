@@ -14,10 +14,7 @@ import javax.validation.constraints.NotNull;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yuanwang.common.controller.FileController;
-import com.yuanwang.common.utils.ChineseNumber;
-import com.yuanwang.common.utils.FremarkerExcel;
-import com.yuanwang.common.utils.StringHelper;
-import com.yuanwang.common.utils.TestSms;
+import com.yuanwang.common.utils.*;
 import com.yuanwang.finace.entity.Review;
 import com.yuanwang.finace.entity.enums.*;
 import com.yuanwang.finace.service.ReimburseService;
@@ -64,6 +61,7 @@ public class ReimburseController extends BaseController<Reimburse>{
 	@Resource
 	private OfficeService officeService;
 	private static String prefixPath;
+	private static String fileprefixPath;
 	@Resource
 	ConfigService configService;
 	@Resource
@@ -81,7 +79,17 @@ public class ReimburseController extends BaseController<Reimburse>{
 		}
 		ReimburseController.prefixPath = upload.getAbsolutePath();
 	}
-	
+	@PostConstruct //指定该方法在对象被创建后马上调用 相当于配置文件中的init-method属性
+	public void setFileprefixPath() throws FileNotFoundException {
+	/*	File path = new File(ResourceUtils.getURL("classpath:").getPath());
+		File upload = new File(path.getAbsolutePath(), "static/tmpupload/");*/
+		//指定文件上传的地址为系统安装的路径
+		File upload=new File(ResourceUtils.getURL("/upload/static").getPath());
+		if(!upload.exists()){
+			upload.mkdirs();
+		}
+		ReimburseController.fileprefixPath = upload.getAbsolutePath();
+	}
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
@@ -191,6 +199,25 @@ public class ReimburseController extends BaseController<Reimburse>{
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		Reimburse result = reimburseService.find(id);
 		map.put("result", result);
+		//重新组装 文件路径和文件名称
+		String[] uploadPathsArr=result.getUploadPath().split(",");
+		String[] uploadNamesArr=result.getUploadName().split(",");
+		List<String> uploadPathsList=Arrays.asList(uploadPathsArr);
+		List<String> uploadNamesList=Arrays.asList(uploadNamesArr);
+		List<Map<String,String>> uploadList=new ArrayList<Map<String,String>>();
+		String prepath = fileprefixPath+File.separator+ user.getUserName();
+		for(int i=0;i<uploadPathsList.size();i++){
+			Map<String,String> upMap=new HashMap<String,String>();
+			upMap.put("uploadPath",uploadPathsList.get(i));
+			upMap.put("uploadName",uploadNamesList.get(i));
+			String path="";
+			if(!"".equals(uploadPathsList.get(i))){
+				path=prepath+File.separator+uploadPathsList.get(i);
+			}
+			upMap.put("uploadSize", FileUtils.getFileSize(path));
+			uploadList.add(upMap);
+		}
+		map.put("uploadList",uploadList);
 		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
 		//组装车船费列表
 		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();
@@ -238,6 +265,25 @@ public class ReimburseController extends BaseController<Reimburse>{
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		Reimburse result = reimburseService.find(id);
 		map.put("result", result);
+		//重新组装 文件路径和文件名称
+		String[] uploadPathsArr=result.getUploadPath().split(",");
+		String[] uploadNamesArr=result.getUploadName().split(",");
+		List<String> uploadPathsList=Arrays.asList(uploadPathsArr);
+		List<String> uploadNamesList=Arrays.asList(uploadNamesArr);
+		List<Map<String,String>> uploadList=new ArrayList<Map<String,String>>();
+		String prepath = fileprefixPath+File.separator+ user.getUserName();
+		for(int i=0;i<uploadPathsList.size();i++){
+			Map<String,String> upMap=new HashMap<String,String>();
+			upMap.put("uploadPath",uploadPathsList.get(i));
+			upMap.put("uploadName",uploadNamesList.get(i));
+			String path="";
+			if(!"".equals(uploadPathsList.get(i))){
+				path=prepath+File.separator+uploadPathsList.get(i);
+			}
+			upMap.put("uploadSize", FileUtils.getFileSize(path));
+			uploadList.add(upMap);
+		}
+		map.put("uploadList",uploadList);
 		JSONArray json =  JSONArray.parseArray(result.getReimburseItems() ); // 首先把字符串转成 JSONArray  对象
 		//组装车船费列表
 		List<Map<String, String>> carboatfeesList =new ArrayList<Map<String, String>>();

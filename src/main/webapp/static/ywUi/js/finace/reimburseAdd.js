@@ -260,6 +260,107 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
             }
         }
     });
+
+
+
+        //多文件列表示例
+        var demoListView = $('#imgList');
+        var totalArray = new Array();
+       /* var uploadInst = upload.render({*/
+    debugger
+     upload.render({
+            elem: '#upload'
+            ,url: '/upload/fileUpload'
+           /* , accept: 'images'  // 允许上传的文件类型*/
+            // , acceptMime: 'image/jpg,image/png'   // (只支持jpg和png格式，多个用逗号隔开),
+            , size: 1024*100        // 最大允许上传的文件大小  单位 KB
+            , auto: false //选择文件后不自动上传
+            , bindAction: '#startUpload' //指向一个按钮触发上传
+            , multiple: true   // 开启多文件上传
+             ,data: {
+                 module: function(){
+                     return $('#module').val();
+                 }
+             }
+            , number: 6    //  同时上传文件的最大个数
+            , choose: function (obj) {
+                debugger
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                var arr = Object.keys(files);
+                totalArray = totalArray.concat(arr);
+                // 检查上传文件的个数
+                if (totalArray.length <= 6) {
+                    //读取本地文件
+                    obj.preview(function (index, file, result) {
+                        var tr = $(['<tr id="upload-' + index + '">'
+                            , '<td><img src="' + result + '" alt="' + file.name + '" class="layui-upload-img" style="height: 66px;width:100px;"></td>'
+                            , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
+                            , '<td>等待上传</td>'
+                            , '<td>'
+                            , '<button class="layui-btn demo-reload layui-hide">重传</button>'
+                            , '<button class="layui-btn layui-btn-danger demo-delete">删除</button>'
+                            , '</td>'
+                            , '</tr>'].join(''));
+                         console.log(tr)
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function () {
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function () {
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                    });
+                } else {
+                    // 超出上传最大文件
+                    layer.msg("上传文件最大不超过6个")
+                }
+
+            }
+            , done: function (res, index, upload) {
+                debugger
+                console.log("res", res);
+                if (res.code == 0) { //上传成功
+                    // 上传成功后将图片路径拼接到input中，多个路径用","分割
+                    var dat=res.data.split(";");
+                    var inputVal =  $("#imgInput").val();
+                    var imgInputNameVal =$("#imgInputName").val() ;
+                    var valDataPath = "";
+                    var valData1Name = "";
+                    if (inputVal) {
+                        valDataPath = inputVal + "," + dat[0];
+                        valData1Name = imgInputNameVal + "," + dat[1];
+                    } else {
+                        valDataPath =  dat[0];
+                        valData1Name = dat[1];
+                    }
+                    $("#imgInput").val(valDataPath);
+                    $("#imgInputName").val(valData1Name);
+
+                    console.log( $("#imgInput").val()+"=="+ $("#imgInputName").val());
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html(''); //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+
+                }
+                this.error(index, upload);
+            }
+            , error: function (index, upload) {
+                var tr = demoListView.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+    //多文件上传结束
     function fqdownload(url,ele){
         var $this=$(ele);
         var name=$this.data("name");

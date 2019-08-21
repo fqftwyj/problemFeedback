@@ -1,9 +1,9 @@
 package com.yuanwang.finace.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.yuanwang.common.utils.FileUtils;
 import com.yuanwang.common.utils.TestSms;
 import com.yuanwang.finace.entity.Reimburse;
 import com.yuanwang.finace.entity.enums.*;
@@ -23,6 +24,7 @@ import com.yuanwang.sys.service.OfficeService;
 import com.yuanwang.sys.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.ModelMap;
@@ -57,7 +59,19 @@ public class ReviewController extends BaseController<Review>{
 	private OfficeService officeService;
 	@Resource
 	private UserService userService;
+	private static String fileprefixPath;
 
+	@PostConstruct //指定该方法在对象被创建后马上调用 相当于配置文件中的init-method属性
+	public void setFileprefixPath() throws FileNotFoundException {
+	/*	File path = new File(ResourceUtils.getURL("classpath:").getPath());
+		File upload = new File(path.getAbsolutePath(), "static/tmpupload/");*/
+		//指定文件上传的地址为系统安装的路径
+		File upload=new File(ResourceUtils.getURL("/upload/static").getPath());
+		if(!upload.exists()){
+			upload.mkdirs();
+		}
+		ReviewController.fileprefixPath = upload.getAbsolutePath();
+	}
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
 	 */
@@ -157,6 +171,25 @@ public class ReviewController extends BaseController<Review>{
 		map.put("reimburseStateEnum", ReimburseStateEnum.values());
 		Reimburse result = reimburseService.find(reimburseId);
 		map.put("result", result);
+		//重新组装 文件路径和文件名称
+		String[] uploadPathsArr=result.getUploadPath().split(",");
+		String[] uploadNamesArr=result.getUploadName().split(",");
+		List<String> uploadPathsList= Arrays.asList(uploadPathsArr);
+		List<String> uploadNamesList=Arrays.asList(uploadNamesArr);
+		List<Map<String,String>> uploadList=new ArrayList<Map<String,String>>();
+		String prepath = fileprefixPath+ File.separator+ result.getStaffCode();
+		for(int i=0;i<uploadPathsList.size();i++){
+			Map<String,String> upMap=new HashMap<String,String>();
+			upMap.put("uploadPath",uploadPathsList.get(i));
+			upMap.put("uploadName",uploadNamesList.get(i));
+			String path="";
+			if(!"".equals(uploadPathsList.get(i))){
+				path=prepath+File.separator+uploadPathsList.get(i);
+			}
+			upMap.put("uploadSize", FileUtils.getFileSize(path));
+			uploadList.add(upMap);
+		}
+		map.put("uploadList",uploadList);
 		map.put("userName", result.getStaffCode());
 		map.put("id",id);
 		map.put("type",type);

@@ -235,6 +235,36 @@
 
 </div>
 <div class="reimburse-card-body-title">
+  <div class="reimburse-card-body-title-text">报销附件 </div>
+  <#if (uploadList?size>0) >
+<!--<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">-->
+  <div id="uploadImg" class="layui-upload" style="margin: 0px 35px;">
+   <!-- <button type="button" class="layui-btn" id="upload">-->
+<!--    </button>-->
+    <div class="layui-upload-list">
+      <table class="layui-table" style="text-align: center;">
+        <thead>
+        <tr>
+          <th style="text-align: center;">文件名称</th>
+          <th style="text-align: center;">大小</th>
+        </tr>
+        </thead>
+        <tbody id="imgList">
+        <#list uploadList as up>
+        <tr id="upload-"+${up_index+1}>
+          <td><a  data-name="${up.uploadName}" data-path="${up.uploadPath}" class="downloadA" data-module="${userName}" onclick="fqdownload('/upload/fileDownload?',this)">${up.uploadName}</a></td>
+          <td>${up.uploadSize}</td>
+            </#list>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</#if>
+</div>
+</div>
+<!--</blockquote>-->
+<!--<div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">下载附件 </div>
   <div class="layui-col-md11 mbottom">
     <div class="layui-inline " style="margin-left: 50px;" >
@@ -243,7 +273,8 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
+<#if result.review??>
 <div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">审核情况 </div>
   <div class="layui-col-md11">
@@ -317,7 +348,7 @@
   </div>
 
 </div>
-
+</#if>
 
 
 </div>

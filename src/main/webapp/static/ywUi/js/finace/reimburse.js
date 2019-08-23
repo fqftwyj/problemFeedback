@@ -216,6 +216,23 @@ layui.define(['table', 'form'], function (exports) {
                                         table.reload('LAY-reimburse-table');
                                         layer.msg(e.msg);
                                         layer.close(index);  //关闭弹层
+                                        debugger
+                                        var delFilePaths= contentId.find("#delFilePath").val();
+                                        console.log(delFilePaths)
+                                        if(delFilePaths) {
+                                            $.ajax({
+                                                url: '/upload/delFile',
+                                                data: {"delFilePaths": delFilePaths},
+                                                type: "post",
+                                                success: function (e) {
+                                                    if (e.code == 0) {
+                                                        layer.msg(e.msg);
+                                                    } else {
+                                                        layer.msg(e.msg);
+                                                    }
+                                                }
+                                            });
+                                        }
                                     } else {
                                         layer.msg(e.msg);
                                     }

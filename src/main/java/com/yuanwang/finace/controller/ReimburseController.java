@@ -268,10 +268,15 @@ public class ReimburseController extends BaseController<Reimburse>{
 		//重新组装 文件路径和文件名称
 		String[] uploadPathsArr=result.getUploadPath().split(",");
 		String[] uploadNamesArr=result.getUploadName().split(",");
-		List<String> uploadPathsList=Arrays.asList(uploadPathsArr);
-		List<String> uploadNamesList=Arrays.asList(uploadNamesArr);
+		List<String> uploadNamesList = new ArrayList<>();
+		List<String> uploadPathsList=new ArrayList<>();
+		if(!(uploadPathsArr.length==1 &&  uploadPathsArr[0].equals(""))) {
+			uploadPathsList = Arrays.asList(uploadPathsArr);
+			uploadNamesList = Arrays.asList(uploadNamesArr);
+		}
 		List<Map<String,String>> uploadList=new ArrayList<Map<String,String>>();
 		String prepath = fileprefixPath+File.separator+ user.getUserName();
+
 		for(int i=0;i<uploadPathsList.size();i++){
 			Map<String,String> upMap=new HashMap<String,String>();
 			upMap.put("uploadPath",uploadPathsList.get(i));

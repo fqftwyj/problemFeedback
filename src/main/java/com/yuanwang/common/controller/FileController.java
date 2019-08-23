@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.yuanwang.common.utils.FileUtils;
 import com.yuanwang.common.utils.FremarkerExcel;
 import com.yuanwang.sys.entity.Role;
 import com.yuanwang.sys.entity.User;
@@ -97,7 +98,34 @@ public class FileController {
 		
 		
 	}
-	
+	/**文件删除
+	 * @param request 请求
+	 * @param files 删除文件
+	 * @param module 所属模块
+	 * @return 文件相对路径
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
+	@RequestMapping("delFile")
+	@ResponseBody
+	public Result delFile(HttpServletRequest request,String delFilePaths,HttpSession session) throws IllegalStateException, IOException {
+		User user=(User)session.getAttribute("user");
+		String[] delFilePathsArr=delFilePaths.split(",");
+		int i=0;
+		String realPath= prefixPath+File.separator+user.getUserName()+File.separator;
+		for(String fnStr:delFilePathsArr){
+			if(FileUtils.deleteFile(realPath+fnStr)){
+				i++;
+			};
+		}
+		if(i==delFilePathsArr.length){
+			return ResultUtil.success("服务器文件删除成功");
+		}else{
+			return ResultUtil.error("服务器文件删除失败");
+		}
+
+
+	}
 	/**
 	 * 下载文件
 	 * @param path

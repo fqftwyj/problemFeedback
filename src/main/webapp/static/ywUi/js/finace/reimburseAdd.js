@@ -212,63 +212,65 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
 
     var index;//上传loading
     //上传文件
-    upload.render({
-        elem: '#selectFile'
-        ,url: '/upload/fileUpload'
-        ,accept: 'file'
-        ,acceptMime:'zip|rar|7z'
-        ,exts:'zip|rar|7z',
-        multiple:false
-        ,data: {
-            module: function(){
-                return $('#module').val();
-            }
-        }
-        ,auto: true
-       /* ,bindAction: '#startUploadFile'*/
-        ,size: 1024*1000//限制文件大小，单位 KB
-        ,before:function(){
-           /* debugger
-            var size=inputObj.files[0].size;
-            console.log(size);
-            if(size>(100*1024*1024)){
-                layer.msg("文件大小不得超过100M",{icon:2});
-                return ;
-            }
-            if(size==0){
-                layer.msg('文件大小不得为空',{icon:2});
-                return ;
-            }*/
-            index=layer.load();
-        },
-        done: function(result){
-            if(result.msg != '上传成功'){
-                layer.msg(result.msg, {icon:1});
-            }else if(result.msg == '上传成功'){
-                var dat=result.data.split(";");
-                $("#uploadPath").val(dat[0]);
-                $("#uploadName").val(dat[1]);
-                var module=$("#module").val();
-                var html= "<span class=\"layui-inline layui-upload-choose\" >  <a  data-name=\""+dat[1]+"\" data-path="+dat[0]+" class=\"downloadA\" data-module="+module+" onclick=\"fqdownload('/upload/fileDownload?',this)\">"+dat[2]+"</a></span>";
-                $(".layui-upload-choose").remove();
-                $("#selectFile").after(html);
-                layer.msg("上传成功!",{icon:1});
-                layer.close(index);
 
-            }else{
-                layer.msg("上传失败!",{icon:1});
-            }
+    //组装删除后的文件路径或文件名字字符串
+    function afterDelStr(curName,names,nameArr,curPath,paths,pathArr){
+        var targetNameArr=[];
+        var targetPathArr=[];
+        for(j = 0; j < pathArr.length; j++) {
+           if(pathArr[j]!=curPath){
+               targetPathArr.push(pathArr[j]);
+               targetNameArr.push(nameArr[j]);
+           }
         }
-    });
 
+        return targetPathArr.join(",")+";"+targetNameArr.join(",");
+    }
+
+
+    var funs={delEditFun:function(){
+            $(".demo-delete-edit").off("click").on("click",function (data){
+
+                //重组文件路径相关
+                var curPath=$(this).attr("txt");
+                var paths=  $("#imgInput").val();
+                var pathArr=paths.split(",");
+
+                //重组文件名称相关
+                var curName=$(this).attr("txtNM");
+                var names= $("#imgInputName").val();
+                var nameArr=names.split(",");
+                var lastPathNameArr=afterDelStr(curName,names,nameArr,curPath,paths,pathArr).split(";");
+                var lastPathStr="";
+                var lastNameStr="";
+                if(lastPathNameArr.length>1){
+                     lastPathStr=lastPathNameArr[0];
+                     lastNameStr=lastPathNameArr[1];
+                }
+
+                var delFilePath=$("#delFilePath").val();
+                if(delFilePath){
+                    delFilePath+=","+curPath;
+                }else{
+                    delFilePath=curPath;
+
+                }
+                $("#delFilePath").val(delFilePath);
+                $("#imgInput").val(lastPathStr);
+                $("#imgInputName").val(lastNameStr);
+                //删除文件的请求
+                $(this).parent().parent().remove();
+
+            });
+        }};
+       funs.delEditFun();
 
 
         //多文件列表示例
         var demoListView = $('#imgList');
         var totalArray = new Array();
-       /* var uploadInst = upload.render({*/
-    debugger
-     upload.render({
+
+    var uploadListIns =upload.render({
             elem: '#upload'
             ,url: '/upload/fileUpload'
            /* , accept: 'images'  // 允许上传的文件类型*/
@@ -282,9 +284,12 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
                      return $('#module').val();
                  }
              }
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+
+            }
             , number: 6    //  同时上传文件的最大个数
             , choose: function (obj) {
-                debugger
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
                 var arr = Object.keys(files);
                 totalArray = totalArray.concat(arr);
@@ -293,8 +298,8 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
                     //读取本地文件
                     obj.preview(function (index, file, result) {
                         var tr = $(['<tr id="upload-' + index + '">'
-                            , '<td><img src="' + result + '" alt="' + file.name + '" class="layui-upload-img" style="height: 66px;width:100px;"></td>'
-                            , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
+                            , '<td>' + file.name + '</td>'
+                            , '<td>' + (file.size / 1014).toFixed(0) + 'kb</td>'
                             , '<td>等待上传</td>'
                             , '<td>'
                             , '<button class="layui-btn demo-reload layui-hide">重传</button>'
@@ -323,7 +328,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
 
             }
             , done: function (res, index, upload) {
-                debugger
+               layer.closeAll('loading'); //关闭loading
                 console.log("res", res);
                 if (res.code == 0) { //上传成功
                     // 上传成功后将图片路径拼接到input中，多个路径用","分割
@@ -345,8 +350,11 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
                     console.log( $("#imgInput").val()+"=="+ $("#imgInputName").val());
                     var tr = demoListView.find('tr#upload-' + index)
                         , tds = tr.children();
+                    var module=$('#module').val();
+                    tds.eq(0).html('<a  data-name=\"'+dat[1]+'\" data-path=\"'+dat[0]+'\" class=\"downloadA\" data-module=\"'+module+'\" onclick=\"fqdownload(\'/upload/fileDownload?\',this)\">'+dat[1]+'</a>');
                     tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                    tds.eq(3).html(''); //清空操作
+                    tds.eq(3).html('<button class=\"layui-btn layui-btn-danger demo-delete-edit\"   txt=\"'+dat[0]+'\" txtNM=\"'+dat[1]+'\">删除</button>'); //清空操作
+                    funs.delEditFun();
                     return delete this.files[index]; //删除文件队列已经上传成功的文件
 
                 }

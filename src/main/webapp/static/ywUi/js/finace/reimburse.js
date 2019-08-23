@@ -226,9 +226,9 @@ layui.define(['table', 'form'], function (exports) {
                                                 type: "post",
                                                 success: function (e) {
                                                     if (e.code == 0) {
-                                                        layer.msg(e.msg);
+                                                      /*  layer.msg(e.msg);*/
                                                     } else {
-                                                        layer.msg(e.msg);
+                                                       /* layer.msg(e.msg);*/
                                                     }
                                                 }
                                             });

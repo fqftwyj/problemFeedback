@@ -450,31 +450,14 @@
                                     </table>
                                 </div>
                                 <button type="button" class="layui-btn" id="startUpload">开始上传</button>
-                              <!--  <div style="color: #c2c2c2;margin:10px 0;">温馨提示: 每次最多上传六张图片, 单张图片的大小不超过5MB, 长宽比例推荐1.5:1,
-                                    推荐上传图片长675px,宽450px
-                                </div>-->
+                                <div style="color: #c2c2c2;margin:10px 0;">温馨提示: 每次最多上传六个文件
+                                </div>
+
                             </div>
                             <input type="hidden" name="uploadPath" id="imgInput"  >
                             <input type="hidden" name="uploadName" id="imgInputName" >
                             <input type="hidden"  name="module" id="module" value="${userName}"/>
                         </blockquote>
-
-           <!-- <div class="layui-upload">
-                <button type="button" class="layui-btn layui-btn-normal" id="selectFile" lay-verify="validateAttach">  <i class="layui-icon">&#xe67c;</i>附件上传</button>
-              &lt;!&ndash;  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>&ndash;&gt;
-                <div class="layui-upload-list">
-                    <table class="layui-table">
-                        <thead>
-                        <tr><th>文件名</th>
-                            <th>大小</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr></thead>
-                        <tbody id="demoList"></tbody>
-                    </table>
-                </div>
-                <button type="button" class="layui-btn" id="testListAction">开始上传</button>
-            </div>-->
 
             <div class="reimburse-attach-explation-div">
             <div class="layui-col-md11 mbottom">
@@ -513,6 +496,11 @@
                 var len = $("#imgList").find("tr").length;
                 if (len==0) {
                     return "请先上传附件";
+                }else{
+                    var imgInput=$("#imgInput").val();
+                    if(imgInput==""){
+                        return "请上传列表中待上传的文件";
+                    }
                 }
             }
         });

@@ -273,8 +273,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
     var uploadListIns =upload.render({
             elem: '#upload'
             ,url: '/upload/fileUpload'
-           /* , accept: 'images'  // 允许上传的文件类型*/
-            // , acceptMime: 'image/jpg,image/png'   // (只支持jpg和png格式，多个用逗号隔开),
+             ,accept: 'file' //允许上传的文件类型
             , size: 1024*100        // 最大允许上传的文件大小  单位 KB
             , auto: false //选择文件后不自动上传
             , bindAction: '#startUpload' //指向一个按钮触发上传
@@ -285,7 +284,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
                  }
              }
             ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-                layer.load(); //上传loading
+              /*  layer.load(); //上传loading*/
 
             }
             , number: 6    //  同时上传文件的最大个数
@@ -328,7 +327,7 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
 
             }
             , done: function (res, index, upload) {
-               layer.closeAll('loading'); //关闭loading
+              /* layer.closeAll('loading'); //关闭loading*/
                 console.log("res", res);
                 if (res.code == 0) { //上传成功
                     // 上传成功后将图片路径拼接到input中，多个路径用","分割

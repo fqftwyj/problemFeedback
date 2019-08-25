@@ -14,140 +14,145 @@
 <body>
 <div class="layui-fluid  reimburse-background-color" id="reimburseDivForm">
   <div class="layui-form " lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+
     <div class="layui-form-item">
+
       <div class="layui-col-md11">
-        <div class="layui-inline">
-          <label class="layui-form-label">科室：</label>
-          <div class="layui-input-block" style="display: block;">
-            <select  disabled="disabled">
-              <option value="" <#if result.officeCode=="">selected</#if>>请输入</option>
+          <div class="layui-inline">
+            <label class="layui-form-label">科室：</label>
+            <div class="layui-input-block" style="display: block;">
+              <select  disabled="disabled">
+                <option value="" <#if result.officeCode=="">selected</#if>>请输入</option>
               <#list officeList as obj>
               <option value="${obj.officeCode}" <#if obj.officeCode==result.officeCode>selected</#if>>${obj.officeName!}</option>
-              </#list>
+          </#list>
           </select>
         </div>
-      </div>
+       </div>
       <div class="layui-inline">
         <label class="layui-form-label">出差人：</label>
         <div class="layui-input-block-special" >
           <input type="text"  placeholder="请输入" autocomplete="off"
-                 class="layui-input" value="${result.reimburseMembers}" lay-verify="required" readonly="readonly">
+                 class="layui-input" value="${result.reimburseMembers}"  readonly="readonly">
         </div>
-       <!-- <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
-          <i class="layui-icon layui-icon-about title-text-icon  title-text-icon-second-separator"
-             id="travelPeopleInfo"></i>
-        </div>-->
+        <!-- <div class="reimburse-card-body-title-text reimburse-card-body-title-text-i-float">
+           <i class="layui-icon layui-icon-about title-text-icon  title-text-icon-second-separator"
+              id="travelPeopleInfo"></i>
+         </div>-->
       </div>
-    </div>
-    <div class="layui-col-md11">
-      <div class="layui-inline layui-col-md9">
-        <label class="layui-form-label">出差事由：</label>
-        <div class="layui-input-block">
-          <textarea placeholder="请输入内容"   class="layui-textarea" lay-verify="required" readonly="readonly">${result.reimburseReason!}</textarea>
+     </div>
+      <div class="layui-col-md11">
+        <div class="layui-inline layui-col-md9">
+          <label class="layui-form-label">出差事由：</label>
+          <div class="layui-input-block">
+            <textarea placeholder="请输入内容"   class="layui-textarea"  readonly="readonly">${result.reimburseReason!}</textarea>
+          </div>
+
+        </div>
+      </div>
+      <div class="layui-col-md11">
+          <div class="layui-inline">
+            <label class="layui-form-label">经费来源：</label>
+            <div class="layui-input-block" style="display: block;">
+              <select disabled="disabled" id="foundSource">
+                <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>
+                   <#list foundSourceEnum as obj>
+                      <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc!}</option>
+                   </#list>
+               </select>
+            </div>
         </div>
 
-      </div>
+        <div class="layui-inline" id="specialNameId2">
+          <label class="layui-form-label">专项名称：</label>
+          <div class="layui-input-block-special" >
+            <input type="text"  placeholder="请输入" autocomplete="off" id="specialName"
+                   class="layui-input" value="${result.specialName}"  readonly="readonly">
+          </div>
+        </div>
+     </div>
+<!--layui-form-item 结尾-->
+</div>
+
+<div class="layui-card-body  layui-card-body-scroll">
+  <div class="reimburse-card-body-title">
+    <div class="reimburse-card-body-title-text">
+      车船费
+      <!--<i class="layui-icon layui-icon-about title-text-icon title-text-icon-second" id="carboatInfo"></i>-->
+
     </div>
-  <div class="layui-col-md11">
-    <div class="layui-inline">
-      <label class="layui-form-label">经费来源：</label>
-      <div class="layui-input-block" style="display: block;">
-    <select disabled="disabled" id="foundSource">
-      <option value="" <#if result.foundSource=="">selected</#if>>请输入</option>
-    <#list foundSourceEnum as obj>
-    <option value="${obj}"  <#if obj==result.foundSource>selected</#if>>${obj.desc!}</option>
-    </#list>
+
+    <#list carboatfeesList as obj>
+    <div class="separator-line-css carboatfeeMotherDiv"  id="carboatfeeMotherDiv">
+      <div class="layui-col-md11 mbottom">
+        <div class="layui-inline">
+          <label class="layui-form-label">出发时间：</label>
+          <div class="layui-input-block">
+            <input type="text"  placeholder="yyyy-MM-dd" autocomplete="off"
+                   class="layui-input datetime" readonly="readonly" value="${obj.departureTime!}">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">出发地点：</label>
+          <div class="layui-input-block">
+            <input type="text" readonly="readonly"  value="${obj.departurePlace!}" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md11 mbottom">
+        <div class="layui-inline">
+          <label class="layui-form-label">到达时间：</label>
+          <div class="layui-input-block">
+            <input type="text" readonly="readonly" value="${obj.arrivalTime!}"  placeholder="yyyy-MM-dd" autocomplete="off"
+                   class="layui-input datetime">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">到达地点：</label>
+          <div class="layui-input-block">
+            <input type="text" readonly="readonly" value="${obj.arrivalPlace!}" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md11 mbottom">
+        <div class="layui-inline layui-form">
+          <label class="layui-form-label">车船类别：</label>
+          <div class="layui-input-block" style="width: 182px;">
+            <select  disabled="disabled">
+              <option value=""    <#if !obj.carboatType??||(obj.carboatType?? && obj.carboatType=='')>selected</#if>>请输入</option>
+            <option value="汽车" <#if obj.carboatType?? && obj.carboatType=='汽车'>selected</#if>>汽车</option>
+          <option value="火车" <#if obj.carboatType?? && obj.carboatType=='火车'>selected</#if>>火车</option>
+        <option value="飞机" <#if obj.carboatType?? && obj.carboatType=='飞机'>selected</#if>>飞机</option>
+      <option value="轮船" <#if obj.carboatType?? && obj.carboatType=='轮船'>selected</#if>>轮船</option>
     </select>
+      </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">单据张数：</label>
+        <div class="layui-input-block">
+          <input type="text"  placeholder="请输入" autocomplete="off"
+                 class="layui-input" readonly="readonly" value="${obj.docNumber!}" lay-verify="int">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">车船费：</label>
+        <div class="layui-input-block">
+          <input type="text"  placeholder="请输入" autocomplete="off"
+                 class="layui-input" readonly="readonly" value="${obj.carboatfee!}" lay-verify="money">
+        </div>
+      </div>
+    </div>
    </div>
-</div>
-<div class="layui-inline" id="specialNameId2">
-  <label class="layui-form-label">专项名称：</label>
-  <div class="layui-input-block-special" >
-    <input type="text"  placeholder="请输入" autocomplete="off" id="specialName"
-           class="layui-input" value="${result.specialName}" lay-verify="required" readonly="readonly">
-  </div>
-</div>
-
-</div>
-  </div>
-  <div class="layui-card-body  layui-card-body-scroll">
-    <div class="reimburse-card-body-title">
-      <div class="reimburse-card-body-title-text">
-        车船费
-        <!--<i class="layui-icon layui-icon-about title-text-icon title-text-icon-second" id="carboatInfo"></i>-->
-
-      </div>
-
-      <#list carboatfeesList as obj>
-      <div class="separator-line-css carboatfeeMotherDiv"  id="carboatfeeMotherDiv">
-        <div class="layui-col-md11 mbottom">
-          <div class="layui-inline">
-            <label class="layui-form-label">出发时间：</label>
-            <div class="layui-input-block">
-              <input type="text"  placeholder="yyyy-MM-dd" autocomplete="off"
-                     class="layui-input datetime" readonly="readonly" value="${obj.departureTime!}">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">出发地点：</label>
-            <div class="layui-input-block">
-              <input type="text" readonly="readonly"  value="${obj.departurePlace!}" placeholder="请输入" autocomplete="off"
-                     class="layui-input">
-            </div>
-          </div>
-        </div>
-        <div class="layui-col-md11 mbottom">
-          <div class="layui-inline">
-            <label class="layui-form-label">到达时间：</label>
-            <div class="layui-input-block">
-              <input type="text" readonly="readonly" value="${obj.arrivalTime!}"  placeholder="yyyy-MM-dd" autocomplete="off"
-                     class="layui-input datetime">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">到达地点：</label>
-            <div class="layui-input-block">
-              <input type="text" readonly="readonly" value="${obj.arrivalPlace!}" placeholder="请输入" autocomplete="off"
-                     class="layui-input">
-            </div>
-          </div>
-        </div>
-        <div class="layui-col-md11 mbottom">
-          <div class="layui-inline layui-form">
-            <label class="layui-form-label">车船类别：</label>
-            <div class="layui-input-block" style="width: 182px;">
-              <select  disabled="disabled">
-                <option value=""    <#if !obj.carboatType??||(obj.carboatType?? && obj.carboatType=='')>selected</#if>>请输入</option>
-                <option value="汽车" <#if obj.carboatType?? && obj.carboatType=='汽车'>selected</#if>>汽车</option>
-                <option value="火车" <#if obj.carboatType?? && obj.carboatType=='火车'>selected</#if>>火车</option>
-                <option value="飞机" <#if obj.carboatType?? && obj.carboatType=='飞机'>selected</#if>>飞机</option>
-                <option value="轮船" <#if obj.carboatType?? && obj.carboatType=='轮船'>selected</#if>>轮船</option>
-             </select>
-      </div>
-    </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">单据张数：</label>
-      <div class="layui-input-block">
-        <input type="text"  placeholder="请输入" autocomplete="off"
-               class="layui-input" readonly="readonly" value="${obj.docNumber!}" lay-verify="int">
-      </div>
-    </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">车船费：</label>
-      <div class="layui-input-block">
-        <input type="text"  placeholder="请输入" autocomplete="off"
-               class="layui-input" readonly="readonly" value="${obj.carboatfee!}" lay-verify="money">
-      </div>
-    </div>
-  </div>
-</div>
 </#list>
 </div>
+
 <div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">
     出差补贴
-   <!-- <i class="layui-icon layui-icon-about title-text-icon title-text-icon-second"
-       id="travelStandardInfo"></i>-->
+    <!-- <i class="layui-icon layui-icon-about title-text-icon title-text-icon-second"
+        id="travelStandardInfo"></i>-->
   </div>
   <#list travelAllowanceList as obj>
   <div class="travelStandardMotherDiv"  id="travelStandardMotherDiv">
@@ -160,28 +165,29 @@
         </div>
       </div>
       <div class="layui-inline layui-form">
-          <label class="layui-form-label">标准：</label>
-          <div class="layui-input-block" style="width: 182px;">
-            <select  lay-filter="travelStandard" disabled="disabled">
-              <option value=""     <#if !obj.travelStandard??||(obj.travelStandard?? && obj.travelStandard=='')>selected</#if>>请输入</option>
-              <option value="25"  <#if obj.travelStandard?? && obj.travelStandard=='25'>selected</#if>>25</option>
-              <option value="55"  <#if obj.travelStandard?? && obj.travelStandard=='55'>selected</#if>>55</option>
-              <option value="42.5" <#if obj.travelStandard?? && obj.travelStandard=='42.5'>selected</#if>>42.5</option>
-            </select>
-         </div>
-       </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">金额：</label>
-    <div class="layui-input-block">
-      <input type="text"  readonly="readonly" readonly="readonly" placeholder="请输入" autocomplete="off"
-             class="layui-input" value="${obj.travelmoney!}">
-    </div>
+        <label class="layui-form-label">标准：</label>
+        <div class="layui-input-block" style="width: 182px;">
+          <select  lay-filter="travelStandard" disabled="disabled">
+            <option value=""     <#if !obj.travelStandard??||(obj.travelStandard?? && obj.travelStandard=='')>selected</#if>>请输入</option>
+          <option value="25"  <#if obj.travelStandard?? && obj.travelStandard=='25'>selected</#if>>25</option>
+        <option value="55"  <#if obj.travelStandard?? && obj.travelStandard=='55'>selected</#if>>55</option>
+      <option value="42.5" <#if obj.travelStandard?? && obj.travelStandard=='42.5'>selected</#if>>42.5</option>
+    </select>
   </div>
+</div>
+<div class="layui-inline">
+  <label class="layui-form-label">金额：</label>
+  <div class="layui-input-block">
+    <input type="text"  readonly="readonly" readonly="readonly" placeholder="请输入" autocomplete="off"
+           class="layui-input" value="${obj.travelmoney!}">
+  </div>
+</div>
 
 </div>
 </div>
 </#list>
 </div>
+
 <div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">
     其它费用
@@ -217,6 +223,7 @@
   </div>
 </#list>
 </div>
+
 <div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">合计 </div>
   <div class="layui-col-md11 mbottom">
@@ -235,8 +242,8 @@
       </div>
     </div>
   </div>
-
 </div>
+
 <!--<div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">下载附件 </div>
   <div class="layui-col-md11 mbottom">
@@ -272,11 +279,10 @@
         </tbody>
       </table>
     </div>
-
   </div>
 </#if>
 </div>
-</div>
+
 <div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">审核结果 </div>
   <#if type==2>
@@ -294,44 +300,45 @@
     <label class="layui-form-label">审核结果：</label>
     <div class="layui-input-block">
       <#if flag==1 && result.foundSource!='ADMINLOGISTIC'>
-      <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.secondReviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-    <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.secondReviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
-  <input type="hidden" name="reviewState" value="${result.review.reviewState!}">
-  <input type="hidden" name="reviewOpinion" value="${result.review.reviewOpinion!}">
-  <#else>
-  <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
-<input type="radio" name="reviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
-<input type="hidden" name="secondReviewState" value="${result.review.secondReviewState!}">
-<input type="hidden" name="secondReviewOpinion" value="${result.review.secondReviewOpinion!}">
-</#if>
+          <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.secondReviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
+            <input type="radio" name="secondReviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.secondReviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+          <input type="hidden" name="reviewState" value="${result.review.reviewState!}">
+          <input type="hidden" name="reviewOpinion" value="${result.review.reviewOpinion!}">
+          <#else>
+          <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="PASSREVIEW" title="通过"   <#if result.review.reviewState=='PASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>通过</div></div>
+        <input type="radio" name="reviewState" lay-verify="validateRadioOne" value="NOTPASSREVIEW" title="不通过"  <#if result.review.reviewState=='NOTPASSREVIEW'>checked="checked"</#if>><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i><div>不通过</div></div>
+        <input type="hidden" name="secondReviewState" value="${result.review.secondReviewState!}">
+        <input type="hidden" name="secondReviewOpinion" value="${result.review.secondReviewOpinion!}">
+    </#if>
+   </div>
+    <input type="hidden"  name="id"  value="${id}"/>
+    <input type="hidden"  name="reimburseId"  value="${result.id}"/>
+   </div>
 </div>
-<input type="hidden"  name="id"  value="${id}"/>
-<input type="hidden"  name="reimburseId"  value="${result.id}"/>
-</div>
-</div>
-  <div class="layui-col-md11" >
-    <div class="layui-inline layui-col-md11 layui-inline-total">
-      <label class="layui-form-label">审核意见：</label>
-      <div class="layui-input-block">
+<div class="layui-col-md11" >
+  <div class="layui-inline layui-col-md11 layui-inline-total">
+    <label class="layui-form-label">审核意见：</label>
+    <div class="layui-input-block">
         <#if flag==1 && result.foundSource!='ADMINLOGISTIC'>
         <textarea placeholder="请输入内容"   name="secondReviewOpinion" class="layui-textarea" >${result.review.secondReviewOpinion!}</textarea>
         <#else>
         <textarea placeholder="请输入内容"   name="reviewOpinion" class="layui-textarea" >${result.review.reviewOpinion!}</textarea>
-      </#if>
-      </div>
+       </#if>
     </div>
-  </div>
+   </div>
+</div>
 
-
+<!--reimburse-card-body-title-->
 </div>
 <#if type==1>
-</div>
-    <div class="layui-form-item layui-hide">
-      <input type="button" lay-submit lay-filter="LAY-review-edit-submit" id="LAY-review-edit-submit" value="确认">
-    </div>
+<div class="layui-form-item layui-hide">
+  <input type="button" lay-submit lay-filter="LAY-review-edit-submit" id="LAY-review-edit-submit" value="确认">
 </div>
 </#if>
+<!--reimburse-card-body-->
+</div>
 
+</div>
 </div>
 
 <script src="${request.contextPath}/static/layuiadmin/layui/layui.js"></script>
@@ -364,11 +371,10 @@
           return "请选择审核结果";
         }
       }
-
     });
 
   });
-  debugger
+
   var  $snObj= $("#specialName");
   var val=$("#foundSource").val();
   if(val=='KEYDISCIPLINES'|| val=='RESEARCHTOPICS' || val=='TALENTTRAIN' ){

@@ -74,6 +74,7 @@ layui.define(['table', 'form'], function(exports){
                   var iframeWindow = window['layui-layer-iframe'+ index]
                       ,submitID = 'LAY-review-edit-submit'
                       ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
                   //监听提交
                   iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                       var field = data.field; //获取提交的字段

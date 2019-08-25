@@ -216,7 +216,7 @@ layui.define(['table', 'form'], function (exports) {
                                         table.reload('LAY-reimburse-table');
                                         layer.msg(e.msg);
                                         layer.close(index);  //关闭弹层
-                                        debugger
+
                                         var delFilePaths= contentId.find("#delFilePath").val();
                                         console.log(delFilePaths)
                                         if(delFilePaths) {

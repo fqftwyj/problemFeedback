@@ -446,7 +446,7 @@
           </table>
         </div>
         <button type="button" class="layui-btn" id="startUpload22">开始上传</button>
-          <div style="color: #c2c2c2;margin:10px 0;">温馨提示: 每次最多上传六个文件
+          <div style="color: #dc1010;margin:10px 0;">温馨提示: 每次最多上传六个文件,每个文件大小不超过100M
           </div>
       </div>
       <input type="hidden" name="uploadPath" id="imgInput"     value="${result.uploadPath}">
@@ -567,8 +567,7 @@
     var uploadListIns =upload.render({
       elem: '#uploadEdit'
       ,url: '/upload/fileUpload'
-      /* , accept: 'images'  // 允许上传的文件类型*/
-      // , acceptMime: 'image/jpg,image/png'   // (只支持jpg和png格式，多个用逗号隔开),
+      ,accept: 'file' //允许上传的文件类型
       , size: 1024*100        // 最大允许上传的文件大小  单位 KB
       , auto: false //选择文件后不自动上传
       , bindAction: '#startUpload22' //指向一个按钮触发上传
@@ -579,7 +578,7 @@
         }
       }
       ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-        layer.load(); //上传loading
+       /* layer.load(); //上传loading*/
 
       }
       , number: 6    //  同时上传文件的最大个数
@@ -600,7 +599,6 @@
               , '<button class="layui-btn layui-btn-danger demo-delete">删除</button>'
               , '</td>'
               , '</tr>'].join(''));
-            console.log(tr)
             //单个重传
             tr.find('.demo-reload').on('click', function () {
               obj.upload(index, file);
@@ -622,7 +620,7 @@
 
       }
       , done: function (res, index, upload) {
-        layer.closeAll('loading'); //关闭loading
+       /* layer.closeAll('loading'); //关闭loading*/
         console.log("res", res);
         if (res.code == 0) { //上传成功
           // 上传成功后将图片路径拼接到input中，多个路径用","分割

@@ -263,17 +263,6 @@
 </#if>
 </div>
 </div>
-<!--</blockquote>-->
-<!--<div class="reimburse-card-body-title">
-  <div class="reimburse-card-body-title-text">下载附件 </div>
-  <div class="layui-col-md11 mbottom">
-    <div class="layui-inline " style="margin-left: 50px;" >
-      <div class="layui-upload">
-        <span class="layui-inline layui-upload-choose" > <a  data-name="${result.uploadName}" data-path="${result.uploadPath}"  data-module="${userName}" class="downloadA" onclick="fqdownload('/upload/fileDownload?',this)">${result.uploadName}</a></span>
-      </div>
-    </div>
-  </div>
-</div>-->
 <#if result.review??>
 <div class="reimburse-card-body-title">
   <div class="reimburse-card-body-title-text">审核情况 </div>
@@ -284,10 +273,8 @@
         <#if  result.foundSource!='ADMINLOGISTIC'  && result.review.reviewState??>
         <div class="reimburse-detail-result" ><#if result.review.reviewState=='PASSREVIEW'><font color="green">通过</font><#elseif result.review.reviewState=='NOTPASSREVIEW'><font color="red">未通过</font><#else></#if></div>
        <#else>
-
       </#if>
   </div>
-
   </div>
   </div>
   <div class="layui-col-md11" >

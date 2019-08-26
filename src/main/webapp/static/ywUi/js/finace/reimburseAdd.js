@@ -287,13 +287,13 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
               /*  layer.load(); //上传loading*/
 
             }
-            , number: 6    //  同时上传文件的最大个数
+        /*    , number: 6    //  同时上传文件的最大个数*/
             , choose: function (obj) {
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
                 var arr = Object.keys(files);
                 totalArray = totalArray.concat(arr);
                 // 检查上传文件的个数
-                if (totalArray.length <= 6) {
+              /*  if (totalArray.length <= 6) {*/
                     //读取本地文件
                     obj.preview(function (index, file, result) {
                         var tr = $(['<tr id="upload-' + index + '">'
@@ -320,10 +320,10 @@ layui.define(['table', 'form','laydate','upload'], function(exports){
 
                         demoListView.append(tr);
                     });
-                } else {
+              /*  } else {
                     // 超出上传最大文件
                     layer.msg("上传文件最大不超过6个")
-                }
+                }*/
 
             }
             , done: function (res, index, upload) {

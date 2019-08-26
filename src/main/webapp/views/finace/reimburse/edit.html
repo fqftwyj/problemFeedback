@@ -446,7 +446,7 @@
           </table>
         </div>
         <button type="button" class="layui-btn" id="startUpload22">开始上传</button>
-          <div style="color: #dc1010;margin:10px 0;">温馨提示: 每次最多上传六个文件,每个文件大小不超过100M,文件内容包括签字完整的外出培训审批表、培训（进修）通知单、培训费/进修费发票（报销人背面签字）、
+          <div style="color: #dc1010;margin:10px 0;">温馨提示: 每次可上传多个文件,每个文件大小不超过100M,文件内容包括签字完整的外出培训审批表、培训（进修）通知单、培训费/进修费发票（报销人背面签字）、
             住宿费发票（报销人背面签字）、交通费发票（报销人背面签字）、报销人银行卡复印件。
           </div>
       </div>
@@ -458,7 +458,7 @@
   </div>
 </div>
 
-    </div>
+
     <div class="layui-form-item layui-hide">
       <input type="button" lay-submit lay-filter="LAY-reimburse-edit-submit" id="LAY-reimburse-edit-submit" value="确认">
     </div>
@@ -571,13 +571,13 @@
        /* layer.load(); //上传loading*/
 
       }
-      , number: 6    //  同时上传文件的最大个数
+   /*   , number: 6    //  同时上传文件的最大个数*/
       , choose: function (obj) {
         var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
         var arr = Object.keys(files);
         totalArray = totalArray.concat(arr);
         // 检查上传文件的个数
-        if (totalArray.length <= 6) {
+      /*  if (totalArray.length <= 6) {*/
           //读取本地文件
           obj.preview(function (index, file, result) {
             var tr = $(['<tr id="upload-' + index + '">'
@@ -603,10 +603,10 @@
 
             demoListView.append(tr);
           });
-        } else {
+       /* } else {
           // 超出上传最大文件
           layer.msg("上传文件最大不超过6个")
-        }
+        }*/
 
       }
       , done: function (res, index, upload) {

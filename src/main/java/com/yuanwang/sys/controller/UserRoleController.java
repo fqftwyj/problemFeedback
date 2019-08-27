@@ -115,7 +115,7 @@ public class UserRoleController extends BaseController<UserRole>{
 	@RequestMapping(CONSTANT_UPDATE)
 	@ResponseBody
 	public Result update(UserRole userRole){ 
-		if(userRole != null&&userRole.getId()!=null){
+		if(userRole != null && userRole.getId()!=null){
 			Map<String,Object> map=new HashMap<String,Object>();
 			/**
 			 * 放入查重字段 map。put("name","测试");

@@ -188,12 +188,12 @@ public class FileController {
 			roleIds=roleIds.equals("")?roleIds:roleIds+",";
 			String suffixName="doc";
 			//根据角色来分配下载的操作手册
-			if(roleIds.contains(",2,") && roleIds.contains(",3,")){
+			if(roleIds.contains(",2,") && (roleIds.contains(",3,")|| roleIds.contains(",4,") || roleIds.contains(",5,"))){
 				fexcle.dowloadAttachZip(prePath,"系统操作手册.zip",response);
 			} else if(roleIds.contains(",2,")){
 				templateNM="财务管理系统操作手册-报销流程.doc";
 				fexcle.dowloadAttachExcel(prePath+File.separator+suffixName,templateNM,response);
-			}else if(roleIds.contains(",3,")){
+			}else if(roleIds.contains(",3,") || roleIds.contains(",4,") || roleIds.contains(",5,")){
 				templateNM="财务管理系统操作手册-审核流程.doc";
 				fexcle.dowloadAttachExcel(prePath+File.separator+suffixName,templateNM,response);
 			}

@@ -12,8 +12,10 @@ import javax.validation.constraints.NotNull;
 
 import com.yuanwang.common.utils.MD5Util;
 import com.yuanwang.sys.entity.Office;
+import com.yuanwang.sys.entity.UserRole;
 import com.yuanwang.sys.service.OfficeService;
 import com.yuanwang.sys.service.RoleService;
+import com.yuanwang.sys.service.UserRoleService;
 import com.yuanwang.sys.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -51,6 +53,8 @@ public class UserController extends BaseController<User>{
 	private RoleService roleService;
 	@Resource
 	private OfficeService officeService;
+	@Resource
+	private UserRoleService userRoleService;
 	
 	/**跳转主页面
 	 * @param map 传值对象,通过这个对象给前台传值
@@ -153,13 +157,21 @@ public class UserController extends BaseController<User>{
 			}catch (Exception e){
 				e.printStackTrace();
 			}
-			Integer flag = userService.update(roleIdsStr,user,map,OperatorEnum.AND);
-			if(flag==2) {
-				return ResultUtil.error("已存在");
-			}else if(flag==1) {
-				return ResultUtil.success("更新成功");
-			}else {
-				return ResultUtil.error("更新失败");
+			//找出该用户所有的角色删除（根据用户ID删除用户角色），再编辑
+			Map<String,Object>  delMap=new HashMap<String,Object>();
+			delMap.put("userId",user.getId());
+			Integer flag=userRoleService.delete(delMap);
+			Integer flag2 =-1;
+			if(flag==0 || flag>0){
+				//更新的时候往user_role里插入数据
+				flag2 = userService.update(roleIdsStr,user,map,OperatorEnum.AND);
+				if(flag2==2) {
+					return ResultUtil.error("已存在");
+				}else if(flag2==1) {
+					return ResultUtil.success("更新成功");
+				}else {
+					return ResultUtil.error("更新失败");
+				}
 			}
 		}
 		return ResultUtil.error("空数据");
